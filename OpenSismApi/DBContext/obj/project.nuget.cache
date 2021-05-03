@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "AfphOzyFXxTHgsq3PUdMeOXMl8CQQcnUD5ODxjQx0xDtvXEBUa/0srvjdJ0iv4YWi4WE0iI7S+C+HuEJCknMHg==",
+  "dgSpecHash": "XlA8IJpggjOdcQQbqzhbgEUhZEDT47GTeNpt7kNF5C8O68wSe6XNK4wAMEnLlTRMdodayFF+88pR+4BB05swDQ==",
   "success": true,
-  "projectFilePath": "D:\\Projects\\OpenSism\\OpenSismApi\\OpenSismApi\\DBContext\\DBContext.csproj",
+  "projectFilePath": "E:\\WebAPI\\OpenSismApi\\DBContext\\DBContext.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

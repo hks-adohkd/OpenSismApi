@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Projects\\OpenSism\\OpenSismApi\\OpenSismApi\\DBContext\\DBContext.csproj": {}
+    "E:\\WebAPI\\OpenSismApi\\DBContext\\DBContext.csproj": {}
   },
   "projects": {
-    "D:\\Projects\\OpenSism\\OpenSismApi\\OpenSismApi\\DBContext\\DBContext.csproj": {
+    "E:\\WebAPI\\OpenSismApi\\DBContext\\DBContext.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\OpenSism\\OpenSismApi\\OpenSismApi\\DBContext\\DBContext.csproj",
+        "projectUniqueName": "E:\\WebAPI\\OpenSismApi\\DBContext\\DBContext.csproj",
         "projectName": "DBContext",
-        "projectPath": "D:\\Projects\\OpenSism\\OpenSismApi\\OpenSismApi\\DBContext\\DBContext.csproj",
-        "packagesPath": "C:\\Users\\Anas\\.nuget\\packages\\",
-        "outputPath": "D:\\Projects\\OpenSism\\OpenSismApi\\OpenSismApi\\DBContext\\obj\\",
+        "projectPath": "E:\\WebAPI\\OpenSismApi\\DBContext\\DBContext.csproj",
+        "packagesPath": "C:\\Users\\Yazbek\\.nuget\\packages\\",
+        "outputPath": "E:\\WebAPI\\OpenSismApi\\DBContext\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Anas\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Yazbek\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -54,7 +54,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }
