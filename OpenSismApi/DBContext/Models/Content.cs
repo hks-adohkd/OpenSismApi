@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Web.Mvc;
+
 
 
 /// <summary>
@@ -28,7 +28,7 @@ namespace DBContext.Models
         public string _TitleAr;
 
         [Display(Name = "Arabic Caption")]
-        [AllowHtml]
+        
         public string TitleAr
         {
             get
@@ -42,7 +42,7 @@ namespace DBContext.Models
         }
 
         [Display(Name = "English Caption")]
-        [AllowHtml]
+     
         public string Title
         {
             get
@@ -68,7 +68,7 @@ namespace DBContext.Models
         public string _ScriptAr;
 
         [Display(Name = "Arabic Script *")]
-        [AllowHtml]
+       
         public string ScriptAr
         {
             get
@@ -82,7 +82,7 @@ namespace DBContext.Models
         }
 
         [Display(Name = "English Script *")]
-        [AllowHtml]
+       
         public string Script
         {
             get
