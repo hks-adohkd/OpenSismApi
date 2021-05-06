@@ -1,0 +1,320 @@
+﻿using OpenSismApi.AppStart;
+using OpenSismApi.Helpers;
+using OpenSismApi.Models;
+using AutoMapper;
+using DBContext.Models;
+using DBContext.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using X.PagedList;
+
+namespace OpenSismApi.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    [Authorize]
+    public class AppTasksController : BaseController
+    {
+        private readonly OpenSismDBContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public AppTasksController(OpenSismDBContext context, UserManager<ApplicationUser> userManager,
+            IStringLocalizer<BaseController> localizer) : base(localizer)
+        {
+            _context = context;
+            _userManager = userManager;
+        }
+
+        // GET: api/AppTasks
+        [HttpPost]
+        [Route("GetAll")]
+        public Response<PagedContent<IPagedList<AppTaskViewModel>>> GetAll([FromBody] PaginationViewModel pagination)
+        {
+            Response<PagedContent<IPagedList<AppTaskViewModel>>> response = new Response<PagedContent<IPagedList<AppTaskViewModel>>>();
+            try
+            {
+                var username = User.Identity.Name;
+                var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
+
+                //NotDeleted
+                var data = (from temp in _context.AppTasks.Where(a => !a.IsDeleted)
+                    //within limit
+                    .Where(a => a.CustomerTasks.Count() < a.Limit)
+                    //customer group
+                    .Where(a => a.AppTaskGroups.Select(a => a.Group).Contains(customer.Group))
+                    .OrderByDescending(a => a.Modified)
+                            select temp);
+
+                if (pagination.TaskTypeId != null)
+                {
+                    data = data.Where(a => a.TaskTypeId == pagination.TaskTypeId);
+                }
+
+                var items = data.ToPagedList(pageNumber: pagination.Page, pageSize: pagination.Limit);
+
+                //within time
+                items = items.Where(a => a.StartDate.Ticks <= DateTime.Now.Ticks && a.EndDate.Ticks >= DateTime.Now.Ticks)
+                                        .ToPagedList(pageNumber: pagination.Page, pageSize: pagination.Limit);
+
+                var tasks = Mapper.Map<IPagedList<AppTaskViewModel>>(items);
+                PagedContent<IPagedList<AppTaskViewModel>> pagedContent = new PagedContent<IPagedList<AppTaskViewModel>>();
+                pagedContent.content = tasks;
+                pagedContent.pagination = new Pagination(tasks.TotalItemCount, tasks.PageSize, tasks.PageCount, tasks.PageNumber);
+                response = APIContants<PagedContent<IPagedList<AppTaskViewModel>>>.CostumSuccessResult(pagedContent, customer);
+                return response;
+            }
+            catch (Exception e)
+            {
+                response = APIContants<PagedContent<IPagedList<AppTaskViewModel>>>.CostumSometingWrong(_localizer["SomethingWentWrong"], null);
+                Serilog.Log.Fatal(e, "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
+                return response;
+            }
+        }
+
+        // GET: api/AppTasks/5
+        [HttpPost]
+        [Route("Get")]
+        public Response<AppTaskViewModel> Get([FromBody] AppTaskViewModel model)
+        {
+            Response<AppTaskViewModel> response = new Response<AppTaskViewModel>();
+            try
+            {
+                var username = User.Identity.Name;
+                var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
+                var item = _context.AppTasks.Where(a => a.Id == model.Id && !a.IsDeleted).FirstOrDefault();
+                if (item == null)
+                {
+                    response = APIContants<AppTaskViewModel>.CostumNotFound(_localizer["NotFound"], null);
+                    Serilog.Log.Warning("{@AddressId}, {@RequestId}, {@Response}", model.Id, CustomFilterAttribute.RequestId, response);
+                    return response;
+                }
+                var appTask = Mapper.Map<AppTaskViewModel>(item);
+                appTask.IsDone = false;
+                item.CustomerTasks = item.CustomerTasks.Where(c => c.CustomerId == customer.Id)
+                    .Where(c => c.AppTask.TaskType.Name != "share_games_app").ToList();
+                if(item.CustomerTasks.Count() > 0)
+                {
+                    foreach (var ct in item.CustomerTasks)
+                    {
+                        if (ct.IsDone)
+                        {
+                            appTask.IsDone = true;
+                            break;
+                        }
+                    }
+                }
+                if(item.TaskType.Name == "share_games_app")
+                {
+                    int count = _context.CustomerTasks.Where(c => c.CustomerId == customer.Id)
+                        .Where(c => c.IsDone && c.AppTaskId == item.Id).Count();
+                    if (count < item.Limit)
+                        appTask.IsReachLimit = false;
+                    else
+                        appTask.IsReachLimit = true;
+                }
+                else
+                {
+                    int count = _context.CustomerTasks.Where(c => c.IsDone && c.AppTaskId == item.Id).Count();
+                    if (count < item.Limit)
+                        appTask.IsReachLimit = false;
+                    else
+                        appTask.IsReachLimit = true;
+                }
+                response = APIContants<AppTaskViewModel>.CostumSuccessResult(appTask, customer);
+                return response;
+            }
+            catch (Exception e)
+            {
+                response = APIContants<AppTaskViewModel>.CostumSometingWrong(_localizer["SomethingWentWrong"], null);
+                Serilog.Log.Fatal(e, "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
+                return response;
+            }
+        }
+
+        [HttpPost]
+        [Route("AddStart")]
+        public async Task<Response<CustomerTaskViewModel>> AddStart([FromBody] CustomerTaskViewModel model)
+        {
+            Response<CustomerTaskViewModel> response = new Response<CustomerTaskViewModel>();
+            try
+            {
+
+                var username = User.Identity.Name;
+                var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
+
+                CustomerTask customerTask = _context.CustomerTasks.Where(c => c.CustomerId == customer.Id
+                && c.AppTaskId == model.AppTaskId).FirstOrDefault();
+
+                if (customerTask == null)
+                {
+                    customerTask = new CustomerTask();
+                    customerTask.CustomerId = customer.Id;
+                    customerTask.AppTaskId = model.AppTaskId;
+                    customerTask.DoneDate = null;
+                    customerTask.StartDate = DateTime.Now;
+                    customerTask.IsDone = false;
+
+                    _context.CustomerTasks.Add(customerTask);
+                    await _context.SaveChangesAsync();
+                }
+                response = APIContants<CustomerTaskViewModel>.CostumSuccessResult(Mapper.Map<CustomerTaskViewModel>(customerTask), customer);
+                return response;
+            }
+            catch (Exception e)
+            {
+                response = APIContants<CustomerTaskViewModel>.CostumSometingWrong(_localizer["SomethingWentWrong"], null);
+                Serilog.Log.Fatal(e, "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
+                return response;
+            }
+        }
+
+        [HttpPost]
+        [Route("AddEnd")]
+        public async Task<Response<CustomerTaskViewModel>> AddEnd([FromBody] CustomerTaskViewModel model)
+        {
+            Response<CustomerTaskViewModel> response = new Response<CustomerTaskViewModel>();
+            try
+            {
+                var username = User.Identity.Name;
+                var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
+
+                CustomerTask customerTask = _context.CustomerTasks.Where(c => c.CustomerId == customer.Id
+                && c.AppTaskId == model.AppTaskId).FirstOrDefault();
+
+                customerTask.DoneDate = DateTime.Now;
+                customerTask.IsDone = true;
+                customerTask.EarnedPoints = customerTask.AppTask.Points;
+                _context.CustomerTasks.Update(customerTask);
+                await _context.SaveChangesAsync();
+
+                customer.CurrentPoints = customer.CurrentPoints + customerTask.AppTask.Points;
+                customer.TotalPoints = customer.TotalPoints + customerTask.AppTask.Points;
+                int nextGroup = customer.Group.ItemOrder + 1;
+                Group group = _context.Groups.Where(g => g.ItemOrder == nextGroup).FirstOrDefault();
+                if(group != null)
+                {
+                    if (customer.TotalPoints >= group.Points)
+                    {
+                        customer.GroupId = group.Id;
+                        customer.Group = group;
+                        int nextNextGroupOrder = nextGroup + 1;
+                        Group nextNextGroup = _context.Groups.Where(g => g.ItemOrder == nextNextGroupOrder).FirstOrDefault();
+                        if (nextNextGroup != null)
+                        {
+                            customer.NextGroupPoints = nextNextGroup.Points;
+                        }
+                        else
+                        {
+                            customer.NextGroupPoints = 0;
+                        }
+                    }
+                    else
+                    {
+                        customer.NextGroupPoints = group.Points;
+                    }
+                }
+                else
+                {
+                    customer.NextGroupPoints = 0;
+                }
+                _context.Customers.Update(customer);
+                await _context.SaveChangesAsync();
+                
+                response = APIContants<CustomerTaskViewModel>.CostumSuccessResult(Mapper.Map<CustomerTaskViewModel>(customerTask), customer);
+                return response;
+            }
+            catch (Exception e)
+            {
+                response = APIContants<CustomerTaskViewModel>.CostumSometingWrong(_localizer["SomethingWentWrong"], null);
+                Serilog.Log.Fatal(e, "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
+                return response;
+            }
+        }
+
+        [HttpPost]
+        [Route("AddShareAppEnd")]
+        public async Task<Response<CustomerTaskViewModel>> AddShareAppEnd([FromBody] CustomerTaskViewModel model)
+        {
+            Response<CustomerTaskViewModel> response = new Response<CustomerTaskViewModel>();
+            try
+            {
+                var username = User.Identity.Name;
+                var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
+                if(customer.InstalledFrom == null || customer.InstalledFrom == "")
+                {
+                    customer.InstalledFrom = model.ShareCode;
+                    _context.Customers.Update(customer);
+                    await _context.SaveChangesAsync();
+
+                    Customer otherCustomer = _context.Customers.Where(c => c.ShareCode == model.ShareCode).FirstOrDefault();
+                    AppTask appTask = _context.AppTasks.Where(a => a.TaskType.Name == "share_games_app").FirstOrDefault();
+
+                    CustomerTask customerTask = new CustomerTask();
+                    customerTask.AppTaskId = appTask.Id;
+                    customerTask.CustomerId = otherCustomer.Id;
+                    customerTask.DoneDate = DateTime.Now;
+                    customerTask.IsDone = true;
+                    customerTask.StartDate = DateTime.Now;
+                    customerTask.EarnedPoints = appTask.Points;
+
+                    _context.CustomerTasks.Add(customerTask);
+                    await _context.SaveChangesAsync();
+
+                    otherCustomer.CurrentPoints = otherCustomer.CurrentPoints + appTask.Points;
+                    otherCustomer.TotalPoints = otherCustomer.TotalPoints + appTask.Points;
+
+                    int nextGroup = otherCustomer.Group.ItemOrder + 1;
+                    Group group = _context.Groups.Where(g => g.ItemOrder == nextGroup).FirstOrDefault();
+                    if (group != null)
+                    {
+                        if (otherCustomer.TotalPoints >= group.Points)
+                        {
+                            otherCustomer.GroupId = group.Id;
+                            otherCustomer.Group = group;
+                            int nextNextGroupOrder = nextGroup + 1;
+                            Group nextNextGroup = _context.Groups.Where(g => g.ItemOrder == nextNextGroupOrder).FirstOrDefault();
+                            if (nextNextGroup != null)
+                            {
+                                otherCustomer.NextGroupPoints = nextNextGroup.Points;
+                            }
+                            else
+                            {
+                                otherCustomer.NextGroupPoints = 0;
+                            }
+                        }
+                        else
+                        {
+                            otherCustomer.NextGroupPoints = group.Points;
+                        }
+                    }
+                    else
+                    {
+                        otherCustomer.NextGroupPoints = 0;
+                    }
+                    _context.Customers.Update(otherCustomer);
+                    await _context.SaveChangesAsync();
+
+                    response = APIContants<CustomerTaskViewModel>.CostumSuccessResult(Mapper.Map<CustomerTaskViewModel>(customerTask), customer);
+                    return response;
+                }
+                else
+                {
+                    response = APIContants<CustomerTaskViewModel>.CostumSuccessResult(null, customer);
+                    return response;
+                }
+            }
+            catch (Exception e)
+            {
+                response = APIContants<CustomerTaskViewModel>.CostumSometingWrong(_localizer["SomethingWentWrong"], null);
+                Serilog.Log.Fatal(e, "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
+                return response;
+            }
+        }
+    }
+}

@@ -16,7 +16,7 @@ namespace OpenSismApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   // [Authorize]
+    [Authorize]
     public class HomeController : BaseController
     {
         private readonly OpenSismDBContext _context;
@@ -34,14 +34,15 @@ namespace OpenSismApi.Controllers
             Response<HomePageViewModel> response = new Response<HomePageViewModel>();
             try
             {
+                
                 HomePageViewModel homePageViewModel = new HomePageViewModel();
                 var pics = _context.Contents.Where(p => p.Name == "slider" && !p.IsDeleted).OrderBy(p => p.ItemOrder).ToList();
                 homePageViewModel.Slides = Mapper.Map<List<ContentViewModel>>(pics);
                 var banners = _context.Contents.Where(p => p.Name == "banner" && !p.IsDeleted).OrderBy(p => p.ItemOrder).ToList();
                 homePageViewModel.Banner = Mapper.Map<List<ContentViewModel>>(banners);
                 var username = User.Identity.Name;
-               // var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
-                var customer = _context.Customers.Where(c => c.User.Id == "1").FirstOrDefault();
+                var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
+                
                 ////NotDeleted
                 //var items = _context.AppTasks.Where(a => !a.IsDeleted)
                 //    //within limit
@@ -101,16 +102,16 @@ namespace OpenSismApi.Controllers
                 //&& !c.IsDeleted).Select(c => c.AppTask).ToList();
                 //homePageViewModel.PendingTasks = Mapper.Map<List<AppTaskViewModel>>(pendings);
 
-                //int nextGroup = customer.Group.ItemOrder + 1;
-                //Group group = _context.Groups.Where(g => g.ItemOrder == nextGroup).FirstOrDefault();
-                //if (group != null)
-                //{
-                //    customer.NextGroupPoints = group.Points;
-                //}
-                //else
-                //{
-                //    customer.NextGroupPoints = 0;
-                //}
+                int nextGroup = customer.Group.ItemOrder + 1;
+                Group group = _context.Groups.Where(g => g.ItemOrder == nextGroup).FirstOrDefault();
+                if (group != null)
+                {
+                    customer.NextGroupPoints = group.Points;
+                }
+                else
+                {
+                    customer.NextGroupPoints = 0;
+                }
                 //homePageViewModel.NewMessages = _context.CustomerMessages.Where(c => c.CustomerId == customer.Id
                 //&& !c.IsRead && !c.IsDeleted).Count();
 

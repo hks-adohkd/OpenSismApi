@@ -21,9 +21,9 @@ namespace OpenSismApi.Controllers
             IStringLocalizer<BaseController> localizer) : base(localizer)
         {
             _context = context;
-          //  _mapper = mapper;
+          
         }
-        // GET: api/Cities
+        
         // GET: api/Cities
         [HttpPost]
         [Route("GetAll")]

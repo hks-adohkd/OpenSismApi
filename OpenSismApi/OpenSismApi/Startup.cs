@@ -16,11 +16,17 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using OpenSismApi.AppStart;
+using OpenSismApi.TwilioFilters;
+using OpenSismApi.TwilioServices;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.Extensions.Options;
 
 namespace OpenSismApi
 {
@@ -55,10 +61,7 @@ namespace OpenSismApi
             });
 
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "OpenSismApi", Version = "v1" });
-            });
+           
 
             // For Entity Framework  
             services.AddDbContext<OpenSismDBContext>(options =>
@@ -76,19 +79,53 @@ namespace OpenSismApi
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             //  For Identity
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<OpenSismDBContext>();
-            // .AddDefaultTokenProviders();
+                .AddEntityFrameworkStores<OpenSismDBContext>()
+             .AddDefaultTokenProviders();
 
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+
+            // Adding Jwt Bearer  
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["JWT:ValidAudience"],
+                    ValidIssuer = Configuration["JWT:ValidIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))
+                };
+            });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "OpenSismApi", Version = "v1" });
+            });
+
+            services.AddScoped<CustomFilterAttribute>();
             Mapper.Initialize((config) =>
             {
                 config.AddProfile<MappingProfile>();
             });
 
-            services.AddScoped<CustomFilterAttribute>();
+            
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
             });
+            
+            // services.AddScoped<IVerification, Verification>();
+            //  services.AddScoped<VerifyFilter>();
+
+            //  services.AddSingleton<IVerification>(new Verification(
+            //      Configuration.GetSection("Twilio").Get<Configuration.Twilio>()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -101,11 +138,15 @@ namespace OpenSismApi
              //  app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "OpenSismApi v1"));
             }
 
-            app.UseHttpsRedirection();
+          //  app.UseHttpsRedirection();
 
             app.UseRouting();
 
-            //app.UseAuthorization();
+            var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
+            app.UseRequestLocalization(locOptions.Value);
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
