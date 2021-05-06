@@ -137,10 +137,19 @@ namespace OpenSismApi.Controllers
                             tempTasks.Add(Mapper.Map<AppTaskViewModel>(at));
                         }
                     }
-                
-                var tasks = tempTasks.ToPagedList(pageNumber: pagination.Page, pageSize: pagination.Limit);
 
-               
+                AppTask shareAppTask = _context.AppTasks.Where(a => !a.IsDeleted)
+                    .Where(a => a.CustomerTasks.Where(c => c.AppTask.TaskType.Name == "share_games_app").Count() < a.Limit)
+                    .Where(a => a.AppTaskGroups.Select(a => a.Group).Contains(customer.Group))
+                    .Where(a => a.TaskType.Name == "share_games_app").FirstOrDefault();
+
+                if (shareAppTask != null)
+                {
+                    tempTasks.Add(Mapper.Map<AppTaskViewModel>(shareAppTask));
+                }
+
+
+                var tasks = tempTasks.ToPagedList(pageNumber: pagination.Page, pageSize: pagination.Limit);
                 PagedContent<IPagedList<AppTaskViewModel>> pagedContent = new PagedContent<IPagedList<AppTaskViewModel>>();
                 pagedContent.content = tasks;
                 pagedContent.pagination = new Pagination(tasks.TotalItemCount, tasks.PageSize, tasks.PageCount, tasks.PageNumber);
@@ -165,48 +174,23 @@ namespace OpenSismApi.Controllers
             {
                 // get the customer who request 
                 var username = User.Identity.Name;
-                var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
-
-                //NotDeleted
-                var data = (from temp in _context.AppTasks.Where(a => !a.IsDeleted)
-                    //within limit :  the count of all users who done the task smaller that task limit
-                    .Where(a => a.CustomerTasks.Count() < a.Limit)
-                    //customer group : the task is from customer group
-                    .Where(a => a.AppTaskGroups.Select(a => a.Group).Contains(customer.Group))
-                    .OrderByDescending(a => a.Modified)
-                            select temp);
-
-                if (pagination.TaskTypeId != null)
-                {
-                    data = data.Where(a => a.TaskTypeId == pagination.TaskTypeId);
-                }
-                var items = data.ToPagedList(pageNumber: pagination.Page, pageSize: pagination.Limit);
+                var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();  
                 var tempTasks = new List<AppTaskViewModel>();
-                items = items.Where(a => a.StartDate.Ticks <= DateTime.Now.Ticks && a.EndDate.Ticks >= DateTime.Now.Ticks)
-                                        .ToPagedList(pageNumber: pagination.Page, pageSize: pagination.Limit);
-                var finished = _context.CustomerTasks.Where(c => c.CustomerId == customer.Id && c.IsDone
+                var  finished = _context.CustomerTasks.Where(c => c.CustomerId == customer.Id && c.IsDone
                 && !c.IsDeleted).Select(c => c.AppTask).ToList();
-                //get tasks list which is not done 
-                foreach (var at in items)
+                int i = 0;
+                foreach (var at in finished)
                 {
-                    bool isDone = false;
-                    foreach (var ct in finished)
-                    {
-                        if (at.Id == ct.Id)
-                        {
-                            isDone = true;
-                            tempTasks.Add(Mapper.Map<AppTaskViewModel>(at));
-                            finished.Remove(ct);
-                            break;
-                        }
-                    }
-                    if (!isDone)
-                    {
-                    }
+                            tempTasks.Add(Mapper.Map<AppTaskViewModel>(at ));
+                  //  tempTasks[i].IsDone = true;
                 }
+                foreach (var at in tempTasks)
+                {
+                    
+                      at.IsDone = true;
+                }
+              
                 var tasks = tempTasks.ToPagedList(pageNumber: pagination.Page, pageSize: pagination.Limit);
-
-
                 PagedContent<IPagedList<AppTaskViewModel>> pagedContent = new PagedContent<IPagedList<AppTaskViewModel>>();
                 pagedContent.content = tasks;
                 pagedContent.pagination = new Pagination(tasks.TotalItemCount, tasks.PageSize, tasks.PageCount, tasks.PageNumber);
