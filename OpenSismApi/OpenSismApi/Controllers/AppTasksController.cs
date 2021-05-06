@@ -13,6 +13,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using X.PagedList;
+using System.Collections.Generic;
 
 namespace OpenSismApi.Controllers
 {
@@ -30,7 +31,12 @@ namespace OpenSismApi.Controllers
             _context = context;
             _userManager = userManager;
         }
-
+        /// <summary>
+        /// returns all task not deleted or finished by date or by user limits , and tasks for user group 
+        /// so it returns all task suitable to the customer 
+        /// </summary>
+        /// <param name="pagination"></param>
+        /// <returns></returns>
         // GET: api/AppTasks
         [HttpPost]
         [Route("GetAll")]
@@ -39,14 +45,15 @@ namespace OpenSismApi.Controllers
             Response<PagedContent<IPagedList<AppTaskViewModel>>> response = new Response<PagedContent<IPagedList<AppTaskViewModel>>>();
             try
             {
+                // get the customer who request 
                 var username = User.Identity.Name;
                 var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
 
                 //NotDeleted
                 var data = (from temp in _context.AppTasks.Where(a => !a.IsDeleted)
-                    //within limit
+                    //within limit :  the count of all users who done the task smaller that task limit
                     .Where(a => a.CustomerTasks.Count() < a.Limit)
-                    //customer group
+                    //customer group : the task is from customer group
                     .Where(a => a.AppTaskGroups.Select(a => a.Group).Contains(customer.Group))
                     .OrderByDescending(a => a.Modified)
                             select temp);
@@ -58,7 +65,7 @@ namespace OpenSismApi.Controllers
 
                 var items = data.ToPagedList(pageNumber: pagination.Page, pageSize: pagination.Limit);
 
-                //within time
+                //within time : the tasks that acheive the time constrains 
                 items = items.Where(a => a.StartDate.Ticks <= DateTime.Now.Ticks && a.EndDate.Ticks >= DateTime.Now.Ticks)
                                         .ToPagedList(pageNumber: pagination.Page, pageSize: pagination.Limit);
 
@@ -77,6 +84,152 @@ namespace OpenSismApi.Controllers
             }
         }
 
+        // returns the active task of customers that is nor done 
+        [HttpPost]
+        [Route("GetActiveCustomerTask")]
+        public Response<PagedContent<IPagedList<AppTaskViewModel>>> GetActiveCustomerTask([FromBody] PaginationViewModel pagination)
+        {
+            Response<PagedContent<IPagedList<AppTaskViewModel>>> response = new Response<PagedContent<IPagedList<AppTaskViewModel>>>();
+            try
+            {
+                // get the customer who request 
+                var username = User.Identity.Name;
+                var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
+
+                //NotDeleted
+                var data = (from temp in _context.AppTasks.Where(a => !a.IsDeleted)
+                    //within limit :  the count of all users who done the task smaller that task limit
+                    .Where(a => a.CustomerTasks.Count() < a.Limit)
+                    //customer group : the task is from customer group
+                    .Where(a => a.AppTaskGroups.Select(a => a.Group).Contains(customer.Group))
+                    .OrderByDescending(a => a.Modified)
+                            select temp);
+
+                if (pagination.TaskTypeId != null)
+                {
+                    data = data.Where(a => a.TaskTypeId == pagination.TaskTypeId);
+                }
+                var items = data.ToPagedList(pageNumber: pagination.Page, pageSize: pagination.Limit);
+                var tempTasks =  new List<AppTaskViewModel>();
+                
+                items = items.Where(a => a.StartDate.Ticks <= DateTime.Now.Ticks && a.EndDate.Ticks >= DateTime.Now.Ticks)
+                                        .ToPagedList(pageNumber: pagination.Page, pageSize: pagination.Limit);
+               
+                var finished = _context.CustomerTasks.Where(c => c.CustomerId == customer.Id && c.IsDone
+                && !c.IsDeleted).Select(c => c.AppTask).ToList();
+                //get tasks list which is not done 
+                
+                    foreach (var at in items)
+                    {
+                        bool isDone = false;
+                        foreach (var ct in finished)
+                        {
+                            if (at.Id == ct.Id)
+                            {
+                                isDone = true;
+                                finished.Remove(ct);
+                                break;
+                            }
+                        }
+                        if (!isDone)
+                        {
+
+                            tempTasks.Add(Mapper.Map<AppTaskViewModel>(at));
+                        }
+                    }
+                
+                var tasks = tempTasks.ToPagedList(pageNumber: pagination.Page, pageSize: pagination.Limit);
+
+               
+                PagedContent<IPagedList<AppTaskViewModel>> pagedContent = new PagedContent<IPagedList<AppTaskViewModel>>();
+                pagedContent.content = tasks;
+                pagedContent.pagination = new Pagination(tasks.TotalItemCount, tasks.PageSize, tasks.PageCount, tasks.PageNumber);
+                response = APIContants<PagedContent<IPagedList<AppTaskViewModel>>>.CostumSuccessResult(pagedContent, customer);
+                return response;
+            }
+            catch (Exception e)
+            {
+                response = APIContants<PagedContent<IPagedList<AppTaskViewModel>>>.CostumSometingWrong(_localizer["SomethingWentWrong"], null);
+                Serilog.Log.Fatal(e, "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
+                return response;
+            }
+        }
+
+        // returns all finished customer Task
+        [HttpPost]
+        [Route("GetFinishCustomerTask")]
+        public Response<PagedContent<IPagedList<AppTaskViewModel>>> GetFinishCustomerTask([FromBody] PaginationViewModel pagination)
+        {
+            Response<PagedContent<IPagedList<AppTaskViewModel>>> response = new Response<PagedContent<IPagedList<AppTaskViewModel>>>();
+            try
+            {
+                // get the customer who request 
+                var username = User.Identity.Name;
+                var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
+
+                //NotDeleted
+                var data = (from temp in _context.AppTasks.Where(a => !a.IsDeleted)
+                    //within limit :  the count of all users who done the task smaller that task limit
+                    .Where(a => a.CustomerTasks.Count() < a.Limit)
+                    //customer group : the task is from customer group
+                    .Where(a => a.AppTaskGroups.Select(a => a.Group).Contains(customer.Group))
+                    .OrderByDescending(a => a.Modified)
+                            select temp);
+
+                if (pagination.TaskTypeId != null)
+                {
+                    data = data.Where(a => a.TaskTypeId == pagination.TaskTypeId);
+                }
+                var items = data.ToPagedList(pageNumber: pagination.Page, pageSize: pagination.Limit);
+                var tempTasks = new List<AppTaskViewModel>();
+                items = items.Where(a => a.StartDate.Ticks <= DateTime.Now.Ticks && a.EndDate.Ticks >= DateTime.Now.Ticks)
+                                        .ToPagedList(pageNumber: pagination.Page, pageSize: pagination.Limit);
+                var finished = _context.CustomerTasks.Where(c => c.CustomerId == customer.Id && c.IsDone
+                && !c.IsDeleted).Select(c => c.AppTask).ToList();
+                //get tasks list which is not done 
+                foreach (var at in items)
+                {
+                    bool isDone = false;
+                    foreach (var ct in finished)
+                    {
+                        if (at.Id == ct.Id)
+                        {
+                            isDone = true;
+                            tempTasks.Add(Mapper.Map<AppTaskViewModel>(at));
+                            finished.Remove(ct);
+                            break;
+                        }
+                    }
+                    if (!isDone)
+                    {
+                    }
+                }
+                var tasks = tempTasks.ToPagedList(pageNumber: pagination.Page, pageSize: pagination.Limit);
+
+
+                PagedContent<IPagedList<AppTaskViewModel>> pagedContent = new PagedContent<IPagedList<AppTaskViewModel>>();
+                pagedContent.content = tasks;
+                pagedContent.pagination = new Pagination(tasks.TotalItemCount, tasks.PageSize, tasks.PageCount, tasks.PageNumber);
+                response = APIContants<PagedContent<IPagedList<AppTaskViewModel>>>.CostumSuccessResult(pagedContent, customer);
+                return response;
+            }
+            catch (Exception e)
+            {
+                response = APIContants<PagedContent<IPagedList<AppTaskViewModel>>>.CostumSometingWrong(_localizer["SomethingWentWrong"], null);
+                Serilog.Log.Fatal(e, "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
+                return response;
+            }
+        }
+
+
+
+
+
+        /// <summary>
+        /// return Single task by task ID with isReachlimit or not 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         // GET: api/AppTasks/5
         [HttpPost]
         [Route("Get")]
@@ -85,8 +238,10 @@ namespace OpenSismApi.Controllers
             Response<AppTaskViewModel> response = new Response<AppTaskViewModel>();
             try
             {
+                // get the customer data 
                 var username = User.Identity.Name;
                 var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
+                // get the unique task by ID 
                 var item = _context.AppTasks.Where(a => a.Id == model.Id && !a.IsDeleted).FirstOrDefault();
                 if (item == null)
                 {
@@ -96,9 +251,11 @@ namespace OpenSismApi.Controllers
                 }
                 var appTask = Mapper.Map<AppTaskViewModel>(item);
                 appTask.IsDone = false;
+                //check if the customer started the task before 
                 item.CustomerTasks = item.CustomerTasks.Where(c => c.CustomerId == customer.Id)
                     .Where(c => c.AppTask.TaskType.Name != "share_games_app").ToList();
-                if(item.CustomerTasks.Count() > 0)
+                //check if the customer done the task before 
+                if (item.CustomerTasks.Count() > 0)
                 {
                     foreach (var ct in item.CustomerTasks)
                     {
@@ -109,6 +266,8 @@ namespace OpenSismApi.Controllers
                         }
                     }
                 }
+                // if the Id of  get request is for share games app task , 
+                // it has a special treatment because the user can do it many times 
                 if(item.TaskType.Name == "share_games_app")
                 {
                     int count = _context.CustomerTasks.Where(c => c.CustomerId == customer.Id)
