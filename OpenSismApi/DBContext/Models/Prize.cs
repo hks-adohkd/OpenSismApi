@@ -106,6 +106,10 @@ namespace DBContext.Models
         public int Points { get; set; }
 
         [Required]
+        [Display(Name = "Values *")]
+        public int Value { get; set; }
+
+        [Required]
         [Display(Name = "Type *")]
         public int PrizeTypeId { get; set; }
 

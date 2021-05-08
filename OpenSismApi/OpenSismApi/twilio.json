@@ -1,0 +1,10 @@
+{
+  "Twilio": {
+    //"AccountSid": "AC60ecfedf19c64557f764d73ae1d33c60",
+    //"AuthToken": "ee62eaba7fb672dc67cdf701e9e8ab9d",
+    //"VerificationSid": "VA3be1c637e3d341230a9499ed224a8260"
+    "AccountSid": "ACbb03b26b92b73b588172bd9ec14fddb5",
+    "AuthToken": "d2529a553842c293918982d25bc8b8b0",
+    "VerificationSid": "VAb3afb28dd9b722cc1c2edcd605b3cd88"
+  }
+}
