@@ -1,0 +1,335 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Identity
+
+@inject IHttpContextAccessor HttpContextAccessor
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+
+@using AdminPanel.Models;
+@using DBContext.Models;
+
+@{
+    Dictionary<string, string> session = HttpContextAccessor.HttpContext.Session.GetComplexData<Dictionary<string, string>>("Active");
+    string newContacts = HttpContextAccessor.HttpContext.Session.GetString("NewContacts");
+    string newPrizes = HttpContextAccessor.HttpContext.Session.GetString("NewPrizes");
+
+}
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar elevation-4 sidebar-light-teal">
+    <!-- Brand Logo -->
+    <a href="~/Home/Index" class="brand-link">
+        <span class="brand-text font-weight-light">Admin Panel</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+    with font-awesome or any other icon font library -->
+
+                <li class="nav-item">
+                    <a href="~/Home/Index" class="nav-link @session["Home"]">
+                        <i class="nav-icon fas fa-home"></i>
+                        <p>
+                            Home Page
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item has-treeview @session["AppTasks.Header"] @session["Prizes.Header"] @session["CustomerPrizes.Header"]">
+                    <a href="#" class="nav-link @session["AppTasks"] @session["Prizes"] @session["CustomerPrizes"]">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                            Tasks & Prizes
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="~/AppTasks/Index" class="nav-link @session["AppTasks"]">
+                                <i class="nav-icon fas fa-tasks"></i>
+                                <p>
+                                    Tasks
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Prizes/Index" class="nav-link @session["Prizes"]">
+                                <i class="nav-icon fas fa-award"></i>
+                                <p>
+                                    Prizes
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/CustomerPrizes/PendingIndex" class="nav-link @session["CustomerPrizes"]">
+                                <i class="nav-icon fas fa-spinner"></i>
+                                @if (int.Parse(newPrizes) > 0)
+                                {
+                                    <span class="badge badge-warning right">@newPrizes</span>
+                                }
+                                <p>
+                                    Pending Prizes
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item has-treeview @session["ContactUs.Header"] @session["Messages.Header"]">
+                    <a href="#" class="nav-link @session["ContactUs"] @session["Messages"]">
+                        <i class="nav-icon fas fa-comments"></i>
+                        <p>
+                            Communications
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="~/ContactUs/Index" class="nav-link @session["ContactUs"]">
+                                <i class="nav-icon fas fa-at"></i>
+                                @if (int.Parse(newContacts) > 0)
+                                {
+                                    <span class="badge badge-info right">@newContacts</span>
+                                }
+                                <p>
+                                    Contact Us /FAQs
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Messages/Index" class="nav-link @session["Messages"]">
+                                <i class="nav-icon fas fa-comments"></i>
+                                <p>
+                                    Messages
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item has-treeview @session["Customers.Header"] @session["Users.Header"]">
+                    <a href="#" class="nav-link @session["Customers"] @session["Users"]">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>
+                            Users
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="~/Customers/Index" class="nav-link @session["Customers"]">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>
+                                    Customers
+                                </p>
+                            </a>
+                        </li>
+                        @if (User.IsInRole("SuperAdmin"))
+                        {
+                            <li class="nav-item">
+                                <a href="~/Users/Index" class="nav-link @session["Users"]">
+                                    <i class="nav-icon fas fa-user-shield"></i>
+                                    <p>
+                                        Admins
+                                    </p>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </li>
+
+                <li class="nav-item has-treeview @session["TaskTypes.Header"] @session["PrizeTypes.Header"]
+                    @session["PrizeStatus.Header"] @session["Groups.Header"] @session["Cities.Header"]">
+
+                    <a href="#" class="nav-link @session["TaskTypes"] @session["PrizeTypes"]
+                       @session["PrizeStatus"] @session["Groups"]  @session["Cities"]">
+                        <i class="nav-icon fas fa-stream"></i>
+                        <p>
+                            Indices
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="~/TaskTypes/Index" class="nav-link @session["TaskTypes"]">
+                                <i class="nav-icon fas fa-tasks"></i>
+                                <p>
+                                    Task Types
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/PrizeTypes/Index" class="nav-link @session["PrizeTypes"]">
+                                <i class="nav-icon fas fa-award"></i>
+                                <p>
+                                    Prize Types
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/PrizeStatus/Index" class="nav-link @session["PrizeStatus"]">
+                                <i class="nav-icon fas fa-stream"></i>
+                                <p>
+                                    Prize Statuses
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Groups/Index" class="nav-link @session["Groups"]">
+                                <i class="nav-icon fas fa-object-group"></i>
+                                <p>
+                                    Groups
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Cities/Index" class="nav-link @session["Cities"]">
+                                <i class="nav-icon fas fa-city"></i>
+                                <p>
+                                    Cities
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li class="nav-item has-treeview @session["Contacts.Header"] @session["Contents.Header"]
+                    @session["Contents.Header"]">
+
+                    <a href="#" class="nav-link @session["Contacts"] @session["Contents"]
+                       @session["Contents"]">
+                        <i class="nav-icon fas fa-images"></i>
+                        <p>
+                            Content Management
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="~/Contacts/Index" class="nav-link @session["Contacts"]">
+                                <i class="nav-icon fas fa-id-card-alt"></i>
+                                <p>
+                                    Contacts
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Contents/Index" class="nav-link @session["Contents.Index"] @session["Contents.Create"] @session["Contents.Delete"] @session["Contents.Details"] @session["Contents.Edit"]">
+                                <i class="nav-icon fas fa-images"></i>
+                                <p>
+                                    Slider
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Contents/IntroIndex" class="nav-link @session["Contents.IntroIndex"] @session["Contents.IntroCreate"] @session["Contents.IntroDelete"] @session["Contents.IntroDetails"] @session["Contents.IntroEdit"]">
+                                <i class="nav-icon fas fa-images"></i>
+                                <p>
+                                    Intro
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Contents/IntroVidoe" class="nav-link @session["Contents.IntroVidoe"]">
+                                <i class="nav-icon fas fa-video"></i>
+                                <p>
+                                    Intro Video
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Contents/AboutUs" class="nav-link @session["Contents.AboutUs"]">
+                                <i class="nav-icon fas fa-id-card-alt"></i>
+                                <p>
+                                    About Us
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li class="nav-item has-treeview @session["Conditions.Header"] @session["MobileAppVersions.Header"]
+                    @session["LuckyWheels.Header"] @session["DailyBonuses.Header"]">
+
+                    <a href="#" class="nav-link @session["Conditions"] @session["MobileAppVersions"]
+                       @session["LuckyWheels"] @session["DailyBonuses"]">
+                        <i class="nav-icon fas fa-cogs"></i>
+                        <p>
+                            Settings
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="~/Conditions/Index" class="nav-link @session["Conditions"]">
+                                <i class="nav-icon fas fa-cogs"></i>
+                                <p>
+                                    Conditions
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/MobileAppVersions/Index" class="nav-link @session["MobileAppVersions"]">
+                                <i class="nav-icon fab fa-android"></i>
+                                <p>
+                                    Mobile App Versions
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/LuckyWheels/Index" class="nav-link @session["LuckyWheels"]">
+                                <i class="nav-icon fas fa-dharmachakra"></i>
+                                <p>
+                                    Lucky Wheel
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/DailyBonuses/Index" class="nav-link @session["DailyBonuses"]">
+                                <i class="nav-icon fas fa-calendar-alt"></i>
+                                <p>
+                                    Daily Bonus
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item has-treeview @session["Logs.Header"] @session["UserLogs.Header"]">
+
+                    <a href="#" class="nav-link @session["Logs"] @session["UserLogs"]">
+                        <i class="nav-icon fas fa-clone"></i>
+                        <p>
+                            Logs
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="~/Logs/Index" class="nav-link @session["Logs"]">
+                                <i class="nav-icon fas fa-clone"></i>
+                                <p>
+                                    General Logs
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/UserLogs/Index" class="nav-link @session["UserLogs"]">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>
+                                    User Logs
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>

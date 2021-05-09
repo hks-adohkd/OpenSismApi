@@ -1,0 +1,86 @@
+﻿@model IEnumerable<DBContext.Models.CustomerTask>
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Customer Tasks";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped" id="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Id)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.AppTask.DisplayName)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.DoneDate)
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    var controllerName = '@HttpContextAccessor.HttpContext.Session.GetString("ControllerName")';
+    var CustomerId = '@ViewBag.CustomerId';
+    var questionsControllerName = 'CustomerAnswers';
+    var sportsControllerName = 'CustomerPredictions';
+
+    $(function () {
+        $('#table').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "filter": true,
+            "orderMulti": false,
+            "language": {
+                processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+            },
+            "ajax": {
+                "url": "/" + controllerName + "/IndexPost/" + CustomerId,
+                "type": "POST",
+                "datatype": "json"
+            },
+            "columnDefs":
+                [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }],
+            "columns": [
+                { "data": "id", "name": "Id", "autoWidth": true },
+                { "data": "displayName", "name": "DisplayName", "autoWidth": true },
+                { "data": "doneDate", "name": "DoneDate", "autoWidth": true },
+                {
+                    data: null, render: function (data, type, row) {
+                        if (data.taskTypeName == "survey" || data.taskTypeName == "quiz") {
+                            return '<a href="/' + questionsControllerName + '/Index?CustomerId=' + row.customerId + '&appTaskId=' + data.appTaskId + '"><i class="fas fa-question-circle"></i></i></a>' +
+                                '<a href="/' + controllerName + '/Details/' + row.id + '"><i class="fas fa-info-circle"></i></a>';
+                        }
+                        else if (data.taskTypeName == "sport_match") {
+                            return '<a href="/' + sportsControllerName + '/Index?CustomerId=' + row.customerId + '&appTaskId=' + data.appTaskId + '"><i class="fas fa-question-circle"></i></i></a>' +
+                                '<a href="/' + controllerName + '/Details/' + row.id + '"><i class="fas fa-info-circle"></i></a>';
+                        }
+                        else {
+                            return '<a href="/' + controllerName + '/Details/' + row.id + '"><i class="fas fa-info-circle"></i></a>';
+                        }
+                    }
+                }
+            ]
+        })
+    })
+</script>

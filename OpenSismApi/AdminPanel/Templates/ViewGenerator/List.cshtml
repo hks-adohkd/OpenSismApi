@@ -1,0 +1,150 @@
+﻿@inherits Microsoft.VisualStudio.Web.CodeGeneration.Templating.RazorTemplateBase
+@using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore
+@using System.Collections.Generic
+@using System.Linq
+@@model @GetEnumerableTypeExpression(Model.ViewDataTypeName)
+@{
+if (Model.IsPartialView)
+{
+}
+else if (Model.IsLayoutPageSelected)
+{
+@:@@{
+@:ViewData["Title"] = "@Model.ViewName";
+if (!string.IsNullOrEmpty(Model.LayoutPageFile))
+{
+    @:Layout = "@Model.LayoutPageFile";
+}
+@:}
+@:
+@:
+}
+else
+{
+@:@@{
+@:Layout = null;
+@:}
+@:
+@:<!DOCTYPE html>
+@:
+@:<html>
+@:<head>
+    @:<meta name="viewport" content="width=device-width" />
+    @:<title>@Model.ViewName</title>
+@:</head>
+@:<body>
+    //    PushIndent("    ");
+}
+@:<section class="content">
+    @:<div class="container-fluid">
+        @:<div class="row">
+            @:<div class="col-md-12">
+                @:<div class="card">
+                    @:<div class="card-header">
+                        @:<h3 class="card-title">
+                            @:<a asp-action="Create"><i class="fas fa-plus-circle"></i> Add new record</a>
+                        @:</h3>
+                    @:</div>
+                    @:<div class="card-body">
+                        @:<table class="table table-bordered table-striped" id="table">
+                            @:<thead>
+                                @:<tr>
+                                    Dictionary
+                                    <string, IPropertyMetadata>
+                                        propertyLookup = ((IModelMetadata)Model.ModelMetadata).Properties.ToDictionary(x => x.PropertyName, x => x);
+                                    Dictionary<string, INavigationMetadata>
+                                        navigationLookup = ((IModelMetadata)Model.ModelMetadata).Navigations.ToDictionary(x => x.AssociationPropertyName, x => x);
+
+                                    foreach (var item in Model.ModelMetadata.ModelType.GetProperties())
+                                    {
+                                if (propertyLookup.TryGetValue(item.Name, out IPropertyMetadata property)
+                                && property.Scaffold && !property.IsForeignKey && !property.IsPrimaryKey)
+                                {
+                                    <th>
+                                        @@Html.DisplayNameFor(model => model.@GetValueExpression(property))
+                                    </th>
+                                }
+                                else if (navigationLookup.TryGetValue(item.Name, out INavigationMetadata navigation))
+                                {
+                                    <th>
+                                        @@Html.DisplayNameFor(model => model.@GetValueExpression(navigation))
+                                    </th>
+                                }
+                                    }
+                                    @:<th></th>
+                                @:</tr>
+                            @:</thead>
+                        @:</table>
+                    @:</div>
+                @:</div>
+            @:</div>
+        @:</div>
+    @:</div>
+@:</section>
+  <script>
+    $(function () {
+        $('#table').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "filter": true,
+            "orderMulti": false,
+            "language": {
+                processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+            },
+            "ajax": {
+                "url": "/" + "controllerName" + "/IndexPost",
+                "type": "POST",
+                "datatype": "json"
+            },
+            "columnDefs":
+                [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }],
+            "columns": [
+                { "data": "id", "name": "Id", "autoWidth": true },
+                { "data": "displayNameAr", "name": "DisplayNameAr", "autoWidth": true },
+                { "data": "displayName", "name": "DisplayName", "autoWidth": true },
+                {
+                    data: null, render: function (data, type, row) {
+                        return '<a href="/' + "controllerName" + '/Edit/' + row.id + '"><i class="far fa-edit"></i></a>' +
+                            '<a href="/' + "controllerName" + '/Details/' + row.id + '"><i class="fas fa-info-circle"></i></a>' +
+                            '<a href="/' + "controllerName" + '/Delete/' + row.id + '"><i class="far fa-trash-alt"></i></a>';
+                    }
+                }
+            ]
+        })
+    })
+  </script>
+        if (!Model.IsPartialView && !Model.IsLayoutPageSelected)
+        {
+            //ClearIndent();
+@:</body>
+@:</html>
+}
+}
+@functions
+{
+    string GetPrimaryKeyName()
+    {
+        return (Model.ModelMetadata.PrimaryKeys != null && Model.ModelMetadata.PrimaryKeys.Length == 1)
+        ? Model.ModelMetadata.PrimaryKeys[0].PropertyName
+        : null;
+    }
+
+    string GetValueExpression(IPropertyMetadata property)
+    {
+        return property.PropertyName;
+    }
+
+    string GetValueExpression(INavigationMetadata navigation)
+    {
+        return navigation.AssociationPropertyName;
+    }
+
+    string GetEnumerableTypeExpression(string typeName)
+    {
+        return "IEnumerable<" + typeName + ">";
+    }
+}

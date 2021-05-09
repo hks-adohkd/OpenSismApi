@@ -1,0 +1,83 @@
+﻿@model DBContext.Models.CustomerPrize
+
+@{
+    ViewData["Title"] = "Reject";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-danger">
+                    <div class="card-header">
+                        <h3 class="card-title">Are you sure you want to reject this?</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.PrizeStatus)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.PrizeStatus.DisplayName)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.RequestDate)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.RequestDate)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.EarnDate)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.EarnDate)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Customer)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Customer.FirstName) @Html.DisplayFor(model => model.Customer.LastName)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Prize)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Prize.DisplayName)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Created)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Created)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Modified)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Modified)
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="card-footer">
+                        <form asp-action="Reject">
+                            <input type="hidden" asp-for="Id" />
+                            <div class="form-group">
+                                <label class="control-label">Rejection English Message</label>
+                                <input name="Script" value="@ViewBag.Script" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Rejection Arabic Message</label>
+                                <input name="ScriptAr" value="@ViewBag.ScriptAr" class="form-control" />
+                            </div>
+                            <input type="submit" value="Reject" class="btn btn-danger" />
+                            <a class="btn btn-default" asp-action="PendingIndex">Back to List</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

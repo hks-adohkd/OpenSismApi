@@ -1,0 +1,121 @@
+﻿@model DBContext.Models.Prize
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Create</h3>
+                    </div>
+                    <form asp-action="Create" enctype="multipart/form-data">
+                        <div class="card-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="ImageUrl" class="control-label"></label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" name="file" class="custom-file-input">
+                                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                    </div>
+                                </div>
+                                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="DisplayNameAr" class="control-label"></label>
+                                <input asp-for="DisplayNameAr" class="form-control" />
+                                <span asp-validation-for="DisplayNameAr" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="DisplayName" class="control-label"></label>
+                                <input asp-for="DisplayName" class="form-control" />
+                                <span asp-validation-for="DisplayName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="DescriptionAr" class="control-label"></label>
+                                <input asp-for="DescriptionAr" class="form-control" />
+                                <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Description" class="control-label"></label>
+                                <input asp-for="Description" class="form-control" />
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                            @if (ViewBag.LuckyWheelId != null && ViewBag.LuckyWheelId != 0)
+                            {
+                                <div class="form-group">
+                                    <div class="col-12">
+                                        <div class="icheck-primary">
+                                            @Html.CheckBoxFor(model => model.IsValid)
+                                            @Html.LabelFor(model => model.IsValid)
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" asp-for="Name" value="lucky_wheel" />
+                                <input type="hidden" asp-for="ItemOrder" value="name" />
+                                <input type="hidden" asp-for="Points" value="0" />
+                                <input type="hidden" asp-for="LuckyWheelId" value="@ViewBag.LuckyWheelId" />
+                            }
+                            else if (ViewBag.DailyBonusId != null && ViewBag.DailyBonusId != 0)
+                            {
+                                <div class="form-group">
+                                    <label asp-for="ItemOrder" class="control-label"></label>
+                                    <input asp-for="ItemOrder" class="form-control" />
+                                    <span asp-validation-for="ItemOrder" class="text-danger"></span>
+                                </div>
+                                <input type="hidden" asp-for="Name" value="daily_bonus" />
+                                <input type="hidden" asp-for="Points" value="0" />
+                                <input type="hidden" asp-for="DailyBonusId" value="@ViewBag.DailyBonusId" />
+                            }
+                            else
+                            {
+                                <input type="hidden" asp-for="Name" value="name" />
+                                <input type="hidden" asp-for="ItemOrder" value="name" />
+                                <div class="form-group">
+                                    <label asp-for="Points" class="control-label"></label>
+                                    <input asp-for="Points" class="form-control" />
+                                    <span asp-validation-for="Points" class="text-danger"></span>
+                                </div>
+
+                            }
+                            <div class="form-group">
+                                <label asp-for="PrizeTypeId" class="control-label"></label>
+                                <select asp-for="PrizeTypeId" class="form-control" asp-items="ViewBag.PrizeTypeId"></select>
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-info">Submit</button>
+                            @if (ViewBag.LuckyWheelId != null && ViewBag.LuckyWheelId != 0)
+                            {
+                                <a class="btn btn-default float-right" asp-action="Index" asp-route-luckyWheelId="@ViewBag.LuckyWheelId">
+                                    Back to List
+                                </a>
+                            }
+                            else if (ViewBag.DailyBonusId != null && ViewBag.DailyBonusId != 0)
+                            {
+                                <a class="btn btn-default float-right" asp-action="Index" asp-route-dailyBonusId="@ViewBag.DailyBonusId">
+                                    Back to List
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-default float-right" asp-action="Index">
+                                    Back to List
+                                </a>
+                            }
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

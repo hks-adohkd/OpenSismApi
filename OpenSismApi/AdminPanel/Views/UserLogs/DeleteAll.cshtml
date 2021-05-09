@@ -1,0 +1,28 @@
+﻿@model DBContext.Models.UserLog
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-danger">
+                    <div class="card-header">
+                        <h3 class="card-title">Are you sure you want to delete all user logs?</h3>
+                    </div>
+                    <div class="card-footer">
+                        <form asp-action="DeleteAll">
+                            <input type="hidden" asp-for="Id" />
+                            <input type="submit" value="Delete All" class="btn btn-danger" />
+                            <a class="btn btn-default" asp-action="Index">Back to List</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

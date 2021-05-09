@@ -1,0 +1,103 @@
+﻿@model DBContext.Models.MobileAppVersion
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Create</h3>
+                    </div>
+                    <form asp-action="Create">
+                        <div class="card-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            
+                            <div class="form-group">
+                                <label asp-for="PlatformType" class="control-label"></label>
+                                <input asp-for="PlatformType" class="form-control" />
+                                <span asp-validation-for="PlatformType" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="VersionNumber" class="control-label"></label>
+                                <input asp-for="VersionNumber" class="form-control" />
+                                <span asp-validation-for="VersionNumber" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="VersionCode" class="control-label"></label>
+                                <input asp-for="VersionCode" class="form-control" />
+                                <span asp-validation-for="VersionCode" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-12">
+                                    <div class="icheck-primary">
+                                        @Html.CheckBoxFor(model => model.IsCurrent)
+                                        @Html.LabelFor(model => model.IsCurrent)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-12">
+                                    <div class="icheck-primary">
+                                        @Html.CheckBoxFor(model => model.IsSupported)
+                                        @Html.LabelFor(model => model.IsSupported)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="StoreUrl" class="control-label"></label>
+                                <input asp-for="StoreUrl" class="form-control" />
+                                <span asp-validation-for="StoreUrl" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="SyriaStoreUrl" class="control-label"></label>
+                                <input asp-for="SyriaStoreUrl" class="form-control" />
+                                <span asp-validation-for="SyriaStoreUrl" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Qrcode" class="control-label"></label>
+                                <input asp-for="Qrcode" class="form-control" />
+                                <span asp-validation-for="Qrcode" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="UpdateMsgAr" class="control-label"></label>
+                                <input asp-for="UpdateMsgAr" class="form-control" />
+                                <span asp-validation-for="UpdateMsgAr" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="UpdateMsg" class="control-label"></label>
+                                <input asp-for="UpdateMsg" class="form-control" />
+                                <span asp-validation-for="UpdateMsg" class="text-danger"></span>
+                            </div>
+                            <input type="hidden" name="NumberOfDownloads" value="0" />
+                            <div class="form-group">
+                                <label asp-for="NoteAr" class="control-label"></label>
+                                <input asp-for="NoteAr" class="form-control" />
+                                <span asp-validation-for="NoteAr" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Note" class="control-label"></label>
+                                <input asp-for="Note" class="form-control" />
+                                <span asp-validation-for="Note" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-info">Submit</button>
+                            <a class="btn btn-default float-right" asp-action="Index">
+                                Back to List
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

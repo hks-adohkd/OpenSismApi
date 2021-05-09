@@ -1,0 +1,91 @@
+﻿@model DBContext.Models.SportMatch
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Create</h3>
+                    </div>
+                    <form asp-action="Create" enctype="multipart/form-data">
+                        <div class="card-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="FirstTeamName" class="control-label"></label>
+                                <input asp-for="FirstTeamName" class="form-control" />
+                                <span asp-validation-for="FirstTeamName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="FirstTeamNameAr" class="control-label"></label>
+                                <input asp-for="FirstTeamNameAr" class="form-control" />
+                                <span asp-validation-for="FirstTeamNameAr" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="FirstTeamFlag" class="control-label"></label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" name="FirstFile" class="custom-file-input">
+                                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                    </div>
+                                </div>
+                                <span asp-validation-for="FirstTeamFlag" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="SecondTeamName" class="control-label"></label>
+                                <input asp-for="SecondTeamName" class="form-control" />
+                                <span asp-validation-for="SecondTeamName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="SecondTeamNameAr" class="control-label"></label>
+                                <input asp-for="SecondTeamNameAr" class="form-control" />
+                                <span asp-validation-for="SecondTeamNameAr" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="SecondTeamFlag" class="control-label"></label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" name="SecondFile" class="custom-file-input">
+                                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                    </div>
+                                </div>
+                                <span asp-validation-for="SecondTeamFlag" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="MatchTime" class="control-label"></label>
+                                <input type="datetime" asp-for="MatchTime" class="form-control datetimepicker" />
+                                <span asp-validation-for="MatchTime" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="League" class="control-label"></label>
+                                <input asp-for="League" class="form-control" />
+                                <span asp-validation-for="League" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Type" class="control-label"></label>
+                                <input asp-for="Type" class="form-control" value="Football" />
+                                <span asp-validation-for="Type" class="text-danger"></span>
+                            </div>
+                            <input type="hidden" name="AppTaskId" value="@ViewBag.AppTaskId" />
+
+                        </div>
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-info">Submit</button>
+                            <a class="btn btn-default float-right" asp-action="Index" asp-controller="AppTasks">
+                                Back to List
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

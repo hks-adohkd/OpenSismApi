@@ -1,0 +1,116 @@
+﻿@model IEnumerable<DBContext.Models.Customer>
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Customers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped" id="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Id)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.ImageUrl)
+                                    </th>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.TotalPoints)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Group)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.CustomerTasks)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.CustomerPrizes)
+                                    </th>
+                                    <th>
+                                        Reset Password
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+      var controllerName = '@HttpContextAccessor.HttpContext.Session.GetString("ControllerName")';
+    var prizescontrollerName = 'CustomerPrizes';
+      var taskscontrollerName = 'CustomerTasks';
+    $(function () {
+        $('#table').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "filter": true,
+            "orderMulti": false,
+            "language": {
+                processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+            },
+            "ajax": {
+                "url": "/" + controllerName + "/IndexPost",
+                "type": "POST",
+                "datatype": "json"
+            },
+            "columnDefs":
+                [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }],
+            "columns": [
+                { "data": "id", "name": "Id", "autoWidth": true },
+                {
+                    data: null, render: function (data, type, row) {
+                        return '<img class="img-responsive img-bordered img-md" src="' + data.imageUrl + '" />';
+                    }
+                },
+                { "data": "name", "name": "Name", "autoWidth": true },
+                { "data": "totalPoints", "name": "TotalPoints", "autoWidth": true },
+                { "data": "group", "name": "Group", "autoWidth": true },
+                { "data": "customerTasks", "name": "CustomerTasks", "autoWidth": true },
+                { "data": "customerPrizes", "name": "CustomerPrizes", "autoWidth": true },
+                {
+                    data: null, render: function (data, type, row) {
+                        return '<a href="/' + controllerName + '/ResetPassword/' + row.id + '" class="btn btn-block btn-sm" style="background: #20c997;color: white;"><i class="fas fa-lock"></i>Reset</a>';
+                    }
+                },
+                {
+                    data: null, render: function (data, type, row) {
+                        if (data.lockoutEnabled) {
+                            return '<a href="/' + prizescontrollerName + '/Index/' + row.id + '"><i class="fas fa-award" style="color:gold;"></i></a>' +
+                                '<a href="/' + taskscontrollerName + '/Index/' + row.id + '"><i class="fas fa-tasks" style="color:black;"></i></a>' +
+                                '<a href="/' + controllerName + '/Details/' + row.id + '"><i class="fas fa-info-circle" ></i></a>' +
+                                '<a href="/' + controllerName + '/Unlock/' + row.id + '"><i class="fas fa-unlock" style="color:green;"></i></a>' +
+                                '<a href="/' + controllerName + '/Message?customerId=' + row.id + '"><i class="fas fa-comments"></i></i></a>';
+                        }
+                        else {
+                            return '<a href="/' + prizescontrollerName + '/Index/' + row.id + '"><i class="fas fa-award" style="color:gold;"></i></a>' +
+                                '<a href="/' + taskscontrollerName + '/Index/' + row.id + '"><i class="fas fa-tasks" style="color:black;"></i></a>' +
+                                '<a href="/' + controllerName + '/Details/' + row.id + '"><i class="fas fa-info-circle" ></i></a>' +
+                                '<a href="/' + controllerName + '/Delete/' + row.id + '"><i class="fas fa-lock" style="color:red;"></i></a>' +
+                                '<a href="/' + controllerName + '/Message?customerId=' + row.id + '"><i class="fas fa-comments"></i></i></a>';
+                        }
+                    }
+                }
+            ]
+        })
+    })
+</script>

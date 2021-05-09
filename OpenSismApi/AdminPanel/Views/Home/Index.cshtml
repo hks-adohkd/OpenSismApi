@@ -1,0 +1,126 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>@ViewBag.newCustomers</h3>
+
+                        <p>New Customer within this week</p>
+                    </div>
+                    <div class="icon">
+                        <i class="nav-icon fas fa-users"></i>
+                    </div>
+                    <a href="~/Customers/Index" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>@ViewBag.pendingPrizes</h3>
+
+                        <p>Pending Prizes</p>
+                    </div>
+                    <div class="icon">
+                        <i class="nav-icon fas fa-award"></i>
+                    </div>
+                    <a href="~/CustomerPrizes/PendingIndex" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>@ViewBag.activeTasks</h3>
+
+                        <p>Active Tasks</p>
+                    </div>
+                    <div class="icon">
+                        <i class="nav-icon fas fa-users"></i>
+                    </div>
+                    <a href="~/UserLogs/Index" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>@ViewBag.contactUs</h3>
+
+                        <p>New Messages</p>
+                    </div>
+                    <div class="icon">
+                        <i class="nav-icon fas fa-comments"></i>
+                    </div>
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+        </div>
+        <!-- /.row -->
+        <!-- Timelime example  -->
+        <div class="row">
+            <div class="col-md-12">
+                <!-- The time line -->
+                <div class="timeline">
+                    <!-- timeline time label -->
+                    <div class="time-label">
+                        @{
+                            string formated = (DateTime.Now).ToString("dd MMMM");
+                        }
+                        <span class="bg-red">@formated</span>
+                    </div>
+                    <!-- /.timeline-label -->
+                    <!-- timeline item -->
+                    <div>
+                        <i class="fas fa-user bg-green"></i>
+                        <div class="timeline-item">
+                            <span class="time"></span>
+                            <h3 class="timeline-header no-border"><a href="#">All Customers</a> @ViewBag.AllCustomers</h3>
+                        </div>
+                    </div>
+                    <div>
+                        <i class="fas fa-tasks bg-fuchsia"></i>
+                        <div class="timeline-item">
+                            <span class="time"></span>
+                            <h3 class="timeline-header no-border"><a href="#">All Done Tasks</a> @ViewBag.AllDoneTasks</h3>
+                        </div>
+                    </div>
+                    <div>
+                        <i class="fas fa-tasks bg-fuchsia"></i>
+                        <div class="timeline-item">
+                            <span class="time"></span>
+                            <h3 class="timeline-header no-border"><a href="#">Most Done Task</a> @ViewBag.MaxTaskDone</h3>
+                        </div>
+                    </div>
+                    <div>
+                        <i class="fas fa-gift bg-gradient-yellow"></i>
+                        <div class="timeline-item">
+                            <span class="time"></span>
+                            <h3 class="timeline-header no-border"><a href="#">Most Requested Prize</a> @ViewBag.MaxRequestedPrize</h3>
+                        </div>
+                    </div>
+                    <!-- END timeline item -->
+                    <div>
+                        <i class="fas fa-clock bg-gray"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- /.col -->
+        </div>
+    </div>
+    <!-- /.timeline -->
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
