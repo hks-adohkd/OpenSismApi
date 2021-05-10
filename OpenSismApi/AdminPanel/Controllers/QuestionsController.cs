@@ -21,6 +21,9 @@ namespace AdminPanel.Controllers
             _context = context;
         }
 
+        /*
+
+
         // GET: Questions
         public IActionResult Index(int id, int? IsQuiz)
         {
@@ -261,6 +264,6 @@ namespace AdminPanel.Controllers
         private bool QuestionExists(int id)
         {
             return _context.Questions.Any(e => e.Id == id);
-        }
+        }*/
     }
 }

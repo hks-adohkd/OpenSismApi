@@ -59,7 +59,7 @@
                                 </div>
                                 <input type="hidden" asp-for="Points" value="0" />
                                 <input type="hidden" asp-for="ItemOrder" value="0" />
-                                <input type="hidden" asp-for="LuckyWheelId" value="@ViewBag.LuckyWheelId" />
+                              //  <input type="hidden" asp-for="LuckyWheelId" value="@ViewBag.LuckyWheelId" />
                             }
                             else if (ViewBag.DailyBonusId != null && ViewBag.DailyBonusId != 0)
                             {
@@ -69,7 +69,7 @@
                                     <span asp-validation-for="ItemOrder" class="text-danger"></span>
                                 </div>
                                 <input type="hidden" asp-for="Points" value="0" />
-                                <input type="hidden" asp-for="DailyBonusId" value="@ViewBag.DailyBonusId" />
+                              //  <input type="hidden" asp-for="DailyBonusId" value="@ViewBag.DailyBonusId" />
                             }
                             else
                             {
@@ -93,27 +93,6 @@
                             <input type="hidden" asp-for="ImageUrl" />
                         </div>
 
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-success">Submit</button>
-                            @if (ViewBag.LuckyWheelId != null && ViewBag.LuckyWheelId != 0)
-                            {
-                                <a class="btn btn-default float-right" asp-action="Index" asp-route-luckyWheelId="@Model.LuckyWheelId">
-                                    Back to List
-                                </a>
-                            }
-                            else if (ViewBag.DailyBonusId != null && ViewBag.DailyBonusId != 0)
-                            {
-                                <a class="btn btn-default float-right" asp-action="Index" asp-route-dailyBonusId="@Model.DailyBonusId">
-                                    Back to List
-                                </a>
-                            }
-                            else
-                            {
-                                <a class="btn btn-default float-right" asp-action="Index">
-                                    Back to List
-                                </a>
-                            }
-                        </div>
                     </form>
                 </div>
             </div>

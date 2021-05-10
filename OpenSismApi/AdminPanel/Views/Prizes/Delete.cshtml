@@ -77,30 +77,7 @@ ViewData["Title"] = "Delete";
                         </dd>
                     </dl>
                 </div>
-                    <div class="card-footer">
-                        <form asp-action="Delete">
-                            <input type="hidden" asp-for="Id" />
-                            <input type="submit" value="Delete" class="btn btn-danger" />
-                            @if (Model.LuckyWheelId != null && Model.LuckyWheelId != 0)
-                            {
-                                <a class="btn btn-default float-right" asp-action="Index" asp-route-luckyWheelId="@Model.LuckyWheelId">
-                                    Back to List
-                                </a>
-                            }
-                            else if (Model.DailyBonusId != null && Model.DailyBonusId != 0)
-                            {
-                                <a class="btn btn-default float-right" asp-action="Index" asp-route-dailyBonusId="@Model.DailyBonusId">
-                                    Back to List
-                                </a>
-                            }
-                            else
-                            {
-                                <a class="btn btn-default float-right" asp-action="Index">
-                                    Back to List
-                                </a>
-                            }
-                        </form>
-                    </div>
+                    
                 </div>
             </div>
         </div>

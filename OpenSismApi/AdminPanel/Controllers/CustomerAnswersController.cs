@@ -39,7 +39,7 @@ namespace AdminPanel.Controllers
                 int pageSize = length != null ? Convert.ToInt32(length) : 0;
                 int skip = start != null ? Convert.ToInt32(start) : 0;
                 int recordsTotal = 0;
-
+                
                 var tableData = (from temp in _context.CustomerAnswers
                                  .Where(c => c.CustomerId == CustomerId && c.Question.AppTaskId == appTaskId)
                                  select new

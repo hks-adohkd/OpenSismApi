@@ -45,23 +45,23 @@ namespace DBContext.Models
         public virtual DbSet<ContactUs> ContactsUs { get; set; }
         public virtual DbSet<Content> Contents { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
-        //public virtual DbSet<CustomerAnswer> CustomerAnswers { get; set; }
+        public virtual DbSet<CustomerAnswer> CustomerAnswers { get; set; }
         public virtual DbSet<CustomerMessage> CustomerMessages { get; set; }
         public virtual DbSet<CustomerPrediction> CustomerPredictions { get; set; }
         public virtual DbSet<CustomerPrize> CustomerPrizes { get; set; }
         public virtual DbSet<CustomerTask> CustomerTasks { get; set; }
-       // public virtual DbSet<DailyBonus> DailyBonuses { get; set; }
+        public virtual DbSet<DailyBonus> DailyBonuses { get; set; }
         public virtual DbSet<Group> Groups { get; set; }
         public virtual DbSet<Log> Logs { get; set; }
-       // public virtual DbSet<LuckyWheel> LuckyWheels { get; set; }
+        public virtual DbSet<LuckyWheel> LuckyWheels { get; set; }
         public virtual DbSet<Message> Messages { get; set; }
         public virtual DbSet<MessageGroup> MessageGroups { get; set; }
         public virtual DbSet<MobileAppVersion> MobileAppVersions { get; set; }
         public virtual DbSet<Prize> Prizes { get; set; }
         public virtual DbSet<PrizeStatus> PrizeStatuses { get; set; }
         public virtual DbSet<PrizeType> PrizeTypes { get; set; }
-       // public virtual DbSet<Question> Questions { get; set; }
-      //  public virtual DbSet<QuestionOption> QuestionOptions { get; set; }
+        public virtual DbSet<Question> Questions { get; set; }
+        public virtual DbSet<QuestionOption> QuestionOptions { get; set; }
         public virtual DbSet<SportMatch> SportMatches { get; set; }
         public virtual DbSet<TaskType> TaskTypes { get; set; }
         public virtual DbSet<UserLog> UserLogs { get; set; }
