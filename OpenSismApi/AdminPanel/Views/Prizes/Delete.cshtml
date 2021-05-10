@@ -1,0 +1,108 @@
+﻿@model DBContext.Models.Prize
+
+@{
+ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-danger">
+                <div class="card-header">
+                    <h3 class="card-title">Are you sure you want to delete this?</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            Icon
+                        </dt>
+                        <dd>
+                            <img class="img-responsive img-bordered img-lg" src="@Model.ImageUrl" />
+                        </dd>
+                    </dl>
+                    <div class="clearfix"></div>
+                    <dl class="dl-horizontal">
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.DisplayNameAr)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.DisplayNameAr)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.DisplayName)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.DisplayName)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.DescriptionAr)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.DescriptionAr)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Description)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Description)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Points)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Points)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.PrizeType)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.PrizeType.Id)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Created)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Created)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Modified)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Modified)
+                        </dd>
+                    </dl>
+                </div>
+                    <div class="card-footer">
+                        <form asp-action="Delete">
+                            <input type="hidden" asp-for="Id" />
+                            <input type="submit" value="Delete" class="btn btn-danger" />
+                            @if (Model.LuckyWheelId != null && Model.LuckyWheelId != 0)
+                            {
+                                <a class="btn btn-default float-right" asp-action="Index" asp-route-luckyWheelId="@Model.LuckyWheelId">
+                                    Back to List
+                                </a>
+                            }
+                            else if (Model.DailyBonusId != null && Model.DailyBonusId != 0)
+                            {
+                                <a class="btn btn-default float-right" asp-action="Index" asp-route-dailyBonusId="@Model.DailyBonusId">
+                                    Back to List
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-default float-right" asp-action="Index">
+                                    Back to List
+                                </a>
+                            }
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

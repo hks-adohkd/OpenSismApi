@@ -1,0 +1,60 @@
+﻿@model DBContext.Models.AppTaskGroup
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h3 class="card-title">Details</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.AppTask)
+                            </dt>
+                            <dd>
+                                <a class="badge badge-info" target="_blank" asp-action="Details" asp-controller="AppTasks" asp-route-id="@Model.AppTaskId">
+                                    @Html.DisplayFor(model => model.AppTask.DisplayName)
+                                </a>
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Group)
+                            </dt>
+                            <dd>
+                                <a class="badge badge-info" target="_blank" asp-action="Details" asp-controller="Groups" asp-route-id="@Model.GroupId">
+                                    @Html.DisplayFor(model => model.Group.DisplayName)
+                                </a>
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Created)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Created)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Modified)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Modified)
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="card-footer">
+                        <a class="btn btn-success" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                        <a class="btn btn-default" asp-action="Index" asp-route-id="@ViewBag.AppTaskId">
+                            Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

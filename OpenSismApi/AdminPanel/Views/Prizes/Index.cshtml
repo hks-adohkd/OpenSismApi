@@ -1,0 +1,145 @@
+﻿@model IEnumerable<DBContext.Models.Prize>
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Prizes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    @if (!ViewBag.isArchive)
+                    {
+                        @if (ViewBag.LuckyWheelId != null && ViewBag.LuckyWheelId != 0)
+                        {
+                            if (!ViewBag.Closed)
+                            {
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <a asp-action="Create" asp-route-luckyWheelId="@ViewBag.LuckyWheelId"><i class="fas fa-plus-circle"></i> Add new record</a>
+                                    </h3>
+                                </div>
+                            }
+                        }
+                        else if (ViewBag.DailyBonusId != null && ViewBag.DailyBonusId != 0)
+                        {
+                            if (!ViewBag.Closed)
+                            {
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <a asp-action="Create" asp-route-dailyBonusId="@ViewBag.DailyBonusId"><i class="fas fa-plus-circle"></i> Add new record</a>
+                                    </h3>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <a asp-action="Create"><i class="fas fa-plus-circle"></i> Add new record</a>
+                                </h3>
+                            </div>
+                        }
+                    }
+                    @if (!ViewBag.isArchive)
+                    {
+                        <div class="card-header">
+                            <div class="card-title" style="float:right !important;">
+                                <a asp-action="Index" asp-route-isArchive="true" class="btn pull-right btn-block" style="color:white;background:#20c997;"><i class="fas fa-archive"></i> Archive</a>
+                            </div>
+                        </div>
+                    }
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped" id="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Id)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.ItemOrder)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.ImageUrl)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.DisplayName)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.CustomerPrizes)
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    var controllerName = '@HttpContextAccessor.HttpContext.Session.GetString("ControllerName")';
+    var luckyWheelId = '@ViewBag.LuckyWheelId';
+    var dailyBonusId = '@ViewBag.DailyBonusId';
+    var isArchive = '@ViewBag.isArchive';
+    var my_url = "/" + controllerName + "/IndexPost?isArchive=" + "@ViewBag.isArchive";
+    if (luckyWheelId != null && luckyWheelId != 0) {
+        my_url = "/" + controllerName + "/IndexPost?isArchive=" + "@ViewBag.isArchive" + "&luckyWheelId=" + luckyWheelId;
+    }
+    if (dailyBonusId != null && dailyBonusId != 0) {
+        my_url = "/" + controllerName + "/IndexPost?isArchive=" + "@ViewBag.isArchive" + "&dailyBonusId=" + dailyBonusId;
+    }
+    debugger;
+
+    $(function () {
+        $('#table').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "filter": true,
+            "orderMulti": false,
+            "order": [[1, "asc"]],
+            "language": {
+                processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+            },
+            "ajax": {
+                "url": my_url,
+                "type": "POST",
+                "datatype": "json"
+            },
+            "columnDefs":
+                [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }],
+            "columns": [
+                { "data": "id", "name": "Id", "autoWidth": true },
+                { "data": "itemOrder", "name": "ItemOrder", "autoWidth": true },
+                {
+                    data: null, render: function (data, type, row) {
+                        return '<img class="img-responsive img-bordered img-md" src="' + data.imageUrl + '" />';
+                    }
+                },
+                { "data": "displayName", "name": "DisplayName", "autoWidth": true },
+                { "data": "custmersCount", "name": "CustmersCount", "autoWidth": true },
+                {
+                    data: null, render: function (data, type, row) {
+                        if (isArchive == "False") {
+                            return '<a href="/' + controllerName + '/Edit/' + row.id + '"><i class="far fa-edit"></i></a>' +
+                                '<a href="/' + controllerName + '/Details/' + row.id + '"><i class="fas fa-info-circle"></i></a>' +
+                                '<a href="/' + controllerName + '/Delete/' + row.id + '"><i class="far fa-trash-alt"></i></a>';
+                        }
+                        else {
+                            return '<a href="/' + controllerName + '/Recover/' + row.id + '">Recover</a>';
+                        }
+                    }
+                }
+            ]
+        })
+    })
+</script>

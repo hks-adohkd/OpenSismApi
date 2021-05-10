@@ -1,0 +1,118 @@
+﻿@model DBContext.Models.AppTask
+
+@{
+    ViewData["Title"] = "Recover";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-teal">
+                    <div class="card-header">
+                        <h3 class="card-title">Are you sure you want to recover this?</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <dl class="dl-horizontal">
+                            <dt>
+                                Icon
+                            </dt>
+                            <dd>
+                                <img class="img-responsive img-bordered img-lg" src="@Model.ImageUrl" />
+                            </dd>
+                        </dl>
+                        <div class="clearfix"></div>
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.DisplayNameAr)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.DisplayNameAr)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.DisplayName)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.DisplayName)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.DescriptionAr)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.DescriptionAr)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Description)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Link)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Link)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.StartDate)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.StartDate)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.EndDate)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.EndDate)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Points)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Points)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Limit)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Limit)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Stared)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Stared)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.TaskType)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.TaskType.DisplayName)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Created)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Created)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Modified)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Modified)
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="card-footer">
+                        <form asp-action="Recover">
+                            <input type="hidden" asp-for="Id" />
+                            <input type="submit" value="Recover" class="btn btn-default" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

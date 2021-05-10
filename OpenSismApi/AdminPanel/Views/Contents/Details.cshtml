@@ -1,0 +1,78 @@
+﻿@model DBContext.Models.Content
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h3 class="card-title">Details</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <dl class="dl-horizontal">
+                            <dt>
+                                Image Url
+                            </dt>
+                            <dd>
+                                <img class="img-responsive img-bordered img-lg" src="@Model.ImageUrl" />
+                            </dd>
+                        </dl>
+                        <div class="clearfix"></div>
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.ItemOrder)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.ItemOrder)
+                            </dd>
+                            <dt>
+                                Arabic Caption
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.TitleAr)
+                            </dd>
+                            <dt>
+                                English Caption
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Title)
+                            </dd>
+
+                            <dt>
+                                Image Path
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.ImageUrl)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Created)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Created)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Modified)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Modified)
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="card-footer">
+                        <a class="btn btn-success" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                        <a class="btn btn-default" asp-action="Index">
+                            Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

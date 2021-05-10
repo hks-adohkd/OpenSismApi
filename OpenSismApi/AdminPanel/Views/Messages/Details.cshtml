@@ -1,0 +1,74 @@
+﻿@model DBContext.Models.Message
+
+@{
+ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h3 class="card-title">Details</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.TitleAr)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.TitleAr)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Title)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Title)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.ScriptAr)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.ScriptAr)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Script)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Script)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.IsForAll)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.IsForAll)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Created)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Created)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Modified)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Modified)
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="card-footer">
+                                <a class="btn btn-success" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                        <a class="btn btn-default" asp-action="Index">
+                            Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

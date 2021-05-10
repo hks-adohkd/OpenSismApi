@@ -1,0 +1,70 @@
+﻿@model IEnumerable<DBContext.Models.CustomerAnswer>
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Customer Answers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped" id="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Id)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Question.Script)
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    var controllerName = '@HttpContextAccessor.HttpContext.Session.GetString("ControllerName")';
+    var CustomerId = '@ViewBag.CustomerId';
+    var AppTaskId = '@ViewBag.AppTaskId';
+    $(function () {
+        $('#table').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "filter": true,
+            "orderMulti": false,
+            "language": {
+                processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+            },
+            "ajax": {
+                "url": "/" + controllerName + "/IndexPost?CustomerId=" + CustomerId + "&AppTaskId=" + AppTaskId,
+                "type": "POST",
+                "datatype": "json"
+            },
+            "columnDefs":
+                [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }],
+            "columns": [
+                { "data": "id", "name": "Id", "autoWidth": true },
+                { "data": "script", "name": "Script", "autoWidth": true },
+                {
+                    data: null, render: function (data, type, row) {
+                        return '<a href="/' + controllerName + '/Details/' + row.id + '"><i class="fas fa-info-circle"></i></a>';
+                    }
+                }
+            ]
+        })
+    })
+</script>

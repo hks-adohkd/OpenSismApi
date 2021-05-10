@@ -1,0 +1,141 @@
+﻿@model DBContext.Models.AppTask
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Create</h3>
+                    </div>
+                    <form asp-action="Create" enctype="multipart/form-data">
+                        <div class="card-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="TaskTypeId" class="control-label"></label>
+                                <select asp-for="TaskTypeId" id="TaskTypeId" class="form-control" asp-items="ViewBag.TaskTypeId">
+                                    <option value="0">Select Type</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ImageUrl" class="control-label"></label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" name="file" class="custom-file-input">
+                                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                    </div>
+                                </div>
+                                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="DisplayNameAr" class="control-label"></label>
+                                <input asp-for="DisplayNameAr" class="form-control" />
+                                <span asp-validation-for="DisplayNameAr" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="DisplayName" class="control-label"></label>
+                                <input asp-for="DisplayName" class="form-control" />
+                                <span asp-validation-for="DisplayName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="DescriptionAr" class="control-label"></label>
+                                <input asp-for="DescriptionAr" class="form-control" />
+                                <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Description" class="control-label"></label>
+                                <input asp-for="Description" class="form-control" />
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Link" class="control-label"></label>
+                                <input asp-for="Link" class="form-control" />
+                                <span asp-validation-for="Link" class="text-danger"></span>
+                            </div>
+                            <div class="form-group" id="VedioFileDiv" style="display:none;">
+                                <label asp-for="Link" class="control-label"></label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" name="vedioFile" class="custom-file-input">
+                                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                    </div>
+                                </div>
+                                <span asp-validation-for="Link" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="StartDate" class="control-label"></label>
+                                <input type="datetime" asp-for="StartDate" class="form-control datetimepicker" />
+                                <span asp-validation-for="StartDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="EndDate" class="control-label"></label>
+                                <input type="datetime" asp-for="EndDate" class="form-control datetimepicker" />
+                                <span asp-validation-for="EndDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Points" class="control-label"></label>
+                                <input asp-for="Points" class="form-control" />
+                                <span asp-validation-for="Points" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Limit" class="control-label"></label>
+                                <input asp-for="Limit" class="form-control" />
+                                <span asp-validation-for="Limit" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-12">
+                                    <div class="icheck-primary">
+                                        @Html.CheckBoxFor(model => model.Stared)
+                                        @Html.LabelFor(model => model.Stared)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-12">
+                                    <div class="icheck-primary">
+                                        @Html.CheckBoxFor(model => model.IsForAll)
+                                        @Html.LabelFor(model => model.IsForAll)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="PackageNameDiv" style="display:none;">
+                                <label asp-for="PackageName" class="control-label"></label>
+                                <input asp-for="PackageName" id="PackageNameInput" class="form-control" />
+                                <span asp-validation-for="PackageName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group" id="PageIdDiv" style="display:none;">
+                                <label asp-for="PageId" class="control-label"></label>
+                                <input asp-for="PageId" id="PageIdInput" class="form-control" />
+                                <span asp-validation-for="PageId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group" id="VedioIdDiv" style="display:none;">
+                                <label asp-for="VedioId" class="control-label"></label>
+                                <input asp-for="VedioId" id="VedioIdInput" class="form-control" />
+                                <span asp-validation-for="VedioId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group" id="VedioDurationDiv" style="display:none;">
+                                <label asp-for="VedioDuration" class="control-label"></label>
+                                <input asp-for="VedioDuration" id="VedioDurationInput" class="form-control" />
+                                <span asp-validation-for="VedioDuration" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-info">Submit</button>
+                            <a class="btn btn-default float-right" asp-action="Index">
+                                Back to List
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

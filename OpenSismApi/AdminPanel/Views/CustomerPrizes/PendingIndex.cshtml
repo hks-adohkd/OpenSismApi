@@ -1,0 +1,85 @@
+﻿@*@model IEnumerable<DBContext.Models.CustomerPrize>*@
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Pending Prizes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped" id="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Id
+                                    </th>
+                                    <th>
+                                        Customer
+                                    </th>
+                                    <th>
+                                        Prize
+                                    </th>
+                                    <th>
+                                        Request Date
+                                    </th>
+                                    <th>
+                                        Status
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    var controllerName = '@HttpContextAccessor.HttpContext.Session.GetString("ControllerName")';
+    $(function () {
+        $('#table').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "filter": true,
+            "orderMulti": false,
+            "language": {
+                processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+            },
+            "ajax": {
+                "url": "/" + controllerName + "/PendingIndexPost",
+                "type": "POST",
+                "datatype": "json"
+            },
+            "columnDefs":
+                [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }],
+            "columns": [
+                { "data": "id", "name": "Id", "autoWidth": true },
+                { "data": "customerName", "name": "CustomerName", "autoWidth": true },
+                { "data": "prize", "name": "Prize", "autoWidth": true },
+                { "data": "requestDate", "name": "RequestDate", "autoWidth": true },
+                { "data": "prizeStatus", "name": "PrizeStatus", "autoWidth": true },
+                {
+                    data: null, render: function (data, type, row) {
+                        return '<a href="/' + controllerName + '/Accept/' + row.id + '"><i class="fas fa-check-square" style="color:green;"></i></a>' +
+                            '<a href="/' + controllerName + '/Reject/' + row.id + '"><i class="fas fa-minus-square" style="color:red;"></i></a>';
+                    }
+                }
+            ]
+        })
+    })
+</script>

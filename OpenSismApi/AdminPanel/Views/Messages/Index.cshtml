@@ -1,0 +1,113 @@
+﻿@model IEnumerable<DBContext.Models.Message>
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Messages";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    @if (!ViewBag.isArchive)
+                    {
+                        <div class="card-header">
+                            <div class="card-title">
+                                <a asp-action="Create"><i class="fas fa-plus-circle"></i> Add new record</a>
+                            </div>
+                        </div>
+                        <div class="card-header">
+                            <div class="card-title" style="float:right !important;">
+                                <a asp-action="Index" asp-route-isArchive="true" class="btn pull-right btn-block" style="color:white;background:#20c997;"><i class="fas fa-archive"></i> Archive</a>
+                            </div>
+                        </div>
+                    }
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped" id="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Id)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Title)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.IsForAll)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Modified)
+                                    </th>
+                                    <th>Send</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    var controllerName = '@HttpContextAccessor.HttpContext.Session.GetString("ControllerName")';
+    var groupControllerName = 'MessageGroups';
+        var isArchive = '@ViewBag.isArchive';
+
+    /**/
+    $(function () {
+        $('#table').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "filter": true,
+            "orderMulti": false,
+            "order": [[3, "desc"]],
+            "language": {
+                processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+            },
+            "ajax": {
+                "url": "/" + controllerName + "/IndexPost?isArchive=" + isArchive,
+                "type": "POST",
+                "datatype": "json"
+            },
+            "columnDefs":
+                [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }],
+            "columns": [
+                { "data": "id", "name": "Id", "autoWidth": true },
+                { "data": "title", "name": "Title", "autoWidth": true },
+                { "data": "isForAll", "name": "IsForAll", "autoWidth": true },
+                { "data": "modified", "name": "Modified", "autoWidth": true },
+                {
+                    data: null, render: function (data, type, row) {
+                        if (isArchive == "False") {
+                            return '<a href="/' + controllerName + '/Send/' + row.id + '" class="btn btn-block btn-sm" style="background: #20c997;color: white;"><i class="fas fa-paper-plane"></i>Send</a>';
+                        }
+                        else {
+                            return '';
+                        }
+                    }
+                },
+                {
+                    data: null, render: function (data, type, row) {
+                        if (isArchive == "False") {
+                            return '<a href="/' + groupControllerName + '/Index/' + row.id + '"><i class="fas fa-object-group"></i></a>' +
+                                '<a href="/' + controllerName + '/Edit/' + row.id + '"><i class="far fa-edit"></i></a>' +
+                                '<a href="/' + controllerName + '/Details/' + row.id + '"><i class="fas fa-info-circle"></i></a>' +
+                                '<a href="/' + controllerName + '/Delete/' + row.id + '"><i class="far fa-trash-alt"></i></a>';
+                        }
+                        else {
+                            return '<a href="/' + controllerName + '/Recover/' + row.id + '">Recover</a>';
+                        }
+                    }
+                }
+            ]
+        })
+    })
+</script>

@@ -1,0 +1,73 @@
+﻿@model IEnumerable<DBContext.Models.Content>
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Intro";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    @if (!ViewBag.Closed)
+                    {
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <a asp-action="IntroCreate"><i class="fas fa-plus-circle"></i> Add new record</a>
+                            </h3>
+                        </div>
+                    }
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Image
+                                    </th>
+                                    <th>
+                                        Order
+                                    </th>
+                                    <th>
+                                        Text 1
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                <tr>
+
+                                    <td>
+                                        <img class="img-responsive img-bordered img-md" src="@item.ImageUrl" />
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ItemOrder)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Title)
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("IntroEdit", new { id = item.Id })"><i class="far fa-edit"></i></a>
+                                        <a href="@Url.Action("IntroDetails", new { id = item.Id })"><i class="fas fa-info-circle"></i></a>
+                                        <a href="@Url.Action("IntroDelete", new { id = item.Id })"><i class="far fa-trash-alt"></i></a>
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $(document).ready(function () {
+        $('.table').DataTable(
+        );
+    });
+</script>

@@ -1,0 +1,54 @@
+﻿@model DBContext.Models.Content
+
+@{
+    ViewData["Title"] = "Intro Video";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-success">
+                    <div class="card-header">
+                        <h3 class="card-title">@ViewData["Title"]</h3>
+                    </div>
+                    <form asp-controller="Contents" asp-action="IntroVidoe" enctype="multipart/form-data">
+                        <div class="card-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="Name" value="intro_video" />
+                            <input type="hidden" asp-for="TitleAr" />
+                            <input type="hidden" asp-for="Title" />
+                            <input type="hidden" asp-for="ItemOrder" />
+                            <div class="form-group">
+                                <label class="control-label">Video File *</label>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" name="file" class="custom-file-input">
+                                        <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="Created" />
+                            <input type="hidden" asp-for="ImageUrl" />
+                            <input type="hidden" asp-for="Script" />
+                            <input type="hidden" asp-for="ScriptAr" />
+                            <input type="hidden" asp-for="IsDeleted" />
+                        </div>
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                            <a class="btn btn-default float-right" asp-action="Index">
+                                Back to List
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

@@ -1,0 +1,77 @@
+﻿@model DBContext.Models.CustomerPrediction
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h3 class="card-title">Details</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.FirstTeamScore)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.FirstTeamScore)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.SecondTeamScore)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.SecondTeamScore)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Customer)
+                            </dt>
+                            <dd>
+                                <a class="badge badge-info" target="_blank" asp-action="Details" asp-controller="Customers" asp-route-id="@Model.CustomerId">
+                                    @Html.DisplayFor(model => model.Customer.FirstName) @Html.DisplayFor(model => model.Customer.LastName)
+                                </a>
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.SportMatch)
+                            </dt>
+                            <dd>
+                                <a class="badge badge-info" target="_blank" asp-action="Details" asp-controller="SportMatches" asp-route-id="@Model.SportMatchId">
+                                    @Html.DisplayFor(model => model.SportMatch.AppTask.DisplayName)
+                                </a>
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Created)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Created)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Modified)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Modified)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.IsDeleted)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.IsDeleted)
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="card-footer">
+                        <a class="btn btn-default" asp-action="Index" asp-route-CustomerId="@Model.CustomerId" asp-route-AppTaskId="@Model.SportMatch.AppTaskId">
+                            Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

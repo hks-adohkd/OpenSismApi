@@ -1,0 +1,101 @@
+﻿@model DBContext.Models.ContactUs
+
+@{
+    ViewData["Title"] = "Reply";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-success">
+                    <div class="card-header">
+                        <h3 class="card-title">Edit</h3>
+                    </div>
+                    <form asp-action="Reply">
+                        <div class="card-body">
+                            <dl class="dl-horizontal">
+                                <dt>
+                                    Customer
+                                </dt>
+                                <dd>
+                                    @if (Model.CustomerId != null)
+                                    {
+                                        <a class="badge badge-info" target="_blank" asp-action="Details" asp-controller="Customers" asp-route-id="@Model.CustomerId">
+                                            @Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName)
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName)
+                                    }
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.PhoneNumber)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.PhoneNumber)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Email)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Email)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Subject)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Subject)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Message)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Message)
+                                </dd>
+                                <dt>
+                                    @Html.DisplayNameFor(model => model.Created)
+                                </dt>
+                                <dd>
+                                    @Html.DisplayFor(model => model.Created)
+                                </dd>
+                            </dl>
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+                            <div class="form-group">
+                                <label asp-for="Reply" class="control-label"></label>
+                                <input asp-for="Reply" class="form-control" />
+                                <span asp-validation-for="Reply" class="text-danger"></span>
+                            </div>
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="CustomerId" />
+                            <input type="hidden" asp-for="Created" />
+                            <input type="hidden" asp-for="IsDeleted" />
+                            <input type="hidden" asp-for="IsViewed" />
+                            <input type="hidden" asp-for="IsFeatured" />
+                            <input type="hidden" asp-for="FeaturedSubject" />
+                            <input type="hidden" asp-for="FeaturedReply" />
+                            <input type="hidden" asp-for="Message" />
+                            <input type="hidden" asp-for="Subject" />
+                            <input type="hidden" asp-for="FirstName" />
+                            <input type="hidden" asp-for="LastName" />
+                            <input type="hidden" asp-for="PhoneNumber" />
+                        </div>
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                            <a class="btn btn-default float-right" asp-action="Index">
+                                Back to List
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

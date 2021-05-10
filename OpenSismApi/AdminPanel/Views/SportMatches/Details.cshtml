@@ -1,0 +1,125 @@
+﻿@model DBContext.Models.SportMatch
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h3 class="card-title">Details</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <dl class="dl-horizontal">
+                            <dt>
+                                First Team Flag
+                            </dt>
+                            <dd>
+                                <img class="img-responsive img-bordered img-lg" src="@Model.FirstTeamFlag" />
+                            </dd>
+                        </dl>
+                        <div class="clearfix"></div>
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.FirstTeamName)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.FirstTeamName)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.FirstTeamNameAr)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.FirstTeamNameAr)
+                            </dd>
+                        </dl>
+                        <div class="clearfix"></div>
+                        <dl class="dl-horizontal">
+                            <dt>
+                                Second Team Flag
+                            </dt>
+                            <dd>
+                                <img class="img-responsive img-bordered img-lg" src="@Model.SecondTeamFlag" />
+                            </dd>
+                        </dl>
+                        <div class="clearfix"></div>
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.SecondTeamName)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.SecondTeamName)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.SecondTeamNameAr)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.SecondTeamNameAr)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Type)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Type)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.League)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.League)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.FirstTeamScore)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.FirstTeamScore)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.SecondTeamScore)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.SecondTeamScore)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.AppTask)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.AppTask.DisplayName)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Created)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Created)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Modified)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Modified)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.IsDeleted)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.IsDeleted)
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="card-footer">
+                        <a class="btn btn-success" asp-action="Edit" asp-route-appTaskId="@Model.AppTaskId">Edit</a>
+                        <a class="btn btn-default" asp-action="Index" asp-controller="AppTasks">
+                            Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
