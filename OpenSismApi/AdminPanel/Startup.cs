@@ -31,6 +31,7 @@ namespace AdminPanel
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<OpenSismDBContext>(options =>
@@ -67,7 +68,7 @@ namespace AdminPanel
                     .AddDefaultTokenProviders();
 
             services.AddRazorPages();
-
+           // services.AddMvc();
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings.
@@ -113,7 +114,7 @@ namespace AdminPanel
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider services)
         {
             if (env.IsDevelopment())
             {
@@ -131,13 +132,16 @@ namespace AdminPanel
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-            app.UseAuthorization();
-
+            //app.UseMvc(); // Order here is important (explained below).
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapDefaultControllerRoute();
                 endpoints.MapRazorPages();
+
             });
+            CreateUserAndClaim(services).Wait();
         }
         private async Task CreateUserAndClaim(IServiceProvider serviceProvider)
         {

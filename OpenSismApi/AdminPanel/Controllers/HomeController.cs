@@ -34,7 +34,7 @@ namespace AdminPanel.Controllers
             ViewBag.AllCustomers = _context.Customers.Count();
             ViewBag.AllDoneTasks = _context.CustomerTasks.Where(c => c.IsDone).Count();
             ViewBag.MaxTaskDone = _context.AppTasks.OrderByDescending(a => a.CustomerTasks.Where(c => c.IsDone).Count()).FirstOrDefault().DisplayName;
-            ViewBag.MaxRequestedPrize = _context.Prizes.OrderByDescending(a => a.CustomerPrizes.Count()).FirstOrDefault().DisplayName;
+          //  ViewBag.MaxRequestedPrize = _context.Prizes.OrderByDescending(a => a.CustomerPrizes.Count()).FirstOrDefault().DisplayName;
             return View();
         }
 
