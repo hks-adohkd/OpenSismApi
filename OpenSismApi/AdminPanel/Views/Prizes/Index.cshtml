@@ -14,7 +14,7 @@
                 <div class="card">
                     @if (!ViewBag.isArchive)
                     {
-                        @if (ViewBag.LuckyWheelId != null && ViewBag.LuckyWheelId != 0)
+                        @*@if (ViewBag.LuckyWheelId != null && ViewBag.LuckyWheelId != 0)
                         {
                             if (!ViewBag.Closed)
                             {
@@ -35,8 +35,8 @@
                                     </h3>
                                 </div>
                             }
-                        }
-                        else
+                        }*@
+                        //else
                         {
                             <div class="card-header">
                                 <h3 class="card-title">
@@ -84,16 +84,16 @@
 </section>
 <script>
     var controllerName = '@HttpContextAccessor.HttpContext.Session.GetString("ControllerName")';
-    var luckyWheelId = '@ViewBag.LuckyWheelId';
-    var dailyBonusId = '@ViewBag.DailyBonusId';
+   // var luckyWheelId = '@ViewBag.LuckyWheelId';
+   // var dailyBonusId = '@ViewBag.DailyBonusId';
     var isArchive = '@ViewBag.isArchive';
     var my_url = "/" + controllerName + "/IndexPost?isArchive=" + "@ViewBag.isArchive";
-    if (luckyWheelId != null && luckyWheelId != 0) {
+    @*if (luckyWheelId != null && luckyWheelId != 0) {
         my_url = "/" + controllerName + "/IndexPost?isArchive=" + "@ViewBag.isArchive" + "&luckyWheelId=" + luckyWheelId;
     }
     if (dailyBonusId != null && dailyBonusId != 0) {
         my_url = "/" + controllerName + "/IndexPost?isArchive=" + "@ViewBag.isArchive" + "&dailyBonusId=" + dailyBonusId;
-    }
+    }*@
     debugger;
 
     $(function () {

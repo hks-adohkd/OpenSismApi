@@ -131,7 +131,7 @@ namespace DBContext.Models
     //    public virtual LuckyWheel LuckyWheel { get; set; }
     //    public virtual DailyBonus DailyBonus { get; set; }
 
-        [Display(Name = "Customers")]
+        [Display(Name = "# Customers")]
         public virtual ICollection<CustomerPrize> CustomerPrizes { get; set; }
     }
 }
