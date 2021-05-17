@@ -17,9 +17,9 @@ namespace DBContext.Models
         public Group()
         {
             Customers = new HashSet<Customer>();
-           // LuckyWheels = new HashSet<LuckyWheel>();
-          //  MessageGroups = new HashSet<MessageGroup>();
-          //  AppTaskGroups = new HashSet<AppTaskGroup>();
+            LuckyWheels = new HashSet<LuckyWheel>();
+            MessageGroups = new HashSet<MessageGroup>();
+            AppTaskGroups = new HashSet<AppTaskGroup>();
         }
 
         [NotMapped]
@@ -85,7 +85,7 @@ namespace DBContext.Models
         public int Points { get; set; }
 
         public virtual ICollection<Customer> Customers { get; set; }
-      //  public virtual ICollection<LuckyWheel> LuckyWheels { get; set; }
+        public virtual ICollection<LuckyWheel> LuckyWheels { get; set; }
         public virtual ICollection<MessageGroup> MessageGroups { get; set; }
         public virtual ICollection<AppTaskGroup> AppTaskGroups { get; set; }
     }

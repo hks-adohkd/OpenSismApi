@@ -42,7 +42,7 @@ namespace OpenSismApi.Controllers
                 homePageViewModel.Banner = Mapper.Map<List<ContentViewModel>>(banners);
                 var username = User.Identity.Name;
                 var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
-                
+
                 ////NotDeleted
                 //var items = _context.AppTasks.Where(a => !a.IsDeleted)
                 //    //within limit
@@ -86,17 +86,17 @@ namespace OpenSismApi.Controllers
                 //{
                 //    homePageViewModel.Tasks.Add(Mapper.Map<AppTaskViewModel>(shareAppTask));
                 //}
-                //homePageViewModel.LuckyWheelValid = true;
-                //if (((DateTime)customer.LuckyWheelLastSpinDate).Date == DateTime.Today)
-                //{
-                //    homePageViewModel.LuckyWheelValid = false;
-                //}
+                homePageViewModel.LuckyWheelValid = true;
+                if (((DateTime)customer.LuckyWheelLastSpinDate).Date == DateTime.Today)
+                {
+                    homePageViewModel.LuckyWheelValid = false;
+                }
 
-                //homePageViewModel.DailyBonusValid = true;
-                //if (((DateTime)customer.DailyBonusLastUseDate).Date == DateTime.Today)
-                //{
-                //    homePageViewModel.DailyBonusValid = false;
-                //}
+                homePageViewModel.DailyBonusValid = true;
+                if (((DateTime)customer.DailyBonusLastUseDate).Date == DateTime.Today)
+                {
+                    homePageViewModel.DailyBonusValid = false;
+                }
 
                 //var pendings = _context.CustomerTasks.Where(c => c.CustomerId == customer.Id && !c.IsDone
                 //&& !c.IsDeleted).Select(c => c.AppTask).ToList();

@@ -113,11 +113,11 @@ namespace DBContext.Models
         [Display(Name = "Type *")]
         public int PrizeTypeId { get; set; }
 
-      //  [Display(Name = "Lucky Wheel")]
-      //  public int? LuckyWheelId { get; set; }
+        [Display(Name = "Lucky Wheel")]
+        public int? LuckyWheelId { get; set; }
         
-     //   [Display(Name = "Daily Bonus")]
-     //   public int? DailyBonusId { get; set; }
+        [Display(Name = "Daily Bonus")]
+        public int? DailyBonusId { get; set; }
 
         [Required]
         [Display(Name = "Is Valid *")]
@@ -128,8 +128,8 @@ namespace DBContext.Models
         public int ItemOrder { get; set; }
 
         public virtual PrizeType PrizeType { get; set; }
-    //    public virtual LuckyWheel LuckyWheel { get; set; }
-    //    public virtual DailyBonus DailyBonus { get; set; }
+        public virtual LuckyWheel LuckyWheel { get; set; }
+        public virtual DailyBonus DailyBonus { get; set; }
 
         [Display(Name = "# Customers")]
         public virtual ICollection<CustomerPrize> CustomerPrizes { get; set; }

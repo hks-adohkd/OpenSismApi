@@ -240,18 +240,18 @@ namespace DBContext.Models
                 entity.Property(e => e.Name).IsRequired();
             });
 
-            //modelBuilder.Entity<LuckyWheel>(entity =>
-            //{
-            //    entity.Property(e => e.Created).HasDefaultValueSql("('0001-01-01T00:00:00.0000000')");
+            modelBuilder.Entity<LuckyWheel>(entity =>
+            {
+                entity.Property(e => e.Created).HasDefaultValueSql("('0001-01-01T00:00:00.0000000')");
 
-            //    entity.Property(e => e.Modified).HasDefaultValueSql("('0001-01-01T00:00:00.0000000')");
+                entity.Property(e => e.Modified).HasDefaultValueSql("('0001-01-01T00:00:00.0000000')");
 
-            //    entity.HasOne(d => d.Group)
-            //        .WithMany(p => p.LuckyWheels)
-            //        .HasForeignKey(d => d.GroupId)
-            //        .OnDelete(DeleteBehavior.ClientSetNull)
-            //        .HasConstraintName("FK_LuckyWheel_Group");
-            //});
+                entity.HasOne(d => d.Group)
+                    .WithMany(p =>  p.LuckyWheels)
+                    .HasForeignKey(d => d.GroupId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_LuckyWheel_Group");
+            });
 
             modelBuilder.Entity<Message>(entity =>
             {

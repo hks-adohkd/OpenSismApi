@@ -106,6 +106,15 @@ namespace DBContext.Mapping
             CreateMap<IPagedList<CustomerPredictionViewModel>, IPagedList<CustomerPrediction>>().ConvertUsing<PagedListConverter<CustomerPredictionViewModel, CustomerPrediction>>();
             CreateMap<IPagedList<CustomerPrediction>, IPagedList<CustomerPredictionViewModel>>().ConvertUsing<PagedListConverter<CustomerPrediction, CustomerPredictionViewModel>>();
 
+            CreateMap<DailyBonusViewModel, DailyBonus>();
+            CreateMap<DailyBonus, DailyBonusViewModel>();
+            CreateMap<IPagedList<DailyBonusViewModel>, IPagedList<DailyBonus>>().ConvertUsing<PagedListConverter<DailyBonusViewModel, DailyBonus>>();
+            CreateMap<IPagedList<DailyBonus>, IPagedList<DailyBonusViewModel>>().ConvertUsing<PagedListConverter<DailyBonus, DailyBonusViewModel>>();
+
+            CreateMap<LuckyWheelViewModel, LuckyWheel>();
+            CreateMap<LuckyWheel, LuckyWheelViewModel>();
+            CreateMap<IPagedList<LuckyWheelViewModel>, IPagedList<LuckyWheel>>().ConvertUsing<PagedListConverter<LuckyWheelViewModel, LuckyWheel>>();
+            CreateMap<IPagedList<LuckyWheel>, IPagedList<LuckyWheelViewModel>>().ConvertUsing<PagedListConverter<LuckyWheel, LuckyWheelViewModel>>();
 
 
             CreateMissingTypeMaps = true;
