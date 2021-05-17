@@ -61,7 +61,7 @@
                                 <input type="hidden" asp-for="Name" value="lucky_wheel" />
                                 <input type="hidden" asp-for="ItemOrder" value="name" />
                                 <input type="hidden" asp-for="Points" value="0" />
-                                //<input type="hidden" asp-for="LuckyWheelId" value="@ViewBag.LuckyWheelId" />
+                                <input type="hidden" asp-for="LuckyWheelId" value="@ViewBag.LuckyWheelId" />
                             }
                             else if (ViewBag.DailyBonusId != null && ViewBag.DailyBonusId != 0)
                             {
@@ -72,7 +72,7 @@
                                 </div>
                                 <input type="hidden" asp-for="Name" value="daily_bonus" />
                                 <input type="hidden" asp-for="Points" value="0" />
-                               // <input type="hidden" asp-for="DailyBonusId" value="@ViewBag.DailyBonusId" />
+                                <input type="hidden" asp-for="DailyBonusId" value="@ViewBag.DailyBonusId" />
                             }
                             else
                             {

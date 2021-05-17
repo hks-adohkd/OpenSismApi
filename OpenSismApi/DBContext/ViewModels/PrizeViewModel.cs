@@ -10,6 +10,7 @@
         public int Value { get; set; }
         public int PrizeTypeId { get; set; }
         public int? DailyBonusId { get; set; }
+        public int? LuckyWheelId { get; set; }
         public bool IsValid { get; set; }
         public int ItemOrder { get; set; }
 
