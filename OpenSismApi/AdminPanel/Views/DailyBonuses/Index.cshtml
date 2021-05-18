@@ -1,8 +1,8 @@
-﻿@model IEnumerable<DBContext.Models.LuckyWheel>
+﻿@model IEnumerable<DBContext.Models.DailyBonus>
 @using Microsoft.AspNetCore.Http
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @{
-    ViewData["Title"] = "Luckey Wheel";
+    ViewData["Title"] = "Daily Bonus";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -11,7 +11,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <div class="card bg-dark mb-3">
+                <div class="card">
                     @if (!ViewBag.isArchive)
                     {
                         <div class="card-header">
@@ -31,9 +31,6 @@
                                 <tr>
                                     <th>
                                         @Html.DisplayNameFor(model => model.Id)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Group.DisplayName)
                                     </th>
                                     <th>
                                         @Html.DisplayNameFor(model => model.PartsCount)
@@ -77,12 +74,11 @@
                 }],
             "columns": [
                 { "data": "id", "name": "Id", "autoWidth": true },
-                { "data": "group.displayName", "name": "Group.DisplayName", "autoWidth": true },
                 { "data": "partsCount", "name": "PartsCount", "autoWidth": true },
                 {
                     data: null, render: function (data, type, row) {
                         if (isArchive == "False") {
-                            return '<a href="/' + prizescontrollerName + '/Index?luckyWheelId=' + row.id + '"><i class="fas fa-award" style="color:gold;"></i></a>' +
+                            return '<a href="/' + prizescontrollerName + '/Index?dailyBonusId=' + row.id + '"><i class="fas fa-award" style="color:gold;"></i></a>' +
                                 '<a href="/' + controllerName + '/Edit/' + row.id + '"><i class="far fa-edit"></i></a>' +
                                 '<a href="/' + controllerName + '/Details/' + row.id + '"><i class="fas fa-info-circle"></i></a>' +
                                 '<a href="/' + controllerName + '/Delete/' + row.id + '"><i class="far fa-trash-alt"></i></a>';
