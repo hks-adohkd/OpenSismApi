@@ -40,6 +40,26 @@ namespace AdminPanel.Controllers
             catch (Exception e) { }
             return View(slides);
         }
+        // GET: Contents
+        public async Task<IActionResult> IndexBanner()
+        {
+           var banners = await _context.Contents.Where(p => p.Name == "banner" && !p.IsDeleted).OrderBy(p => p.ItemOrder).ToListAsync(); 
+            
+            try
+            {
+                
+                if (banners == null )
+                {
+                    ViewBag.Closed = false;
+                }
+                else
+                {
+                    ViewBag.Closed = true;
+                }
+            }
+            catch (Exception e) { }
+            return View(banners);
+        }
 
         // GET: Contents/Details/5
         public async Task<IActionResult> Details(int? id)

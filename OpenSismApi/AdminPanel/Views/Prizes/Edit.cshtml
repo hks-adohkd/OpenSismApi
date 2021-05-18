@@ -47,6 +47,11 @@
                                 <input asp-for="Description" class="form-control" />
                                 <span asp-validation-for="Description" class="text-danger"></span>
                             </div>
+                            <div class="form-group">
+                                <label asp-for="ItemOrder" class="control-label"></label>
+                                <input asp-for="ItemOrder" class="form-control" />
+                                <span asp-validation-for="ItemOrder" class="text-danger"></span>
+                            </div>
                             @if (ViewBag.LuckyWheelId != null && ViewBag.LuckyWheelId != 0)
                             {
                                 <div class="form-group">
@@ -58,22 +63,18 @@
                                     </div>
                                 </div>
                                 <input type="hidden" asp-for="Points" value="0" />
-                                <input type="hidden" asp-for="ItemOrder" value="0" />
+                                //   <input type="hidden" asp-for="ItemOrder" value="0" />
                                 <input type="hidden" asp-for="LuckyWheelId" value="@ViewBag.LuckyWheelId" />
                             }
                             else if (ViewBag.DailyBonusId != null && ViewBag.DailyBonusId != 0)
                             {
-                                <div class="form-group">
-                                    <label asp-for="ItemOrder" class="control-label"></label>
-                                    <input asp-for="ItemOrder" class="form-control" />
-                                    <span asp-validation-for="ItemOrder" class="text-danger"></span>
-                                </div>
+
                                 <input type="hidden" asp-for="Points" value="0" />
                                 <input type="hidden" asp-for="DailyBonusId" value="@ViewBag.DailyBonusId" />
                             }
                             else
                             {
-                                <input type="hidden" asp-for="ItemOrder" value="0" />
+                                //   <input type="hidden" asp-for="ItemOrder" value="0" />
                                 <div class="form-group">
                                     <label asp-for="Points" class="control-label"></label>
                                     <input asp-for="Points" class="form-control" />
@@ -81,6 +82,11 @@
                                 </div>
 
                             }
+                            <div class="form-group">
+                                <label asp-for="Value" class="control-label"></label>
+                                <input asp-for="Value" class="form-control" />
+                                <span asp-validation-for="Value" class="text-danger"></span>
+                            </div>
                             <div class="form-group">
                                 <label asp-for="PrizeTypeId" class="control-label"></label>
                                 <select asp-for="PrizeTypeId" class="form-control" asp-items="ViewBag.PrizeTypeId"></select>
@@ -92,7 +98,27 @@
                             <input type="hidden" asp-for="IsDeleted" />
                             <input type="hidden" asp-for="ImageUrl" />
                         </div>
-
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-info">Submit</button>
+                            @if (ViewBag.LuckyWheelId != null && ViewBag.LuckyWheelId != 0)
+                            {
+                                <a class="btn btn-default float-right" asp-action="Index" asp-route-luckyWheelId="@ViewBag.LuckyWheelId">
+                                    Back to List
+                                </a>
+                            }
+                            else if (ViewBag.DailyBonusId != null && ViewBag.DailyBonusId != 0)
+                            {
+                                <a class="btn btn-default float-right" asp-action="Index" asp-route-dailyBonusId="@ViewBag.DailyBonusId">
+                                    Back to List
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-default float-right" asp-action="Index">
+                                    Back to List
+                                </a>
+                            }
+                        </div>
                     </form>
                 </div>
             </div>

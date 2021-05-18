@@ -58,6 +58,12 @@ ViewData["Title"] = "Details";
                                 @Html.DisplayFor(model => model.Points)
                             </dd>
                             <dt>
+                                @Html.DisplayNameFor(model => model.Value)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Value)
+                            </dd>
+                            <dt>
                                 @Html.DisplayNameFor(model => model.PrizeType)
                             </dt>
                             <dd>
@@ -79,7 +85,27 @@ ViewData["Title"] = "Details";
                             </dd>
                         </dl>
                     </div>
-                    
+                    <div class="card-footer">
+                        
+                        @if (ViewBag.LuckyWheelId != null && ViewBag.LuckyWheelId != 0)
+                        {
+                            <a class="btn btn-default float-right" asp-action="Index" asp-route-luckyWheelId="@ViewBag.LuckyWheelId">
+                                Back to List
+                            </a>
+                        }
+                        else if (ViewBag.DailyBonusId != null && ViewBag.DailyBonusId != 0)
+                        {
+                            <a class="btn btn-default float-right" asp-action="Index" asp-route-dailyBonusId="@ViewBag.DailyBonusId">
+                                Back to List
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-default float-right" asp-action="Index">
+                                Back to List
+                            </a>
+                        }
+                    </div>
                 </div>
             </div>
         </div>

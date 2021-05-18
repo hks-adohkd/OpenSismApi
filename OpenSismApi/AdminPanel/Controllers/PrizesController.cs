@@ -11,7 +11,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+
 using System.Threading.Tasks;
+
 
 namespace AdminPanel.Controllers
 {
@@ -246,7 +248,7 @@ namespace AdminPanel.Controllers
                 }
                 else
                 {
-                 //   prize.ImageUrl = "/images/prizes/prize_icon.png";
+                    prize.ImageUrl = "/images/prizes/prize_icon.png";
                 }
                 if (prize.LuckyWheelId != null && prize.LuckyWheelId != 0)
                 {
@@ -272,7 +274,12 @@ namespace AdminPanel.Controllers
                 HttpContext.Session.SetString("SuccessMsg", SuccessMsg);
                 return RedirectToAction(nameof(Index));
             }
-            HttpContext.Session.SetString("FailedMsg", FailedMsg);
+            var message = string.Join(" | ", ModelState.Values
+        .SelectMany(v => v.Errors)
+        .Select(e => e.ErrorMessage));
+         //   return new HttpStatusCodeResult(HttpStatusCode.BadRequest, message);
+
+            HttpContext.Session.SetString("FailedMsg", message);
             ViewData["PrizeTypeId"] = new SelectList(_context.PrizeTypes, "Id", "DisplayName", prize.PrizeTypeId);
             return View(prize);
         }
