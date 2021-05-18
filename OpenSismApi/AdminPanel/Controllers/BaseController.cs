@@ -61,6 +61,8 @@ namespace AdminPanel.Controllers
                 sessionActive.Add("Contents.Details", "");
                 sessionActive.Add("Contents.Edit", "");
                 sessionActive.Add("Contents.IndexBanner", "");
+                sessionActive.Add("Contents.EditBanner", "");
+
                 sessionActive.Add("Contents.IntroIndex", "");
                 sessionActive.Add("Contents.IntroCreate", "");
                 sessionActive.Add("Contents.IntroDelete", "");

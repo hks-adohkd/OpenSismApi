@@ -71,6 +71,13 @@ namespace AdminPanel.Controllers
 
             var content = await _context.Contents
                 .FirstOrDefaultAsync(m => m.Id == id);
+            if (content.Name == "banner")
+            {
+                ViewBag.index = "IndexBanner";
+            }
+            else if (content.Name == "slider") {
+                ViewBag.index = "Index";
+            }
             if (content == null)
             {
                 return NotFound();
@@ -186,7 +193,78 @@ namespace AdminPanel.Controllers
             HttpContext.Session.SetString("FailedMsg", FailedMsg);
             return View(content);
         }
-        
+
+        /// <summary>
+        /// /////////////
+        // GET: Contents/Edit/5
+        public async Task<IActionResult> EditBanner(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var content = await _context.Contents.FindAsync(id);
+            if (content == null)
+            {
+                return NotFound();
+            }
+            return View(content);
+        }
+
+        // POST: Contents/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditBanner(int id, Content content)
+        {
+            if (id != content.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (content.file != null)
+                    {
+                        FileInfo fi = new FileInfo(content.file.FileName);
+                        var newFilename = "P" + content.Id + "_" + string.Format("{0:d}",
+                                          (DateTime.Now.Ticks / 10) % 100000000) + fi.Extension;
+                        var webPath = _hostingEnvironment.WebRootPath;
+                        var path = Path.Combine("", webPath + @"\images\banner\" + newFilename);
+                        var pathToSave = @"/images/banner/" + newFilename;
+                        using (var stream = new FileStream(path, FileMode.Create))
+                        {
+                            content.file.CopyTo(stream);
+                        }
+                        content.ImageUrl = pathToSave;
+                    }
+                    _context.Update(content);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ContentExists(content.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                HttpContext.Session.SetString("SuccessMsg", SuccessMsg);
+                return RedirectToAction(nameof(IndexBanner));
+            }
+            HttpContext.Session.SetString("FailedMsg", FailedMsg);
+            return View(content);
+        }
+        /// </summary>
+        /// <returns></returns>
+
         // GET: Contents/Edit/5
         public async Task<IActionResult> IntroVidoe()
         {
