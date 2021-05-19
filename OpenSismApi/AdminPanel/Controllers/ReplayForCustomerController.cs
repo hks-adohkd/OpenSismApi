@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace AdminPanel.Controllers
 {
-    public class ContactUsController : BaseController
+    public class ReplayForCustomerController : BaseController
     {
         private readonly OpenSismDBContext _context;
         private IHostingEnvironment env;
 
-        public ContactUsController(OpenSismDBContext context, IHostingEnvironment env) : base(context, env)
+        public ReplayForCustomerController(OpenSismDBContext context, IHostingEnvironment env) : base(context, env)
         {
             _context = context;
             this.env = env;
@@ -40,6 +40,7 @@ namespace AdminPanel.Controllers
         public IActionResult IndexPost(bool isArchive)
         {
             try
+           
             {
                 var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
                 var start = Request.Form["start"].FirstOrDefault();
@@ -51,7 +52,7 @@ namespace AdminPanel.Controllers
                 int skip = start != null ? Convert.ToInt32(start) : 0;
                 int recordsTotal = 0;
 
-                var tableData = (from temp in _context.ContactsUs.Where(c => c.IsDeleted == isArchive)
+                var tableData = (from temp in _context.ContactsUs.Where(c => c.IsDeleted == isArchive && c.Reply != null)
                                  select new
                                  {
                                      Id = temp.Id,
@@ -60,6 +61,7 @@ namespace AdminPanel.Controllers
                                      IsFeatured = temp.IsFeatured,
                                      IsViewed = temp.IsViewed,
                                      Created = temp.Created,
+                                     Message = temp.Message,
                                      CustomerId = temp.CustomerId
                                  });
 

@@ -53,6 +53,11 @@ namespace AdminPanel.Controllers
                 sessionActive.Add("Contacts.Header", "");
                 sessionActive.Add("ContactUs", "");
                 sessionActive.Add("ContactUs.Header", "");
+
+                sessionActive.Add("ReplayForCustomer", "");
+                sessionActive.Add("ReplayForCustomer.Header", "");
+                sessionActive.Add("ReplayForCustomer.Index", "");
+                sessionActive.Add("ReplayForCustomer.Details", "");
                 sessionActive.Add("Contents", "");
                 sessionActive.Add("Contents.Header", "");
                 sessionActive.Add("Contents.Index", "");
