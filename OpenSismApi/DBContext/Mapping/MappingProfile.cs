@@ -46,6 +46,11 @@ namespace DBContext.Mapping
             CreateMap<IPagedList<ContactUsViewModel>, IPagedList<ContactUs>>().ConvertUsing<PagedListConverter<ContactUsViewModel, ContactUs>>();
             CreateMap<IPagedList<ContactUs>, IPagedList<ContactUsViewModel>>().ConvertUsing<PagedListConverter<ContactUs, ContactUsViewModel>>();
 
+            CreateMap<MailViewModel, Mail>();
+            CreateMap<Mail, MailViewModel>();
+            CreateMap<IPagedList<MailViewModel>, IPagedList<Mail>>().ConvertUsing<PagedListConverter<MailViewModel, Mail>>();
+            CreateMap<IPagedList<Mail>, IPagedList<MailViewModel>>().ConvertUsing<PagedListConverter<Mail, MailViewModel>>();
+
             CreateMap<CustomerViewModel, Customer>();
             CreateMap<Customer, CustomerViewModel>();
             CreateMap<IPagedList<CustomerViewModel>, IPagedList<Customer>>().ConvertUsing<PagedListConverter<CustomerViewModel, Customer>>();

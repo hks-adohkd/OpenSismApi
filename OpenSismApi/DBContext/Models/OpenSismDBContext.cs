@@ -43,6 +43,8 @@ namespace DBContext.Models
         public virtual DbSet<Condition> Conditions { get; set; }
         public virtual DbSet<Contact> Contacts { get; set; }
         public virtual DbSet<ContactUs> ContactsUs { get; set; }
+
+        public virtual DbSet<Mail> Mails { get; set; }
         public virtual DbSet<Content> Contents { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<CustomerAnswer> CustomerAnswers { get; set; }
@@ -164,6 +166,23 @@ namespace DBContext.Models
                     .HasForeignKey(d => d.CustomerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ContactUs_Customer");
+            });
+
+            modelBuilder.Entity<Mail>(entity =>
+            {
+                entity.Property(e => e.Created).HasDefaultValueSql("('0001-01-01T00:00:00.0000000')");
+
+                entity.Property(e => e.Message).IsRequired();
+
+                entity.Property(e => e.Modified).HasDefaultValueSql("('0001-01-01T00:00:00.0000000')");
+
+                entity.Property(e => e.Subject).IsRequired();
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.Mails)
+                    .HasForeignKey(d => d.CustomerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Mail_Customer");
             });
 
             modelBuilder.Entity<Content>(entity =>

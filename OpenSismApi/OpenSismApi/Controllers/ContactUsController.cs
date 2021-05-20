@@ -29,24 +29,24 @@ namespace OpenSismApi.Controllers
         //get all customer messages 
         [HttpPost]
         [Route("GetAll")]
-        public Response<PagedContent<IPagedList<ContactUsViewModel>>> GetAll([FromBody] PaginationViewModel pagination)
+        public Response<PagedContent<IPagedList<MailViewModel>>> GetAll([FromBody] PaginationViewModel pagination)
         {
-            Response<PagedContent<IPagedList<ContactUsViewModel>>> response = new Response<PagedContent<IPagedList<ContactUsViewModel>>>();
+            Response<PagedContent<IPagedList<MailViewModel>>> response = new Response<PagedContent<IPagedList<MailViewModel>>>();
             try
             {
                 var items = _context.ContactsUs.Where(a => !a.IsDeleted)
                     .Where(a => a.IsFeatured)
                     .ToPagedList(pageNumber: pagination.Page, pageSize: pagination.Limit);
-                var contacts = Mapper.Map<IPagedList<ContactUsViewModel>>(items);
-                PagedContent<IPagedList<ContactUsViewModel>> pagedContent = new PagedContent<IPagedList<ContactUsViewModel>>();
+                var contacts = Mapper.Map<IPagedList<MailViewModel>>(items);
+                PagedContent<IPagedList<MailViewModel>> pagedContent = new PagedContent<IPagedList<MailViewModel>>();
                 pagedContent.content = contacts;
                 pagedContent.pagination = new Pagination(contacts.TotalItemCount, contacts.PageSize, contacts.PageCount, contacts.PageNumber);
-                response = APIContants<PagedContent<IPagedList<ContactUsViewModel>>>.CostumSuccessResult(pagedContent);
+                response = APIContants<PagedContent<IPagedList<MailViewModel>>>.CostumSuccessResult(pagedContent);
                 return response;
             }
             catch (Exception e)
             {
-                response = APIContants<PagedContent<IPagedList<ContactUsViewModel>>>.CostumSometingWrong(_localizer["SomethingWentWrong"], null);
+                response = APIContants<PagedContent<IPagedList<MailViewModel>>>.CostumSometingWrong(_localizer["SomethingWentWrong"], null);
                 Serilog.Log.Fatal(e, "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
                 return response;
             }
@@ -55,9 +55,9 @@ namespace OpenSismApi.Controllers
         //add message from customer to database 
         [HttpPost]
         [Route("Add")]
-        public async Task<Response<ContactUsViewModel>> Add([FromBody] ContactUsViewModel model)
+        public async Task<Response<MailViewModel>> Add([FromBody] MailViewModel model)
         {
-            Response<ContactUsViewModel> response = new Response<ContactUsViewModel>();
+            Response<MailViewModel> response = new Response<MailViewModel>();
             try
             {
                 ContactUs contactUs = Mapper.Map<ContactUs>(model);
@@ -74,13 +74,13 @@ namespace OpenSismApi.Controllers
                 }
                 _context.ContactsUs.Add(contactUs);
                 await _context.SaveChangesAsync();
-                response = APIContants<ContactUsViewModel>.CostumSuccessResult(
-                Mapper.Map<ContactUsViewModel>(contactUs));
+                response = APIContants<MailViewModel>.CostumSuccessResult(
+                Mapper.Map<MailViewModel>(contactUs));
                 return response;
             }
             catch (Exception e)
             {
-                response = APIContants<ContactUsViewModel>.CostumSometingWrong(_localizer["SomethingWentWrong"], null);
+                response = APIContants<MailViewModel>.CostumSometingWrong(_localizer["SomethingWentWrong"], null);
                 Serilog.Log.Fatal(e, "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
                 return response;
             }

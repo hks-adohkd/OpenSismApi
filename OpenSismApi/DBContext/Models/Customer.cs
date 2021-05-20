@@ -107,5 +107,8 @@ namespace DBContext.Models
         public virtual ICollection<CustomerTask> CustomerTasks { get; set; }
        // public virtual ICollection<CustomerAnswer> CustomerAnswers { get; set; }
         public virtual ICollection<CustomerMessage> CustomerMessages { get; set; }
+
+        public virtual ICollection<Mail> Mails { get; set; }
+
     }
 }
