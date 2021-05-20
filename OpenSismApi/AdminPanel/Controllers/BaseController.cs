@@ -12,6 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net;
+using System.Net.Mail;
 
 namespace AdminPanel.Controllers
 {
@@ -159,6 +161,24 @@ namespace AdminPanel.Controllers
                     }
                 }
             }
+        }
+
+        public async Task SendEmail(DBContext.Models.Mail customerMail, string SenderEmail)
+        {
+            MailAddress to = new MailAddress(customerMail.RecieverEmail);
+            MailAddress from = new MailAddress(SenderEmail);
+            MailMessage message = new MailMessage(from, to);
+            message.Subject = customerMail.Subject;
+            message.Body =customerMail.Message;
+            SmtpClient client = new SmtpClient("smtp.gmail.com", 587)
+            {
+                Credentials = new NetworkCredential("smtp_username", "smtp_password"),
+                EnableSsl = true
+            };
+
+
+
+
         }
 
         public async Task SendNotification(DBContext.Models.Message customerMessage, string token)
