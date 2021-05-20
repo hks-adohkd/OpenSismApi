@@ -108,15 +108,15 @@ namespace AdminPanel.Controllers
             {
                 return NotFound();
             }
-            try
-            {
-                contactUs.IsViewed = true;
-                _context.Update(contactUs);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-            }
+            //try
+            //{
+            //    contactUs.IsViewed = true;
+            //    _context.Update(contactUs);
+            //    await _context.SaveChangesAsync();
+            //}
+            //catch (Exception e)
+            //{
+            //}
             return View(contactUs);
         }
 
@@ -136,9 +136,9 @@ namespace AdminPanel.Controllers
             ViewData["CustomerId"] = contactUs.CustomerId;
             try
             {
-                contactUs.IsViewed = true;
-                _context.Update(contactUs);
-                await _context.SaveChangesAsync();
+             //   contactUs.IsViewed = true;
+             //   _context.Update(contactUs);
+             //   await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -162,6 +162,7 @@ namespace AdminPanel.Controllers
             {
                 try
                 {
+                    contactUs.IsViewed = true;
                     _context.Update(contactUs);
                     await _context.SaveChangesAsync();
                 }
@@ -221,9 +222,9 @@ namespace AdminPanel.Controllers
             ViewData["CustomerId"] = contactUs.CustomerId;
             try
             {
-                contactUs.IsViewed = true;
-                _context.Update(contactUs);
-                await _context.SaveChangesAsync();
+             //   contactUs.IsViewed = true;
+             //   _context.Update(contactUs);
+            //    await _context.SaveChangesAsync();
             }
             catch (Exception e)
             {
@@ -402,6 +403,7 @@ namespace AdminPanel.Controllers
             {
                 try
                 {
+
                     Mail mail1 = new Mail()
                     {
                         RecieverEmail = mail.RecieverEmail,

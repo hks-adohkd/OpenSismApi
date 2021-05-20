@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace AdminPanel.Controllers
 {
-    public class ReplayForCustomerController : BaseController
+    public class MailReplayController : BaseController
     {
         private readonly OpenSismDBContext _context;
         private IHostingEnvironment env;
 
-        public ReplayForCustomerController(OpenSismDBContext context, IHostingEnvironment env) : base(context, env)
+        public MailReplayController(OpenSismDBContext context, IHostingEnvironment env) : base(context, env)
         {
             _context = context;
             this.env = env;
@@ -52,17 +52,14 @@ namespace AdminPanel.Controllers
                 int skip = start != null ? Convert.ToInt32(start) : 0;
                 int recordsTotal = 0;
 
-                var tableData = (from temp in _context.ContactsUs.Where(c => c.IsDeleted == isArchive && c.Reply != null)
+                var tableData = (from temp in _context.Mails.Where(c => c.IsDeleted == isArchive )
                                  select new
                                  {
                                      Id = temp.Id,
-                                     Name = temp.FirstName + " " + temp.LastName,
-                                     Subject = temp.Subject,
-                                     IsFeatured = temp.IsFeatured,
-                                     IsViewed = temp.IsViewed,
+                                     RecieverEmail = temp.RecieverEmail,
+                                     Subject = temp.Subject,                                    
                                      Created = temp.Created,
                                      Message = temp.Message,
-                                     CustomerId = temp.CustomerId
                                  });
 
                 if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection))
@@ -75,8 +72,8 @@ namespace AdminPanel.Controllers
                 }
                 if (!string.IsNullOrEmpty(searchValue))
                 {
-                    tableData = tableData.Where(m => m.Subject.Contains(searchValue) ||
-                    m.Name.Contains(searchValue));
+                    tableData = tableData.Where(m => m.RecieverEmail.Contains(searchValue) ||
+                    m.Subject.Contains(searchValue));
                 }
                 recordsTotal = tableData.Count();
                 var data = tableData.Skip(skip).Take(pageSize).ToList();
@@ -103,18 +100,56 @@ namespace AdminPanel.Controllers
                 return NotFound();
             }
 
-            var contactUs = await _context.ContactsUs
-                .Include(c => c.Customer)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (contactUs == null)
+            var mails = await _context.Mails.Where(c => c.Id == id).FirstOrDefaultAsync();
+               
+            if (mails == null)
             {
                 return NotFound();
             }
             
-            return View(contactUs);
+            return View(mails);
         }
 
-       
+        // GET: ContactUs/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var mail = await _context.Mails
+                .Where(c => c.Id == id)
+                .FirstOrDefaultAsync();
+            if (mail == null)
+            {
+                return NotFound();
+            }
+           
+            return View(mail);
+        }
+
+        // POST: ContactUs/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var mail = await _context.Mails.FindAsync(id);
+            try
+            {
+                mail.IsDeleted = true;
+                _context.Update(mail);
+                await _context.SaveChangesAsync();
+                HttpContext.Session.SetString("SuccessMsg", SuccessMsg);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                HttpContext.Session.SetString("FailedMsg", FailedMsg);
+                return View(mail);
+            }
+        }
+
 
         public async Task<IActionResult> Recover(int? id)
         {
@@ -123,14 +158,14 @@ namespace AdminPanel.Controllers
                 return NotFound();
             }
 
-            var contactUs = await _context.ContactsUs
-                .Include(c => c.Customer)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (contactUs == null)
+            var mails = await _context.Mails
+                .Where(c => c.Id == id)
+                .FirstOrDefaultAsync();
+            if (mails == null)
             {
                 return NotFound();
             }
-            return View(contactUs);
+            return View(mails);
         }
 
         // POST: ContactUs/Delete/5
@@ -138,11 +173,11 @@ namespace AdminPanel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RecoverConfirmed(int id)
         {
-            var contactUs = await _context.ContactsUs.FindAsync(id);
+            var mails = await _context.Mails.FindAsync(id);
             try
             {
-                contactUs.IsDeleted = false;
-                _context.Update(contactUs);
+                mails.IsDeleted = false;
+                _context.Update(mails);
                 await _context.SaveChangesAsync();
                 HttpContext.Session.SetString("SuccessMsg", SuccessMsg);
                 return RedirectToAction(nameof(Index));
@@ -150,7 +185,7 @@ namespace AdminPanel.Controllers
             catch (Exception e)
             {
                 HttpContext.Session.SetString("FailedMsg", FailedMsg);
-                return View(contactUs);
+                return View(mails);
             }
         }
 

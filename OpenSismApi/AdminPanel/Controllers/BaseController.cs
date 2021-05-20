@@ -58,6 +58,12 @@ namespace AdminPanel.Controllers
                 sessionActive.Add("ReplayForCustomer.Header", "");
                 sessionActive.Add("ReplayForCustomer.Index", "");
                 sessionActive.Add("ReplayForCustomer.Details", "");
+
+                sessionActive.Add("MailReplay", "");
+                sessionActive.Add("MailReplay.Header", "");
+                sessionActive.Add("MailReplay.Index", "");
+                sessionActive.Add("MailReplay.Details", "");
+
                 sessionActive.Add("Contents", "");
                 sessionActive.Add("Contents.Header", "");
                 sessionActive.Add("Contents.Index", "");
