@@ -264,9 +264,9 @@ namespace AdminPanel.Controllers
                 _context.Add(customerMessage);
                 await _context.SaveChangesAsync();
 
-                try { await SendNotification(message, c.FCMToken); }
-                catch (Exception e)
-                { }
+                //try { await SendNotification(message, c.FCMToken); }
+                //catch (Exception e)
+                //{ }
 
                 return RedirectToAction(nameof(Index));
 
