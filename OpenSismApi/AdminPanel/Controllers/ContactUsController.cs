@@ -143,6 +143,7 @@ namespace AdminPanel.Controllers
             catch (Exception e)
             {
             }
+            
             return View(contactUs);
         }
 
@@ -157,18 +158,21 @@ namespace AdminPanel.Controllers
             {
                 return NotFound();
             }
-
+            
             if (ModelState.IsValid)
             {
+                var contact = await _context.ContactsUs.Include(c => c.Customer).Where(c => c.Id == contactUs.Id).FirstOrDefaultAsync();
                 try
                 {
-                    contactUs.IsViewed = true;
-                    _context.Update(contactUs);
+                    contact.IsViewed = true;
+                    contact.Reply = contactUs.Reply;
+                    contact.Created = DateTime.Now;
+                    _context.Update(contact);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ContactUsExists(contactUs.Id))
+                    if (!ContactUsExists(contact.Id))
                     {
                         return NotFound();
                     }
@@ -177,7 +181,7 @@ namespace AdminPanel.Controllers
                         throw;
                     }
                 }
-                var contact = await _context.ContactsUs.Include(c => c.Customer).Where(c => c.Id == contactUs.Id).FirstOrDefaultAsync();
+             
                 if (contact.CustomerId != null)
                 {
                     Message message = new Message();
