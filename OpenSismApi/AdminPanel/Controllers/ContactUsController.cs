@@ -355,6 +355,76 @@ namespace AdminPanel.Controllers
             }
         }
 
+
+        public async Task<IActionResult> MailReplay(int? id)
+        {
+            
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var contactUs = await _context.ContactsUs.Include(c => c.Customer)
+                .Include(c => c.Customer.User).Where(c => c.Id == id).FirstOrDefaultAsync();
+            if (contactUs == null)
+            {
+                return NotFound();
+            }
+            ViewData["CustomerId"] = contactUs.CustomerId;
+            ViewBag.Receiver = contactUs.Email;
+            try
+            {
+
+                contactUs.IsViewed = true;
+                _context.Update(contactUs);
+                await _context.SaveChangesAsync();
+                
+               
+                   
+            }
+            catch (Exception e)
+            {
+            }
+            return View();
+        }
+
+
+        // POST: ContactUs/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MailReplay( Mail mail)
+        {
+            
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    Mail mail1 = new Mail()
+                    {
+                        RecieverEmail = mail.RecieverEmail,
+                        Subject = mail.Subject,
+                        Message = mail.Message,
+                        Created = DateTime.Now
+                    };
+                    _context.Add(mail1);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    var error = e.Message;
+                }
+                
+                HttpContext.Session.SetString("SuccessMsg", SuccessMsg);
+                return RedirectToAction(nameof(Index));
+            }
+           
+            HttpContext.Session.SetString("FailedMsg", FailedMsg);
+            return RedirectToAction(nameof(Index));
+        }
+
         private bool ContactUsExists(int id)
         {
             return _context.ContactsUs.Any(e => e.Id == id);

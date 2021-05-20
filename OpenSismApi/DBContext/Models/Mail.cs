@@ -11,20 +11,9 @@ namespace DBContext.Models
     public partial class Mail : BaseEntity
     {
         
-        [Display(Name = "Phone Number *")]
-        public string PhoneNumber { get; set; }
+        
 
         
-        [Display(Name = "First Name *")]
-        public string FirstName { get; set; }
-
-        
-        [Display(Name = "Last Name *")]
-        public string LastName { get; set; }
-
-        [Required]
-        [Display(Name = "Sender Email")]
-        public string SenderEmail { get; set; }
 
         [Required]
         [Display(Name = "Reciever Email")]
@@ -40,9 +29,6 @@ namespace DBContext.Models
 
 
 
-        [Display(Name = "Customer *")]
-        public int? CustomerId { get; set; }
-
-        public virtual Customer Customer { get; set; }
+       
     }
 }

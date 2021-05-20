@@ -908,17 +908,8 @@ namespace DBContext.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("('0001-01-01T00:00:00.0000000')");
 
-                    b.Property<int?>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Message")
                         .IsRequired()
@@ -929,14 +920,7 @@ namespace DBContext.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("('0001-01-01T00:00:00.0000000')");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("RecieverEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SenderEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -945,8 +929,6 @@ namespace DBContext.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
 
                     b.ToTable("Mail");
                 });
@@ -1803,16 +1785,6 @@ namespace DBContext.Migrations
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("DBContext.Models.Mail", b =>
-                {
-                    b.HasOne("DBContext.Models.Customer", "Customer")
-                        .WithMany("Mails")
-                        .HasForeignKey("CustomerId")
-                        .HasConstraintName("FK_Mail_Customer");
-
-                    b.Navigation("Customer");
-                });
-
             modelBuilder.Entity("DBContext.Models.MessageGroup", b =>
                 {
                     b.HasOne("DBContext.Models.Group", "Group")
@@ -1978,8 +1950,6 @@ namespace DBContext.Migrations
                     b.Navigation("CustomerPrizes");
 
                     b.Navigation("CustomerTasks");
-
-                    b.Navigation("Mails");
                 });
 
             modelBuilder.Entity("DBContext.Models.DailyBonus", b =>

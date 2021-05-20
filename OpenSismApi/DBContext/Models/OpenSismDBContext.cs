@@ -178,11 +178,7 @@ namespace DBContext.Models
 
                 entity.Property(e => e.Subject).IsRequired();
 
-                entity.HasOne(d => d.Customer)
-                    .WithMany(p => p.Mails)
-                    .HasForeignKey(d => d.CustomerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Mail_Customer");
+                
             });
 
             modelBuilder.Entity<Content>(entity =>
