@@ -1,8 +1,8 @@
-﻿@model IEnumerable<DBContext.Models.CustomerMessage>
+﻿@model IEnumerable<DBContext.Models.ContactUs>
 @using Microsoft.AspNetCore.Http
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-@{ ViewData["Title"] = "Replay for Customer";
-                Layout = "~/Views/Shared/_Layout.cshtml"; }
+@{ ViewData["Title"] = "Customer Messages ";
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
 
 
 <section class="content">
@@ -12,11 +12,11 @@
                 <div class="card">
                     @if (!ViewBag.isArchive)
                     {
-        <div class="card-header">
-            <div class="card-title" style="float:right !important;">
-                <a asp-action="Index" asp-route-isArchive="true" class="btn pull-right btn-block" style="color:white;background:#20c997;"><i class="fas fa-archive"></i> Archive</a>
-            </div>
-        </div>}
+                        <div class="card-header">
+                            <div class="card-title" style="float:right !important;">
+                                <a asp-action="Index" asp-route-isArchive="true" class="btn pull-right btn-block" style="color:white;background:#20c997;"><i class="fas fa-archive"></i> Archive</a>
+                            </div>
+                        </div>}
                     <div class="card-body">
                         <table class="table table-bordered table-striped" id="table">
                             <thead>
@@ -24,17 +24,20 @@
                                     <th>
                                         @Html.DisplayNameFor(model => model.Id)
                                     </th>
-                                    
+
                                     <th>
                                         Customer Name
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.Message.Title)
+                                        Phone Number
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.Message.Script)
+                                        Title
                                     </th>
-                                    
+                                    <th>
+                                        TitleAr
+                                    </th>
+
                                     <th></th>
                                 </tr>
                             </thead>
@@ -57,7 +60,7 @@
             "serverSide": true,
             "filter": true,
             "orderMulti": false,
-            "order": [[4, "desc"]],
+            "order": [[5, "desc"]],
             "language": {
                 processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
             },
@@ -73,21 +76,22 @@
                     "searchable": false
                 }],
             "columns": [
-                { "data": "id", "name": "Id", "autoWidth": true },  
+                { "data": "id", "name": "Id", "autoWidth": true },
                 { "data": "name", "name": "Name", "autoWidth": true },
+                { "data": "phoneNumber", "name": "PhoneNumber", "autoWidth": true },
                 { "data": "title", "name": "Title", "autoWidth": true },
-                { "data": "script", "name": "Script", "autoWidth": true },
-                
+                { "data": "titleAr", "name": "TitleAr", "autoWidth": true },
+
                 {
                     data: null, render: function (data, type, row) {
                         if (isArchive == "False") {
                             if (data.customerId != null) {
                                 return '<a href="/' + controllerName + '/Details/' + row.id + '"><i class="fas fa-info-circle"></i></a>';
-                                    
+
                             }
                             else {
                                 return '<a href="/' + controllerName + '/Details/' + row.id + '"><i class="fas fa-info-circle"></i></a>';
-                                    
+
                             }
                         }
                         else {
@@ -99,3 +103,109 @@
         })
     })
 </script>
+
+@*
+
+    @model IEnumerable<DBContext.Models.CustomerMessage>
+    @using Microsoft.AspNetCore.Http
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+    @{ ViewData["Title"] = "Replay for Customer";
+                    Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        @if (!ViewBag.isArchive)
+                        {
+            <div class="card-header">
+                <div class="card-title" style="float:right !important;">
+                    <a asp-action="Index" asp-route-isArchive="true" class="btn pull-right btn-block" style="color:white;background:#20c997;"><i class="fas fa-archive"></i> Archive</a>
+                </div>
+            </div>}
+                        <div class="card-body">
+                            <table class="table table-bordered table-striped" id="table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Id)
+                                        </th>
+                                        <th>
+                                            Customer Name
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Message.Title)
+
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.Message.Script)
+
+                                        </th>
+
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+          var controllerName = '@HttpContextAccessor.HttpContext.Session.GetString("ControllerName")';
+      //  var AppTaskId = '@ViewBag.AppTaskId';
+            var isArchive = '@ViewBag.isArchive';
+
+        $(function () {
+            debugger;
+            $('#table').DataTable({
+                "processing": true,
+               // "serverSide": true,
+                "filter": true,
+                "orderMulti": false,
+                "order": [[3, "desc"]],
+                "language": {
+                    processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+                },
+                "ajax": {
+                    "url": "/" + controllerName + "/IndexPost?isArchive=" + isArchive,
+                    "type": "POST",
+                    "datatype": "json"
+                },
+                "columnDefs":
+                    [{
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    }],
+                "columns": [
+                    { "data": "id", "name": "Id", "autoWidth": true },
+                    { "data": "name", "name": "Name", "autoWidth": true },
+                    { "data": "title", "name": "Title", "autoWidth": true },
+                    { "data": "script", "name": "Script", "autoWidth": true },
+
+                    {
+                        data: null, render: function (data, type, row) {
+                            if (isArchive == "False") {
+                                if (data.customerId != null) {
+                                    return '<a href="/' + controllerName + '/Details/' + row.id + '"><i class="fas fa-info-circle"></i></a>';
+
+                                }
+                                else {
+                                    return '<a href="/' + controllerName + '/Details/' + row.id + '"><i class="fas fa-info-circle"></i></a>';
+
+                                }
+                            }
+                            else {
+                                return '<a href="/' + controllerName + '/Recover/' + row.id + '">Recover</a>';
+                            }
+                        }
+                    }
+                ]
+            })
+        })
+    </script>
+*@

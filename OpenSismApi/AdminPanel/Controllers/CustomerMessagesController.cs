@@ -52,31 +52,40 @@ namespace AdminPanel.Controllers
                 int skip = start != null ? Convert.ToInt32(start) : 0;
                 int recordsTotal = 0;
 
-                var tableData = (from temp in _context.CustomerMessages.Where(c => c.IsDeleted == isArchive).
+                //var customerMessageData =  _context.CustomerMessages.Where(c => c.IsDeleted == isArchive);
+
+
+                //var customerData = _context.Customers.Where() 
+                var tableData = (from temp in _context.CustomerMessages.Where(c => c.IsDeleted == isArchive)
+                                 .Where (a=> a.Message.IsForCustomer == true)
                                  select new
                                  {
                                      Id = temp.Id,
-                                     Name = temp.FirstName + " " + temp.LastName,
-                                     Subject = temp.Subject,
-                                     IsFeatured = temp.IsFeatured,
-                                     IsViewed = temp.IsViewed,
+                                     Script = temp.Message.Script,
+                                     ScriptAr = temp.Message.ScriptAr,
+                                     Title = temp.Message.Title,
+                                     TitleAr = temp.Message.TitleAr,
+                                     Name = temp.Customer.FirstName + "  " + temp.Customer.LastName,
                                      Created = temp.Created,
-                                     Message = temp.Message,
+                                     PhoneNumber = temp.Customer.User.PhoneNumber,
+                                    // Message = temp.Message,
+                                     MessageId = temp.MessageId,
                                      CustomerId = temp.CustomerId
-                                 });
 
+                                 });
+                
                 if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection))
                 {
                     tableData = tableData.OrderBy(sortColumn + " " + sortColumnDirection);
                 }
                 else
                 {
-                    tableData = tableData.OrderBy("Created" + " " + "DESC");
+                 //   tableData = tableData.OrderBy("Created" + " " + "DESC");
                 }
                 if (!string.IsNullOrEmpty(searchValue))
                 {
-                    tableData = tableData.Where(m => m.Subject.Contains(searchValue) ||
-                    m.Name.Contains(searchValue));
+                    tableData = tableData.Where(m => m.Title.Contains(searchValue) || m.TitleAr.Contains(searchValue) ||
+                    m.Name.Contains(searchValue) || m.PhoneNumber.Contains(searchValue));
                 }
                 recordsTotal = tableData.Count();
                 var data = tableData.Skip(skip).Take(pageSize).ToList();
@@ -91,6 +100,7 @@ namespace AdminPanel.Controllers
             }
             catch (Exception e)
             {
+                
                 throw;
             }
         }
@@ -103,15 +113,21 @@ namespace AdminPanel.Controllers
                 return NotFound();
             }
 
-            var contactUs = await _context.ContactsUs
-                .Include(c => c.Customer)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (contactUs == null)
+            var customerMessage = await _context.CustomerMessages
+                .Where(c => c.Id == id)
+                .FirstOrDefaultAsync();
+            if (customerMessage == null)
             {
                 return NotFound();
             }
-            
-            return View(contactUs);
+            ViewBag.TitleEn = customerMessage.Message.Title;
+            ViewBag.TitleAr = customerMessage.Message.TitleAr;
+            ViewBag.Script = customerMessage.Message.Script;
+            ViewBag.ScriptAr = customerMessage.Message.ScriptAr;
+            ViewBag.Name = customerMessage.Customer.FirstName + "  " + customerMessage.Customer.LastName;
+            ViewBag.PhoneNumber = customerMessage.Customer.User.PhoneNumber;
+
+            return View(customerMessage);
         }
 
        

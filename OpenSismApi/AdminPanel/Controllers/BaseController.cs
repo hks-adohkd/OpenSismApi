@@ -67,7 +67,7 @@ namespace AdminPanel.Controllers
                 sessionActive.Add("CustomerMessages.Header", "");
                 sessionActive.Add("CustomerMessages.Index", "");
                 sessionActive.Add("CustomerMessages.Details", "");
-                sessionActive.Add("CustomerMessages.Details", "");
+                //sessionActive.Add("CustomerMessages.Delete", "");
 
                 sessionActive.Add("MailReplay", "");
                 sessionActive.Add("MailReplay.Header", "");
