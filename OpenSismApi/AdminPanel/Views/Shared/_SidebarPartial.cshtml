@@ -91,7 +91,7 @@
                                 <i class="nav-icon fas fa-at"></i>
                                 @if (int.Parse(newContacts) > 0)
                                 {
-                    <span class="badge badge-info right">@newContacts</span>}
+                                    <span class="badge badge-info right">@newContacts</span>}
                                 <p>
                                     Contact Us /FAQs
                                 </p>
@@ -102,6 +102,14 @@
                                 <i class="nav-icon fas fa-comments"></i>
                                 <p>
                                     Messages
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/CustomerMessages/Index" class="nav-link @session["CustomerMessages"]">
+                                <i class="nav-icon fas fa-comments"></i>
+                                <p>
+                                    Customer Messages
                                 </p>
                             </a>
                         </li>
