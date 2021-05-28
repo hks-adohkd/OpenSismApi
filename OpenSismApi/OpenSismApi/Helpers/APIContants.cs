@@ -37,6 +37,16 @@ namespace OpenSismApi.Helpers
         public static int RESET_PASSWORD_EMAIL_TYPE = 2;
 
         public static int MISSING_HEADER_CODE = -5;
+
+        public static ResponseNew CostumSuccessResultNew(Customer customer)
+        {
+            return new ResponseNew (SUCCESS_CODE, SUCCESS_RESULT, Mapper.Map<CustomerViewModel>(customer));
+        }
+
+        public static ResponseNew CostumSometingWrongNew(string msg , Customer customer)
+        {
+            return new ResponseNew(SOMETHING_WENT_WROEG_CODE, msg, Mapper.Map<CustomerViewModel>(customer));
+        }
     }
 
     public static class APIContants<T>
@@ -80,6 +90,11 @@ namespace OpenSismApi.Helpers
             return new Response<T>(SUCCESS_CODE, SUCCESS_RESULT, Content, Mapper.Map<CustomerViewModel>(customer));
         }
 
+        public static Response<T> JustCostumSuccessResult(T Content, Customer customer)
+        {
+            return new Response<T>(SUCCESS_CODE, SUCCESS_RESULT, Content,  Mapper.Map<CustomerViewModel>(customer));
+        }
+
         public static Response<T> CostumSuccessResult(T Content)
         {
             return new Response<T>(SUCCESS_CODE, SUCCESS_RESULT, Content, null);
@@ -119,5 +134,7 @@ namespace OpenSismApi.Helpers
         {
             return new Response<T>(NO_POINTS_CODE, msg, Content, null);
         }
+
+        
     }
 }

@@ -197,7 +197,7 @@ namespace DBContext.Models
                 entity.Property(e => e.Created).HasDefaultValueSql("('0001-01-01T00:00:00.0000000')");
 
                 entity.Property(e => e.Modified).HasDefaultValueSql("('0001-01-01T00:00:00.0000000')");
-
+                
                 entity.HasOne(d => d.City)
                     .WithMany(p => p.Customers)
                     .HasForeignKey(d => d.CityId)

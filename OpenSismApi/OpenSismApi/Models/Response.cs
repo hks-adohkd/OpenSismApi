@@ -40,4 +40,30 @@ namespace OpenSismApi.Models
             this.msg = msg;
         }
     }
+
+    public class ResponseNew
+    {
+        public ResponseNew()
+        {
+        }
+
+        public ResponseNew (int code, string message, CustomerViewModel customer)
+        {
+            Code = code;
+            Message = message;
+            
+            CurrentCustomer = customer;
+        }
+
+        public int Code { get; set; }
+
+        public string Message { get; set; }
+
+        
+
+        public CustomerViewModel CurrentCustomer { get; set; }
+    }
+
+    
+
 }

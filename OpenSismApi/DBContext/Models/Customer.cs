@@ -45,6 +45,10 @@ namespace DBContext.Models
         public int TotalPoints { get; set; }
 
         [Required]
+        [Display(Name = "Premium *")]
+        public bool? Premium { get; set; }
+
+        [Required]
         [Display(Name = "Lucky Wheel Last Spin Date *")]
         public DateTime? LuckyWheelLastSpinDate { get; set; }
         

@@ -11,6 +11,7 @@ namespace DBContext.ViewModels
         public bool? Gender { get; set; }
         public int CurrentPoints { get; set; }
         public int TotalPoints { get; set; }
+        public bool Premium { get; set; }
         public DateTime? LuckyWheelLastSpinDate { get; set; }
         public DateTime? DailyBonusLastUseDate { get; set; }
         public int? DailyBonusLevel { get; set; }
