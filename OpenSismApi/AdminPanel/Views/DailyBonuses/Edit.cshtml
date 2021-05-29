@@ -17,11 +17,19 @@ ViewData["Title"] = "Edit";
                 <form asp-action="Edit">
                     <div class="card-body">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        
+
                         <div class="form-group">
                             <label asp-for="PartsCount" class="control-label"></label>
                             <input asp-for="PartsCount" class="form-control" />
                             <span asp-validation-for="PartsCount" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-12">
+                                <div class="icheck-primary">
+                                    @Html.CheckBoxFor(model => model.IsPremium)
+                                    @Html.LabelFor(model => model.IsPremium)
+                                </div>
+                            </div>
                         </div>
                         <input type="hidden" asp-for="Id" />
                         <input type="hidden" asp-for="Created" />

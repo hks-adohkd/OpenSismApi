@@ -5,6 +5,7 @@ namespace DBContext.ViewModels
     public partial class DailyBonusViewModel : BaseEntityViewModel
     {
         public int PartsCount { get; set; }
+        public bool IsPremium { get; set; }
         public bool IsDoneToday { get; set; }
         public bool IsDoneYesterday { get; set; }
 

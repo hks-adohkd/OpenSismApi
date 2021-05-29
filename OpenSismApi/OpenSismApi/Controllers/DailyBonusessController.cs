@@ -76,5 +76,65 @@ namespace OpenSismApi.Controllers
                 return response;
             }
         }
+
+        [HttpPost]
+        [Route("GetPremium")]
+        public Response<DailyBonusViewModel> GetPremium([FromBody] DailyBonusViewModel model)
+        {
+            Response<DailyBonusViewModel> response = new Response<DailyBonusViewModel>();
+            try
+            {
+                var username = User.Identity.Name;
+                var customer = _context.Customers.Where(c => c.User.UserName == username).Where(b => b.Premium == true).FirstOrDefault();
+                if (customer == null)
+                {
+                    response = APIContants<DailyBonusViewModel>.CostumNotFound(_localizer["NotFound"], null);
+                    Serilog.Log.Warning("{@AddressId}, {@RequestId}, {@Response}", model.Id, CustomFilterAttribute.RequestId, response);
+                    return response;
+                }
+
+                var item = _context.DailyBonuses.Where(a => !a.IsDeleted)
+                    .Where(b => b.IsPremium)
+                   .FirstOrDefault();
+
+               
+                if (item == null)
+                {
+                    response = APIContants<DailyBonusViewModel>.CostumNotFound(_localizer["NotFound"], null);
+                    Serilog.Log.Warning("{@AddressId}, {@RequestId}, {@Response}", model.Id, CustomFilterAttribute.RequestId, response);
+                    return response;
+                }
+
+                item.Prizes = _context.Prizes.Where(p => p.DailyBonusId == item.Id).OrderBy(p => p.ItemOrder).ToList();
+                var dailyBonus = Mapper.Map<DailyBonusViewModel>(item);
+                dailyBonus.IsDoneToday = false;
+                if (((DateTime)customer.DailyBonusLastUseDate).Date == DateTime.Today)
+                {
+                    dailyBonus.IsDoneToday = true;
+                }
+                dailyBonus.IsDoneYesterday = false;
+                if (!dailyBonus.IsDoneToday)
+                {
+                    if (((DateTime)customer.DailyBonusLastUseDate).Date == DateTime.Today.AddDays(-1))
+                    {
+                        dailyBonus.IsDoneYesterday = true;
+                    }
+                    if (!dailyBonus.IsDoneYesterday)
+                    {
+                        customer.DailyBonusLevel = 1;
+                        _context.Update(customer);
+                        _context.SaveChanges();
+                    }
+                }
+                response = APIContants<DailyBonusViewModel>.CostumSuccessResult(dailyBonus, customer);
+                return response;
+            }
+            catch (Exception e)
+            {
+                response = APIContants<DailyBonusViewModel>.CostumSometingWrong(_localizer["SomethingWentWrong"], null);
+                Serilog.Log.Fatal(e, "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
+                return response;
+            }
+        }
     }
 }

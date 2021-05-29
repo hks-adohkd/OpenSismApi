@@ -22,6 +22,14 @@
                                 <input asp-for="PartsCount" class="form-control" />
                                 <span asp-validation-for="PartsCount" class="text-danger"></span>
                             </div>
+                            <div class="form-group">
+                                <div class="col-12">
+                                    <div class="icheck-primary">
+                                        @Html.CheckBoxFor(model => model.IsPremium)
+                                        @Html.LabelFor(model => model.IsPremium)
+                                    </div>
+                                </div>
+                            </div>
                             <input type="hidden" name="Id" />
                         </div>
 

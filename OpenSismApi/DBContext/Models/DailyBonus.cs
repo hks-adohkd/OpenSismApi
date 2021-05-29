@@ -16,6 +16,9 @@ namespace DBContext.Models
         [Display(Name = "Parts Count *")]
         public int PartsCount { get; set; }
 
+        [Display(Name = "is Premium *")]
+        public bool IsPremium { get; set; }
+
         public virtual ICollection<Prize> Prizes { get; set; }
 
     }
