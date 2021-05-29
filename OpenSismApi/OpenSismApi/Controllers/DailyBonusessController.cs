@@ -35,7 +35,7 @@ namespace OpenSismApi.Controllers
             {
                 var username = User.Identity.Name;
                 var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
-                var item = _context.DailyBonuses.Where(a => !a.IsDeleted)
+                var item = _context.DailyBonuses.Where(a => !a.IsDeleted).Where(a => !a.IsPremium)
                     .FirstOrDefault();
                 
                 if (item == null)
