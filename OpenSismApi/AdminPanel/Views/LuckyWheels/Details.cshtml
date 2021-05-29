@@ -17,32 +17,38 @@ ViewData["Title"] = "Details";
                     <!-- /.card-header -->
                     <div class="card-body">
                         <dl class="dl-horizontal">
-                                        <dt>
-                                            @Html.DisplayNameFor(model => model.PartsCount)
-                                        </dt>
-                                        <dd>
-                                            @Html.DisplayFor(model => model.PartsCount)
-                                        </dd>
-                                        <dt>
-                                            @Html.DisplayNameFor(model => model.Group)
-                                        </dt>
-                                        <dd>
-                                            <a class="badge badge-info" target="_blank" asp-action="Details" asp-controller="Groups" asp-route-id="@Model.GroupId">
-                                                @Html.DisplayFor(model => model.Group.DisplayName)
-                                            </a>
-                                        </dd>
-                                        <dt>
-                                            @Html.DisplayNameFor(model => model.Created)
-                                        </dt>
-                                        <dd>
-                                            @Html.DisplayFor(model => model.Created)
-                                        </dd>
-                                        <dt>
-                                            @Html.DisplayNameFor(model => model.Modified)
-                                        </dt>
-                                        <dd>
-                                            @Html.DisplayFor(model => model.Modified)
-                                        </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.PartsCount)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.PartsCount)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Group)
+                            </dt>
+                            <dd>
+                                <a class="badge badge-info" target="_blank" asp-action="Details" asp-controller="Groups" asp-route-id="@Model.GroupId">
+                                    @Html.DisplayFor(model => model.Group.DisplayName)
+                                </a>
+                            </dd>
+                            <dt>
+                            @Html.DisplayNameFor(model => model.IsPremium)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.IsPremium)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Created)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Created)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Modified)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Modified)
+                            </dd>
                         </dl>
                     </div>
                     <div class="card-footer">

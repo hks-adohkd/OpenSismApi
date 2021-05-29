@@ -38,6 +38,9 @@
                                     <th>
                                         @Html.DisplayNameFor(model => model.PartsCount)
                                     </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.IsPremium)
+                                    </th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -79,6 +82,7 @@
                 { "data": "id", "name": "Id", "autoWidth": true },
                 { "data": "group.displayName", "name": "Group.DisplayName", "autoWidth": true },
                 { "data": "partsCount", "name": "PartsCount", "autoWidth": true },
+                { "data": "isPremium", "name": "IsPremium", "autoWidth": true },
                 {
                     data: null, render: function (data, type, row) {
                         if (isArchive == "False") {

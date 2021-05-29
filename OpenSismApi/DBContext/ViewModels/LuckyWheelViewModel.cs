@@ -6,6 +6,8 @@ namespace DBContext.ViewModels
     {
         public int GroupId { get; set; }
         public int PartsCount { get; set; }
+
+        public bool IsPremium { get; set; }
         public bool IsDoneToday { get; set; }
 
         public virtual GroupViewModel Group { get; set; }
