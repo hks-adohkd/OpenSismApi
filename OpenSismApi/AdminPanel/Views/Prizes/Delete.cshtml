@@ -58,6 +58,12 @@ ViewData["Title"] = "Delete";
                             @Html.DisplayFor(model => model.Points)
                         </dd>
                         <dt>
+                            @Html.DisplayNameFor(model => model.Value)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Value)
+                        </dd>
+                        <dt>
                             @Html.DisplayNameFor(model => model.PrizeType)
                         </dt>
                         <dd>
@@ -77,7 +83,13 @@ ViewData["Title"] = "Delete";
                         </dd>
                     </dl>
                 </div>
-                    
+                <div class="card-footer">
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="submit" value="Delete" class="btn btn-danger" />
+                        <a class="btn btn-default" asp-action="Index">Back to List</a>
+                    </form>
+                </div>   
                 </div>
             </div>
         </div>
