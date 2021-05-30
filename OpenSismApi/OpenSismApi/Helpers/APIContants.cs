@@ -119,6 +119,10 @@ namespace OpenSismApi.Helpers
         {
             return new Response<T>(SOMETHING_WENT_WROEG_CODE, msg, Content, null);
         }
+        public static Response<T> CostumBonusgWrong(string msg, T Content , Customer customer)
+        {
+            return new Response<T>(SOMETHING_WENT_WROEG_CODE, msg, Content, Mapper.Map<CustomerViewModel>(customer));
+        }
 
         public static Response<T> CostumIncorectCode(string msg, T Content)
         {
