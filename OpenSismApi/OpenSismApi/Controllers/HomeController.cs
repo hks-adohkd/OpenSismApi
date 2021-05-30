@@ -98,11 +98,14 @@ namespace OpenSismApi.Controllers
                     homePageViewModel.DailyBonusValid = false;
                 }
 
-                //var pendings = _context.CustomerTasks.Where(c => c.CustomerId == customer.Id && !c.IsDone
-                //&& !c.IsDeleted).Select(c => c.AppTask).ToList();
-                //homePageViewModel.PendingTasks = Mapper.Map<List<AppTaskViewModel>>(pendings);
+                if (customer.DailyBonusLevel == 9) {
+                    customer.DailyBonusLevel = 1;
+                }
+                    //var pendings = _context.CustomerTasks.Where(c => c.CustomerId == customer.Id && !c.IsDone
+                    //&& !c.IsDeleted).Select(c => c.AppTask).ToList();
+                    //homePageViewModel.PendingTasks = Mapper.Map<List<AppTaskViewModel>>(pendings);
 
-                int nextGroup = customer.Group.ItemOrder + 1;
+                    int nextGroup = customer.Group.ItemOrder + 1;
                 Group group = _context.Groups.Where(g => g.ItemOrder == nextGroup).FirstOrDefault();
                 if (group != null)
                 {
