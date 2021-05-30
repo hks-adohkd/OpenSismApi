@@ -173,7 +173,9 @@ namespace OpenSismApi.Controllers
                     await _context.SaveChangesAsync();
                     customerPrize.Prize = await _context.Prizes.FindAsync(customerPrize.PrizeId);
                     customer.DailyBonusLastUseDate = DateTime.Now;
-                    customer.DailyBonusLevel = customer.DailyBonusLevel + 1;
+                    
+                        customer.DailyBonusLevel = customer.DailyBonusLevel + 1;
+                    
                     _context.Update(customer);
                     await _context.SaveChangesAsync();
                     response = APIContants<CustomerPrizeViewModel>.CostumSuccessResult(
