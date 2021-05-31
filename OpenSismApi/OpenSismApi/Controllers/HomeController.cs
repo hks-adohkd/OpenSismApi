@@ -29,7 +29,7 @@ namespace OpenSismApi.Controllers
 
         [HttpPost]
         [Route("GetHome")]
-        public Response<HomePageViewModel> GetHome()
+        public  Response<HomePageViewModel> GetHome()
         {
             Response<HomePageViewModel> response = new Response<HomePageViewModel>();
             try
@@ -117,7 +117,8 @@ namespace OpenSismApi.Controllers
                 }
                 //homePageViewModel.NewMessages = _context.CustomerMessages.Where(c => c.CustomerId == customer.Id
                 //&& !c.IsRead && !c.IsDeleted).Count();
-
+                _context.Customers.Update(customer);
+                _context.SaveChanges();
                 response = APIContants<HomePageViewModel>.CostumSuccessResult(homePageViewModel,customer);
                 return response;
             }

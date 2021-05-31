@@ -127,19 +127,31 @@ namespace OpenSismApi.Controllers
                 CustomerPrize customerPrize = Mapper.Map<CustomerPrize>(model);
                 var username = User.Identity.Name;
                 var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
+                TimeSpan ts = DateTime.Now.Subtract(customer.LuckyWheelLastSpinDate.Value);
+                int NumberOfDays = (int)ts.TotalDays;
+                if (NumberOfDays >= 1)
+                {
+                    customerPrize.CustomerId = customer.Id;
+                    customerPrize.RequestDate = DateTime.Now;
+                    customerPrize.EarnDate = DateTime.Now;
+                    customerPrize.PrizeStatusId = _context.PrizeStatuses.Where(p => p.Name == "accepted").FirstOrDefault().Id;
+                    _context.CustomerPrizes.Add(customerPrize);
+                    await _context.SaveChangesAsync();
+                    customerPrize.Prize = await _context.Prizes.FindAsync(customerPrize.PrizeId);
+                    customer.LuckyWheelLastSpinDate = DateTime.Now;
+                    _context.Update(customer);
+                    await _context.SaveChangesAsync();
 
-                customerPrize.CustomerId = customer.Id;
-                customerPrize.RequestDate = DateTime.Now;
-                customerPrize.PrizeStatusId = _context.PrizeStatuses.Where(p => p.Name == "accepted").FirstOrDefault().Id;
-                _context.CustomerPrizes.Add(customerPrize);
-                await _context.SaveChangesAsync();
-                customerPrize.Prize = await _context.Prizes.FindAsync(customerPrize.PrizeId);
-                customer.LuckyWheelLastSpinDate = DateTime.Now;
-                _context.Update(customer);
-                await _context.SaveChangesAsync();
-                response = APIContants<CustomerPrizeViewModel>.CostumSuccessResult(
-                Mapper.Map<CustomerPrizeViewModel>(customerPrize), customer);
-                return response;
+
+                    response = APIContants<CustomerPrizeViewModel>.CostumSuccessResult(
+                    Mapper.Map<CustomerPrizeViewModel>(customerPrize), customer);
+                    return response;
+                }
+                else {
+                    response = APIContants<CustomerPrizeViewModel>.CostumBonusgWrong(_localizer["NotAllowed"], null, customer);
+                    Serilog.Log.Fatal("not Allowed wright Now ", "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
+                    return response;
+                }
             }
             catch (Exception e)
             {
@@ -167,7 +179,7 @@ namespace OpenSismApi.Controllers
                 {
                     customerPrize.CustomerId = customer.Id;
                     customerPrize.RequestDate = DateTime.Now;
-                    //customerPrize.EarnDate = DateTime.Now;
+                    customerPrize.EarnDate = DateTime.Now;
                     customerPrize.PrizeStatusId = _context.PrizeStatuses.Where(p => p.Name == "accepted").FirstOrDefault().Id;
                     _context.CustomerPrizes.Add(customerPrize);
                     await _context.SaveChangesAsync();
