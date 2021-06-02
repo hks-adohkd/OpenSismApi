@@ -109,7 +109,7 @@ namespace OpenSismApi.Controllers
                             {
                                 customerViewModel.NextGroupPoints = 0;
                             }
-                            response = APIContants<CustomerViewModel>.CostumSuccessResult(customerViewModel) ;
+                            response = APIContants<CustomerViewModel>.CostumSuccessResult(customerViewModel , customer) ;
                             return response;
                         }
                     }
@@ -202,7 +202,7 @@ namespace OpenSismApi.Controllers
                         customer.ShareCode = RandomString(10);
                         _context.Add(customer);
                         await _context.SaveChangesAsync();
-                        response = APIContants<CustomerViewModel>.CostumSuccessResult(Mapper.Map<CustomerViewModel>(customer));
+                        response = APIContants<CustomerViewModel>.CostumSuccessResult(Mapper.Map<CustomerViewModel>(customer) , customer);
                         return response;
                         //var verification = await _verificationService.StartVerificationAsync(user.PhoneNumber, "sms");
                         //if (verification.IsValid)
