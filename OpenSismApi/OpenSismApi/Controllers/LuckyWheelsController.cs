@@ -72,7 +72,8 @@ namespace OpenSismApi.Controllers
             try
             {
                 var username = User.Identity.Name;
-                var customer = _context.Customers.Where(c => c.User.UserName == username).Where(b => b.Premium == true).FirstOrDefault();
+                ///   var customer = _context.Customers.Where(c => c.User.UserName == username).Where(b => b.Premium == true).FirstOrDefault();
+                   var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
                 if (customer == null)
                 {
                     response = APIContants<LuckyWheelViewModel>.CostumNotFound(_localizer["NotFound"], null);

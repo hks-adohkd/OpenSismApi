@@ -24,8 +24,10 @@ namespace OpenSismApi.Models
         [Required(ErrorMessage = "Gender is required")]
         public bool Gender { get; set; }
 
-        [Required(ErrorMessage = "City is required")]
+       
         public int CityId { get; set; }
+
+        public string Email { get; set; }
 
         public string FCMToken { get; set; }
 

@@ -146,7 +146,8 @@ namespace OpenSismApi.Controllers
                     {
                         SecurityStamp = Guid.NewGuid().ToString(),
                         UserName = model.Phone,
-                        PhoneNumber = model.Phone
+                        PhoneNumber = model.Phone,
+                        Email = model.Email
                     };
                     /////////////////////////////////////////////////////////////////////////
                     user.PhoneNumberConfirmed = true; // added to test 
@@ -167,22 +168,25 @@ namespace OpenSismApi.Controllers
                         signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                         );
 
-                    
+
                     
                     ///////////////////////////////////////////////////////////////////////////////////
                     var result = await userManager.CreateAsync(user, model.Password);
+                   
                     if (!result.Succeeded)
                     {
+                       
                         response = APIContants<CustomerViewModel>.CostumSometingWrong(result.Errors.ElementAt(0).Description, null);
                         Serilog.Log.Fatal(_localizer["SomethingWentWrong"], "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
                         return response;
                     }
                     else
                     {
+                        
                         Customer customer = new Customer();
                         customer.UserId = user.Id;
                         customer.GroupId = _context.Groups.Where(g => g.Name == "general").FirstOrDefault().Id;
-                        customer.CityId = model.CityId;
+                       // customer.CityId = model.CityId;
                         customer.CurrentPoints = 0;
                         customer.FirstName = model.FirstName;
                         customer.LastName = model.LastName;
@@ -198,9 +202,11 @@ namespace OpenSismApi.Controllers
                         // customer.TokenExpiration = DateTime.Now;
                         customer.TokenExpiration = token.ValidTo;
                         customer.ImageUrl = "";
+                        customer.Premium = false;
                         customer.Gender = model.Gender;
                         customer.ShareCode = RandomString(10);
                         _context.Add(customer);
+                        
                         await _context.SaveChangesAsync();
                         response = APIContants<CustomerViewModel>.CostumSuccessResult(Mapper.Map<CustomerViewModel>(customer) , customer);
                         return response;
@@ -220,6 +226,7 @@ namespace OpenSismApi.Controllers
                 }
                 else
                 {
+                   // return null;
                     response = APIContants<CustomerViewModel>.CostumSometingWrong(ModelState.Values.ElementAt(0).Errors.ElementAt(0).ErrorMessage, null);
                     Serilog.Log.Warning(_localizer["SomethingWentWrong"], "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
                     return response;
@@ -466,7 +473,7 @@ namespace OpenSismApi.Controllers
                     customer.FCMToken = model.FCMToken;
                     _context.Update(customer);
                     await _context.SaveChangesAsync();
-                    response = APIContants<CustomerViewModel>.CostumSuccessResult(Mapper.Map<CustomerViewModel>(customer));
+                    response = APIContants<CustomerViewModel>.CostumSuccessResult(Mapper.Map<CustomerViewModel>(customer) , customer);
                     return response;
                 }
                 else

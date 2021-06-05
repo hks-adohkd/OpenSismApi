@@ -60,7 +60,7 @@ namespace DBContext.Models
         [Display(Name = "Daily Bonus Level")]
         public int? DailyBonusLevel { get; set; }
 
-        [Required]
+       
         [Display(Name = "City *")]
         public int? CityId { get; set; }
 
