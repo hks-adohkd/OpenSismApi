@@ -22,6 +22,9 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Http;
+
 namespace OpenSismApi.Controllers
 {
     [Route("api/[controller]")]
@@ -33,18 +36,169 @@ namespace OpenSismApi.Controllers
         private readonly OpenSismDBContext _context;
         private readonly IVerification _verificationService;
         private readonly IHostingEnvironment _hostingEnvironment;
-
+       
         public AuthenticateController(OpenSismDBContext context, UserManager<ApplicationUser> userManager,
             IConfiguration configuration, 
             IStringLocalizer<BaseController> localizer,
-            IHostingEnvironment hostingEnvironment) : base(localizer)
+            IHostingEnvironment hostingEnvironment ) : base(localizer)
+            
         {
             this.userManager = userManager;
             _configuration = configuration;
             _context = context;
            // _verificationService = verificationService;
             _hostingEnvironment = hostingEnvironment;
+            
         }
+
+
+        [AllowAnonymous]
+        [HttpPost("authenticate")]
+        public async Task<IActionResult> AuthenticateAsync([FromBody] LoginModel model)
+        {
+            // Response<CustomerViewModel> response = new Response<CustomerViewModel>();
+            var user = await userManager.FindByNameAsync(model.Username);
+
+            if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
+            {
+                // user is valid do whatever you want
+                //var authclaims = new list<claim>
+                //        {
+                //            new claim(claimtypes.name, user.username),
+                //            new claim(jwtregisteredclaimnames.jti, guid.newguid().tostring()),
+                //        };
+
+                //var authsigningkey = new symmetricsecuritykey(encoding.utf8.getbytes(_configuration["jwt:secret"]));
+
+                //var token = new jwtsecuritytoken(
+                //    issuer: _configuration["jwt:validissuer"],
+                //    audience: _configuration["jwt:validaudience"],
+                //    expires: datetime.now.adddays(30),
+                //    claims: authclaims,
+                //    signingcredentials: new signingcredentials(authsigningkey, securityalgorithms.hmacsha256)
+                //    );
+               
+               // var customer = _context.Customers.Where(c => c.userid == user.id).firstordefault();
+                //customer.token = new jwtsecuritytokenhandler().writetoken(token);
+                //customer.tokenexpiration = token.validto;
+                //_context.update(customer);
+                //await _context.savechangesasync();
+
+                var refreshToken = generateRefreshToken();
+
+                setTokenCookie(refreshToken.Token);
+                var response = new AuthenticateResponse("", refreshToken.Token);
+                return Ok(response);
+
+            }
+            else {
+                return BadRequest(new { message = "Username or password is incorrect" });
+            }
+
+         //   var response = _userService.Authenticate(model);
+
+            
+           
+
+           
+        }
+
+        //[AllowAnonymous]
+        //[HttpPost("refresh-token")]
+        //public async Task<IActionResult> RefreshToken()
+        //{
+        //    var refreshToken = Request.Cookies["refreshToken"];
+        //    // Response<CustomerViewModel> response = new Response<CustomerViewModel>();
+        //   var user = await userManager.FindByNameAsync(model.Username);
+        //  //  var customer = _context.Users.SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
+        //    if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
+        //    {
+        //        // user is valid do whatever you want
+        //        //var authclaims = new list<claim>
+        //        //        {
+        //        //            new claim(claimtypes.name, user.username),
+        //        //            new claim(jwtregisteredclaimnames.jti, guid.newguid().tostring()),
+        //        //        };
+
+        //        //var authsigningkey = new symmetricsecuritykey(encoding.utf8.getbytes(_configuration["jwt:secret"]));
+
+        //        //var token = new jwtsecuritytoken(
+        //        //    issuer: _configuration["jwt:validissuer"],
+        //        //    audience: _configuration["jwt:validaudience"],
+        //        //    expires: datetime.now.adddays(30),
+        //        //    claims: authclaims,
+        //        //    signingcredentials: new signingcredentials(authsigningkey, securityalgorithms.hmacsha256)
+        //        //    );
+        //      //  var customer = _context.Users.SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
+        //       // var customer = _context.Customers.Where(c => c.UserId == user.Id).FirstOrDefault();
+        //        //customer.token = new jwtsecuritytokenhandler().writetoken(token);
+        //        //customer.tokenexpiration = token.validto;
+        //        //_context.update(customer);
+        //        //await _context.savechangesasync();
+
+        //        var _refreshToken = generateRefreshToken();
+
+        //        setTokenCookie(_refreshToken.Token);
+        //      //  var response = new AuthenticateResponse("", refreshToken.Token);
+        //        return Ok(response);
+
+        //    }
+        //    else
+        //    {
+        //        return BadRequest(new { message = "Username or password is incorrect" });
+        //    }
+
+        //    //   var response = _userService.Authenticate(model);
+
+
+
+
+
+        //}
+
+        private RefreshToken generateRefreshToken()
+        {
+            using (var rngCryptoServiceProvider = new RNGCryptoServiceProvider())
+            {
+                var randomBytes = new byte[64];
+                rngCryptoServiceProvider.GetBytes(randomBytes);
+                return new RefreshToken
+                {
+                    Token = Convert.ToBase64String(randomBytes),
+                    Expires = DateTime.UtcNow.AddDays(7),
+                    Created = DateTime.UtcNow,
+                   
+                };
+            }
+        }
+
+        private void setTokenCookie(string token)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = DateTime.UtcNow.AddDays(7)
+            };
+            Response.Cookies.Append("refreshToken", token, cookieOptions);
+        }
+
+        //[AllowAnonymous]
+        //[HttpPost("refresh-token")]
+        //public IActionResult RefreshToken()
+        //{
+        //    var refreshToken = Request.Cookies["refreshToken"];
+        //    var response = _userService.RefreshToken(refreshToken, ipAddress());
+
+        //    if (response == null)
+        //        return Unauthorized(new { message = "Invalid token" });
+
+        //    setTokenCookie(response.RefreshToken);
+
+        //    return Ok(response);
+        //}
+
+
+
 
         [HttpPost]
         [Route("Login")]
@@ -92,6 +246,7 @@ namespace OpenSismApi.Controllers
                             var customer = _context.Customers.Where(c => c.UserId == user.Id).FirstOrDefault();
                             customer.Token = new JwtSecurityTokenHandler().WriteToken(token);
                             customer.TokenExpiration = token.ValidTo;
+                            
                             customer.FCMToken = model.FCMToken;
                             //customer.LuckyWheelLastSpinDate = DateTime.Now.AddDays(-10);
                             //customer.DailyBonusLastUseDate = DateTime.Now.AddDays(-2);
@@ -159,14 +314,15 @@ namespace OpenSismApi.Controllers
                         };
                     
                     var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-                    
+
                     var token = new JwtSecurityToken(
                         issuer: _configuration["JWT:ValidIssuer"],
                         audience: _configuration["JWT:ValidAudience"],
-                        expires: DateTime.Now.AddDays(30),
+                      //  expires: DateTime.Now.AddDays(30),
+                      expires: DateTime.Now.AddMinutes(2),
                         claims: authClaims,
                         signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                        );
+                        ); ;
 
 
                     
