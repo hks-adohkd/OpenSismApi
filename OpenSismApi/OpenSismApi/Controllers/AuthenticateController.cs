@@ -349,6 +349,7 @@ namespace OpenSismApi.Controllers
                         customer.LockoutEnabled = false;
                         customer.LuckyWheelLastSpinDate = DateTime.Now.AddDays(-1);
                         customer.DailyBonusLastUseDate = DateTime.Now.AddDays(-1);
+                        customer.LuckyWheelPremiumLastSpinDate = DateTime.Now.AddDays(-1);
                         customer.DailyBonusLevel = 1;
                         customer.TermsAndConditions = model.TermsAndConditions;
                         // customer.Token = "";

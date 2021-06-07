@@ -162,6 +162,60 @@ namespace OpenSismApi.Controllers
         }
 
         [HttpPost]
+        [Route("AddLuckyPremium")]
+        public async Task<Response<CustomerPrizeViewModel>> AddLuckyPremium([FromBody] CustomerPrizeViewModel model)
+        {
+            Response<CustomerPrizeViewModel> response = new Response<CustomerPrizeViewModel>();
+            try
+            {
+                CustomerPrize customerPrize = Mapper.Map<CustomerPrize>(model);
+                var username = User.Identity.Name;
+                var customer = _context.Customers.Where(c => c.User.UserName == username).Where(a => a.Premium == true).FirstOrDefault();
+                if (customer != null)
+                {
+                    TimeSpan ts = DateTime.Now.Subtract(customer.LuckyWheelPremiumLastSpinDate.Value);
+                    int NumberOfDays = (int)ts.TotalDays;
+                    if (NumberOfDays >= 1)
+                    {
+                        customerPrize.CustomerId = customer.Id;
+                        customerPrize.RequestDate = DateTime.Now;
+                        customerPrize.EarnDate = DateTime.Now;
+                        customerPrize.PrizeStatusId = _context.PrizeStatuses.Where(p => p.Name == "accepted").FirstOrDefault().Id;
+                        _context.CustomerPrizes.Add(customerPrize);
+                        await _context.SaveChangesAsync();
+                        customerPrize.Prize = await _context.Prizes.FindAsync(customerPrize.PrizeId);
+                        customer.LuckyWheelPremiumLastSpinDate = DateTime.Now;
+                        _context.Update(customer);
+                        await _context.SaveChangesAsync();
+
+
+                        response = APIContants<CustomerPrizeViewModel>.CostumSuccessResult(
+                        Mapper.Map<CustomerPrizeViewModel>(customerPrize), customer);
+                        return response;
+                    }
+                    else
+                    {
+                        response = APIContants<CustomerPrizeViewModel>.CostumBonusgWrong(_localizer["NotAllowed"], null, customer);
+                        Serilog.Log.Fatal("not Allowed wright Now ", "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
+                        return response;
+                    }
+                }
+                else
+                {
+                    response = APIContants<CustomerPrizeViewModel>.CostumBonusgWrong(_localizer["SomethingWentWrong"], null, customer);
+                    Serilog.Log.Fatal("not Allowed wright Now ", "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
+                    return response;
+                }
+            }
+            catch (Exception e)
+            {
+                response = APIContants<CustomerPrizeViewModel>.CostumSometingWrong(_localizer["SomethingWentWrong"], null);
+                Serilog.Log.Fatal(e, "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
+                return response;
+            }
+        }
+
+        [HttpPost]
         [Route("AddDailyBonus")]
         public async Task<Response<CustomerPrizeViewModel>> AddDailyBonus([FromBody] CustomerPrizeViewModel model)
         {

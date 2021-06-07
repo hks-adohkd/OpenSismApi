@@ -51,7 +51,11 @@ namespace DBContext.Models
         [Required]
         [Display(Name = "Lucky Wheel Last Spin Date *")]
         public DateTime? LuckyWheelLastSpinDate { get; set; }
+
         
+        [Display(Name = "Lucky Wheel Premium Last Spin Date *")]
+        public DateTime? LuckyWheelPremiumLastSpinDate { get; set; }
+
         [Required]
         [Display(Name = "Daily Bonus Last Use Date")]
         public DateTime? DailyBonusLastUseDate { get; set; }

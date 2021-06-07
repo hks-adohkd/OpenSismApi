@@ -13,6 +13,7 @@ namespace DBContext.ViewModels
         public int TotalPoints { get; set; }
         public bool Premium { get; set; }
         public DateTime? LuckyWheelLastSpinDate { get; set; }
+        public DateTime? LuckyWheelPremiumLastSpinDate { get; set; }
         public DateTime? DailyBonusLastUseDate { get; set; }
         public int? DailyBonusLevel { get; set; }
         public int? CityId { get; set; }

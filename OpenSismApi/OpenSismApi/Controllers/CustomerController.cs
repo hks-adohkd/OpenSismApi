@@ -11,7 +11,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using X.PagedList;
-
+using Microsoft.AspNetCore.Identity;
+using Microsoft.VisualBasic;
 
 namespace OpenSismApi.Controllers
 {
@@ -21,12 +22,45 @@ namespace OpenSismApi.Controllers
     public class CustomerController : BaseController
     {
         private readonly OpenSismDBContext _context;
+        private readonly UserManager<ApplicationUser> userManager;
         public CustomerController(OpenSismDBContext context,
             IStringLocalizer<BaseController> localizer) : base(localizer)
         {
+            this.userManager = userManager;
             _context = context;
         }
 
+
+        [HttpPost]
+        [Route("GetTime")]
+        public async Task<IActionResult> GetTimeAsync()
+        {
+            // Response<CustomerViewModel> response = new Response<CustomerViewModel>();
+            var username = User.Identity.Name;
+            var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
+
+            if (customer != null)
+            {
+                String dateStr = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff");
+                DateTime tempDate = DateTime.ParseExact(dateStr, "MM/dd/yyyy hh:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
+              //  DateTime tempDate = DateTime.Parse("yyyy-MM-dd hh:mm:ss");
+
+                var response = new TimeResponse(tempDate);
+                return Ok(response);
+
+            }
+            else
+            {
+                return BadRequest(new { message = "Customer Not Found" });
+            }
+
+            //   var response = _userService.Authenticate(model);
+
+
+
+
+
+        }
 
         [HttpPost]
         [Route("GetCustomer")]

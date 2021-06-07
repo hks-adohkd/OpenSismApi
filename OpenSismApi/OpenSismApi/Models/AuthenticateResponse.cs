@@ -1,3 +1,4 @@
+using System;
 using System.Text.Json.Serialization;
 
 
@@ -18,4 +19,21 @@ namespace OpenSismApi.Models
             RefreshToken = refreshToken;
         }
     }
+
+
+    public class TimeResponse
+    {
+
+        public DateTime DateTimeNow { get; set; }
+
+       
+
+        public TimeResponse(DateTime TimeNow)
+        {
+
+            DateTimeNow = TimeNow;
+            
+        }
+    }
+
 }
