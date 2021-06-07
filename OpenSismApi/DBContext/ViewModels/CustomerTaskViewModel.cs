@@ -11,7 +11,7 @@ namespace DBContext.ViewModels
         public DateTime? StartDate { get; set; }
         public string ShareCode { get; set; }
         public int EarnedPoints { get; set; }
-
+        public String Description { get; set; }
         public virtual AppTaskViewModel AppTask { get; set; }
         public virtual SportMatchViewModel SportMatch { get; set; }
     }

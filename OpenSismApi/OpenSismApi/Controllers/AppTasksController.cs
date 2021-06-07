@@ -301,6 +301,7 @@ namespace OpenSismApi.Controllers
                     customerTask.AppTaskId = model.AppTaskId;
                     customerTask.DoneDate = null;
                     customerTask.StartDate = DateTime.Now;
+                    customerTask.Description = model.Description;
                     customerTask.IsDone = false;
 
                     _context.CustomerTasks.Add(customerTask);
@@ -333,6 +334,7 @@ namespace OpenSismApi.Controllers
                 customerTask.DoneDate = DateTime.Now;
                 customerTask.IsDone = true;
                 customerTask.EarnedPoints = customerTask.AppTask.Points;
+                customerTask.Description = model.Description;
                 _context.CustomerTasks.Update(customerTask);
                 await _context.SaveChangesAsync();
 

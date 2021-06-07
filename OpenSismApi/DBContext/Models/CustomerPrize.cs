@@ -26,6 +26,9 @@ namespace DBContext.Models
         [Display(Name = "Status *")]
         public int PrizeStatusId { get; set; }
 
+        [Display(Name = "Description *")]
+        public String Description { get; set; }
+
         public virtual Customer Customer { get; set; }
         public virtual Prize Prize { get; set; }
         public virtual PrizeStatus PrizeStatus { get; set; }

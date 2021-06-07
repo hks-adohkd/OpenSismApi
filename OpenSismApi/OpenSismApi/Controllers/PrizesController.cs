@@ -109,6 +109,7 @@ namespace OpenSismApi.Controllers
                         customerPrize.CustomerId = customer.Id;
                         customerPrize.PrizeId = model.PrizeId;
                         customerPrize.RequestDate = DateTime.Now;
+                        customerPrize.Description = model.Description;
                         customerPrize.PrizeStatusId = _context.PrizeStatuses.Where(p => p.Name == "requested").FirstOrDefault().Id;
                         _context.CustomerPrizes.Add(customerPrize);
                         await _context.SaveChangesAsync();

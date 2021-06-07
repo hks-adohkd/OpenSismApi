@@ -134,6 +134,7 @@ namespace OpenSismApi.Controllers
                     customerPrize.CustomerId = customer.Id;
                     customerPrize.RequestDate = DateTime.Now;
                     customerPrize.EarnDate = DateTime.Now;
+                    customerPrize.Description = "Lucky Points";
                     customerPrize.PrizeStatusId = _context.PrizeStatuses.Where(p => p.Name == "accepted").FirstOrDefault().Id;
                     _context.CustomerPrizes.Add(customerPrize);
                     await _context.SaveChangesAsync();
@@ -180,6 +181,7 @@ namespace OpenSismApi.Controllers
                         customerPrize.CustomerId = customer.Id;
                         customerPrize.RequestDate = DateTime.Now;
                         customerPrize.EarnDate = DateTime.Now;
+                        customerPrize.Description = "LuckyPremium Points";
                         customerPrize.PrizeStatusId = _context.PrizeStatuses.Where(p => p.Name == "accepted").FirstOrDefault().Id;
                         _context.CustomerPrizes.Add(customerPrize);
                         await _context.SaveChangesAsync();
@@ -234,6 +236,7 @@ namespace OpenSismApi.Controllers
                     customerPrize.CustomerId = customer.Id;
                     customerPrize.RequestDate = DateTime.Now;
                     customerPrize.EarnDate = DateTime.Now;
+                    customerPrize.Description = "DailyBonus Points";
                     customerPrize.PrizeStatusId = _context.PrizeStatuses.Where(p => p.Name == "accepted").FirstOrDefault().Id;
                     _context.CustomerPrizes.Add(customerPrize);
                     await _context.SaveChangesAsync();

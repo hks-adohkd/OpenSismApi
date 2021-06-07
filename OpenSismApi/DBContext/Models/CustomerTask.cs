@@ -28,6 +28,9 @@ namespace DBContext.Models
         [Display(Name = "Earned Points")]
         public int EarnedPoints { get; set; }
 
+        [Display(Name = "Description")]
+        public String Description { get; set; }
+
         public virtual Customer Customer { get; set; }
         public virtual AppTask AppTask { get; set; }
     }

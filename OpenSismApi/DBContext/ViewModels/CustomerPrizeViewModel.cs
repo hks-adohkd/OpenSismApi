@@ -9,8 +9,10 @@ namespace DBContext.ViewModels
         public DateTime EarnDate { get; set; }
         public DateTime RequestDate { get; set; }
         public int PrizeStatusId { get; set; }
-
+        public String Description { get; set; }
         public virtual PrizeViewModel Prize { get; set; }
         public virtual PrizeStatusViewModel PrizeStatus { get; set; }
     }
 }
+
+

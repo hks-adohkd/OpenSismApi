@@ -36,6 +36,9 @@
                                         @Html.DisplayNameFor(model => model.CustomerTasks)
                                     </th>
                                     <th>
+                                        @Html.DisplayNameFor(model => model.Premium)
+                                    </th>
+                                    <th>
                                         @Html.DisplayNameFor(model => model.CustomerPrizes)
                                     </th>
                                     <th>
@@ -86,7 +89,9 @@
                 { "data": "totalPoints", "name": "TotalPoints", "autoWidth": true },
                 { "data": "group", "name": "Group", "autoWidth": true },
                 { "data": "customerTasks", "name": "CustomerTasks", "autoWidth": true },
+                { "data": "premium", "name": "Premium", "autoWidth": true },
                 { "data": "customerPrizes", "name": "CustomerPrizes", "autoWidth": true },
+                
                 {
                     data: null, render: function (data, type, row) {
                         return '<a href="/' + controllerName + '/ResetPassword/' + row.id + '" class="btn btn-block btn-sm" style="background: #20c997;color: white;"><i class="fas fa-lock"></i>Reset</a>';

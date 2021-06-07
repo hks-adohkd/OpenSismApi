@@ -21,7 +21,7 @@ ViewData["Title"] = "Details";
                                 @Html.DisplayNameFor(model => model.PrizeStatus)
                             </dt>
                             <dd>
-                                <a class="badge badge-info" target="_blank" asp-action="Details" 
+                                <a class="badge badge-info" target="_blank" asp-action="Details"
                                    asp-controller="PrizeStatus" asp-route-id="@Model.PrizeStatusId">
                                     @Html.DisplayFor(model => model.PrizeStatus.DisplayName)
                                 </a>
@@ -37,6 +37,12 @@ ViewData["Title"] = "Details";
                             </dt>
                             <dd>
                                 @Html.DisplayFor(model => model.EarnDate)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Description)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Description)
                             </dd>
                             <dt>
                                 @Html.DisplayNameFor(model => model.Customer)
