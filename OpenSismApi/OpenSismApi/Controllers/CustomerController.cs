@@ -41,8 +41,8 @@ namespace OpenSismApi.Controllers
 
             if (customer != null)
             {
-                String dateStr = DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss.fff");
-                DateTime tempDate = DateTime.ParseExact(dateStr, "MM/dd/yyyy hh:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
+                String dateStr = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff");
+                DateTime tempDate = DateTime.ParseExact(dateStr, "MM/dd/yyyy HH:mm:ss.fff", System.Globalization.CultureInfo.InvariantCulture);
               //  DateTime tempDate = DateTime.Parse("yyyy-MM-dd hh:mm:ss");
 
                 var response = new TimeResponse(tempDate);
