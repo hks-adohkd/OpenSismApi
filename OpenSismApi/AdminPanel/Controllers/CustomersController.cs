@@ -56,6 +56,7 @@ namespace AdminPanel.Controllers
                                      CustomerPrizes = temp.CustomerPrizes.Count(),
                                      CustomerTasks = temp.CustomerTasks.Count(),
                                      Group = temp.Group.DisplayName,
+                                     Premium = temp.Premium,
                                  });
 
                 if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection))
@@ -65,7 +66,7 @@ namespace AdminPanel.Controllers
                 if (!string.IsNullOrEmpty(searchValue))
                 {
                     tableData = tableData.Where(m => m.Name.Contains(searchValue) ||
-                    m.Group.Contains(searchValue));
+                    m.Group.Contains(searchValue) );
                 }
                 recordsTotal = tableData.Count();
                 var data = tableData.Skip(skip).Take(pageSize).ToList();

@@ -4,14 +4,16 @@ using DBContext.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DBContext.Migrations
 {
     [DbContext(typeof(OpenSismDBContext))]
-    partial class OpenSismDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210607164617_customerPrizeDescripton")]
+    partial class customerPrizeDescripton
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -350,9 +352,6 @@ namespace DBContext.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsFeatured")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsReaded")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsViewed")
@@ -738,9 +737,6 @@ namespace DBContext.Migrations
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DoneDate")
                         .HasColumnType("datetime2");
