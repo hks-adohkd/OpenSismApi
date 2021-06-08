@@ -13,6 +13,8 @@
         public string Reply { get; set; }
         public string FeaturedReply { get; set; }
         public bool IsViewed { get; set; }
+
+        public bool IsReaded { get; set; }
         public int? CustomerId { get; set; }
     }
 }

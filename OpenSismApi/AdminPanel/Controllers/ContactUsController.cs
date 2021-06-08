@@ -167,6 +167,7 @@ namespace AdminPanel.Controllers
                     contact.IsViewed = true;
                     contact.Reply = contactUs.Reply;
                     contact.Created = DateTime.Now;
+                    contact.IsReaded = false;
                     _context.Update(contact);
                     await _context.SaveChangesAsync();
                 }

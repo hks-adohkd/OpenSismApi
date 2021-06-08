@@ -50,6 +50,10 @@ namespace DBContext.Models
         [Display(Name = "Is Viewed *")]
         public bool IsViewed { get; set; }
 
+        //Read replay by customer 
+        [Display(Name = "Is Readed *")]
+        public bool IsReaded { get; set; }
+
         [Display(Name = "Customer *")]
         public int? CustomerId { get; set; }
 

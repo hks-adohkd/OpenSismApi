@@ -37,6 +37,15 @@ namespace OpenSismApi.Controllers
             {
                 var username = User.Identity.Name;
                 var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
+                var itemsAll = _context.CustomerMessages.Where(a => !a.IsDeleted)
+                    .Where(m => m.CustomerId == customer.Id)
+                    .OrderByDescending(c => c.SendDate);
+                foreach (var item in itemsAll) {
+                    item.IsRead = true;
+                    _context.CustomerMessages.Update(item);
+                    _context.SaveChanges();
+                }
+                
                 var items = _context.CustomerMessages.Where(a => !a.IsDeleted)
                     .Where(m => m.CustomerId == customer.Id)
                     .OrderByDescending(c => c.SendDate)
@@ -55,6 +64,8 @@ namespace OpenSismApi.Controllers
                 return response;
             }
         }
+
+       
 
         [HttpPost]
         [Route("Get")]

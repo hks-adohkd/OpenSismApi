@@ -115,8 +115,10 @@ namespace OpenSismApi.Controllers
                 {
                     customer.NextGroupPoints = 0;
                 }
-                //homePageViewModel.NewMessages = _context.CustomerMessages.Where(c => c.CustomerId == customer.Id
-                //&& !c.IsRead && !c.IsDeleted).Count();
+                homePageViewModel.NewNotification = _context.CustomerMessages.Where(c => c.CustomerId == customer.Id
+                && !c.IsRead && !c.IsDeleted).Count();
+                homePageViewModel.NewMessages = _context.ContactsUs.Where(c => c.CustomerId == customer.Id
+                && !c.IsReaded && !c.IsDeleted).Count();
                 _context.Customers.Update(customer);
                 _context.SaveChanges();
                 response = APIContants<HomePageViewModel>.CostumSuccessResult(homePageViewModel,customer);

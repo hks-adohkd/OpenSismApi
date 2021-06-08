@@ -13,5 +13,7 @@ namespace DBContext.ViewModels
         public bool LuckyWheelValid { get; set; }
         public bool DailyBonusValid { get; set; }
         public int NewMessages { get; set; }
+
+        public int NewNotification { get; set; }    
     }
 }
