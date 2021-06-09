@@ -35,10 +35,11 @@ namespace OpenSismApi.Controllers
             Response<PrizePageViewModel> response = new Response<PrizePageViewModel>();
             try
             {
-                
 
-               
 
+
+                var username = User.Identity.Name;
+                var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
 
                 PrizePageViewModel prizePageViewModel = new PrizePageViewModel();
                 var data = (from temp in _context.Prizes.Where(a => !a.IsDeleted)
@@ -48,7 +49,7 @@ namespace OpenSismApi.Controllers
                
                 prizePageViewModel.Prizes = Mapper.Map<List<PrizeViewModel>>(data);
 
-                response = APIContants<PrizePageViewModel>.CostumSuccessResult(prizePageViewModel, null);
+                response = APIContants<PrizePageViewModel>.CostumSuccessResult(prizePageViewModel, customer);
                 return response;
 
 

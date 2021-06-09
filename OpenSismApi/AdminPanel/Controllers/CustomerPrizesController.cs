@@ -189,6 +189,7 @@ namespace AdminPanel.Controllers
             {
                 PrizeStatus prizeStatus = _context.PrizeStatuses.Where(p => p.Name == "accepted").FirstOrDefault();
                 customerPrize.PrizeStatusId = prizeStatus.Id;
+                customerPrize.EarnDate = DateTime.Now;
                 _context.Update(customerPrize);
                 await _context.SaveChangesAsync();
                 HttpContext.Session.SetString("SuccessMsg", SuccessMsg);
@@ -210,7 +211,7 @@ namespace AdminPanel.Controllers
                 await _context.SaveChangesAsync();
                 try
                 {
-                    await SendNotification(message, customerPrize.Customer.FCMToken);
+                  //  await SendNotification(message, customerPrize.Customer.FCMToken);
                 }
                 catch (Exception e)
                 {
@@ -255,6 +256,7 @@ namespace AdminPanel.Controllers
             {
                 PrizeStatus prizeStatus = _context.PrizeStatuses.Where(p => p.Name == "rejected").FirstOrDefault();
                 customerPrize.PrizeStatusId = prizeStatus.Id;
+                customerPrize.EarnDate = DateTime.Now;
                 _context.Update(customerPrize);
                 await _context.SaveChangesAsync();
                 HttpContext.Session.SetString("SuccessMsg", SuccessMsg);
@@ -276,7 +278,7 @@ namespace AdminPanel.Controllers
                 await _context.SaveChangesAsync();
                 try
                 {
-                    await SendNotification(message, customerPrize.Customer.FCMToken);
+                //    await SendNotification(message, customerPrize.Customer.FCMToken);
                 }
                 catch (Exception e) { }
                 Customer customer = await _context.Customers.FindAsync(customerPrize.CustomerId);
