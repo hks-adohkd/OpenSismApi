@@ -11,13 +11,16 @@ namespace OpenSismApi.Models
         [Required(ErrorMessage = "Last Name is required")]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "Gender is required")]
+        public string Email { get; set; }
+
+        //[Required(ErrorMessage = "Gender is required")]
         public bool Gender { get; set; }
 
-        [Required(ErrorMessage = "City is required")]
+       // [Required(ErrorMessage = "City is required")]
         public int CityId { get; set; }
 
         public string ImageUrl { get; set; }
+        public string Address { get; set; }
     }
 
     public class UpdateFCMTokenModel

@@ -28,7 +28,10 @@ namespace DBContext.Models
         [Display(Name = "Profile Image")]
         public string ImageUrl { get; set; }
 
-        [Required]
+        [Display(Name = " Address")]
+        public string Address { get; set; }
+
+        [Required]  
         [Display(Name = "Terms & Conditions *")]
         public bool? TermsAndConditions { get; set; }
 

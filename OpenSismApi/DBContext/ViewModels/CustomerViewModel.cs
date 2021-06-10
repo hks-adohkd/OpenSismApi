@@ -7,6 +7,7 @@ namespace DBContext.ViewModels
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string ImageUrl { get; set; }
+        public string Address { get; set; }
         public bool? TermsAndConditions { get; set; }
         public bool? Gender { get; set; }
         public int CurrentPoints { get; set; }

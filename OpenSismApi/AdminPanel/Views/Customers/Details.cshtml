@@ -36,8 +36,15 @@
                                 @Html.DisplayFor(model => model.ImageUrl)
                             </dd>
                             <dt>
+                                @Html.DisplayNameFor(model => model.Address)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Address)
+                            </dd>
+                            <dt>
                                 @Html.DisplayNameFor(model => model.Group)
                             </dt>
+
                             <dd>
                                 <a class="badge badge-info" target="_blank" asp-action="Details" asp-controller="Groups" asp-route-id="@Model.GroupId">
                                     @Html.DisplayFor(model => model.Group.DisplayName)

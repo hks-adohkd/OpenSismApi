@@ -543,14 +543,17 @@ namespace OpenSismApi.Controllers
                 {
                     var username = User.Identity.Name;
                     var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
-                    customer.CityId = model.CityId;
+                    //customer.CityId = model.CityId;
                     customer.FirstName = model.FirstName;
                     customer.LastName = model.LastName;
                     customer.Gender = model.Gender;
+                    customer.Address = model.Address;
+                    customer.User.Email = model.Email;
                     if (model.ImageUrl != null || model.ImageUrl != "")
                     {
                         customer.ImageUrl = model.ImageUrl;
                     }
+
                     _context.Update(customer);
                     await _context.SaveChangesAsync();
                     int nextGroup = customer.Group.ItemOrder + 1;
@@ -698,19 +701,27 @@ namespace OpenSismApi.Controllers
                 {
                     var username = User.Identity.Name;
                     var user = await userManager.FindByNameAsync(username);
-                    var changePasswordResult = await userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-                    if (!changePasswordResult.Succeeded)
+
+                    if (!await userManager.CheckPasswordAsync(user, model.OldPassword))
                     {
-                        foreach (var error in changePasswordResult.Errors)
+                        return APIContants<ApplicationUserViewModel>.CostumSometingWrong(_localizer["WrongPassword"], null);
+                    }
+                    else
+                    {
+                        var changePasswordResult = await userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                        if (!changePasswordResult.Succeeded)
                         {
-                            ModelState.AddModelError(string.Empty, error.Description);
+                            foreach (var error in changePasswordResult.Errors)
+                            {
+                                ModelState.AddModelError(string.Empty, error.Description);
+                            }
+                            response = APIContants<ApplicationUserViewModel>.CostumSometingWrong(ModelState.Values.ElementAt(0).Errors.ElementAt(0).ErrorMessage, null);
+                            Serilog.Log.Warning(_localizer["SomethingWentWrong"], "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
+                            return response;
                         }
-                        response = APIContants<ApplicationUserViewModel>.CostumSometingWrong(ModelState.Values.ElementAt(0).Errors.ElementAt(0).ErrorMessage, null);
-                        Serilog.Log.Warning(_localizer["SomethingWentWrong"], "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
+                        response = APIContants<ApplicationUserViewModel>.CostumSuccessResult(Mapper.Map<ApplicationUserViewModel>(user));
                         return response;
                     }
-                    response = APIContants<ApplicationUserViewModel>.CostumSuccessResult(Mapper.Map<ApplicationUserViewModel>(user));
-                    return response;
                 }
                 else
                 {
