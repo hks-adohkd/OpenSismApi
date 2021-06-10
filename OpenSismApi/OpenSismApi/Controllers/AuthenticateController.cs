@@ -318,8 +318,8 @@ namespace OpenSismApi.Controllers
                     var token = new JwtSecurityToken(
                         issuer: _configuration["JWT:ValidIssuer"],
                         audience: _configuration["JWT:ValidAudience"],
-                      //  expires: DateTime.Now.AddDays(30),
-                      expires: DateTime.Now.AddMinutes(2),
+                        expires: DateTime.Now.AddDays(30),
+                    //  expires: DateTime.Now.AddMinutes(2),
                         claims: authClaims,
                         signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                         ); ;
