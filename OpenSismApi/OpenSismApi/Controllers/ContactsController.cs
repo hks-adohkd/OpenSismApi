@@ -9,6 +9,7 @@ using Microsoft.Extensions.Localization;
 using System;
 using System.Linq;
 using X.PagedList;
+using System.Collections.Generic;
 
 
 //this is our informations of whats up instgrame .....
@@ -46,6 +47,43 @@ namespace OpenSismApi.Controllers
             catch (Exception e)
             {
                 response = APIContants<PagedContent<IPagedList<ContactViewModel>>>.CostumSometingWrong(_localizer["SomethingWentWrong"], null);
+                Serilog.Log.Fatal(e, "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
+                return response;
+            }
+        }
+
+
+        [HttpPost]
+        [Route("GetAbout")]
+        public Response<AboutViewModel> GetAbout()
+        {
+            Response<AboutViewModel> response = new Response<AboutViewModel>();
+            try
+            {
+
+                AboutViewModel aboutViewModel = new AboutViewModel();
+                var videos = _context.Contacts.Where(p => p.Name == "video" && !p.IsDeleted).ToList();
+                aboutViewModel.Videos = Mapper.Map<List<ContactViewModel>>(videos);
+                var contacts = _context.Contacts.Where(p => p.DisplayName != "video" && p.DisplayName != "location" && !p.IsDeleted).ToList();
+                aboutViewModel.Contacts = Mapper.Map<List<ContactViewModel>>(contacts);
+                var location = _context.Contacts.Where(p => p.DisplayName == "location" && !p.IsDeleted).FirstOrDefault();
+                var aboutUS = _context.Contents.Where(p => p.Name == "about_us" && !p.IsDeleted).FirstOrDefault();
+                var username = User.Identity.Name;
+                var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
+
+                aboutViewModel.Location = Mapper.Map<ContactViewModel>(location);
+                aboutViewModel.AboutUs = Mapper.Map<ContentViewModel>(aboutUS);
+                
+                
+
+               
+          
+                response = APIContants<AboutViewModel>.CostumSuccessResult(aboutViewModel, customer);
+                return response;
+            }
+            catch (Exception e)
+            {
+                response = APIContants<AboutViewModel>.CostumSometingWrong(_localizer["SomethingWentWrong"], null);
                 Serilog.Log.Fatal(e, "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
                 return response;
             }

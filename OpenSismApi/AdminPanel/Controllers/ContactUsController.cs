@@ -185,22 +185,22 @@ namespace AdminPanel.Controllers
              
                 if (contact.CustomerId != null)
                 {
-                    Message message = new Message();
-                    message.IsForAll = false;
-                    message.Script = contact.Reply;
-                    message.ScriptAr = contact.Reply;
-                    message.Title = contact.Subject;
-                    message.TitleAr = contact.Subject;
-                    message.IsForCustomer = true;
-                    _context.Add(message);
-                    await _context.SaveChangesAsync();
-                    CustomerMessage customerMessage = new CustomerMessage();
-                    customerMessage.CustomerId = (int)contact.CustomerId;
-                    customerMessage.IsRead = false;
-                    customerMessage.MessageId = message.Id;
-                    customerMessage.SendDate = DateTime.Now;
-                    _context.Add(customerMessage);
-                    await _context.SaveChangesAsync();
+                    //Message message = new Message();
+                    //message.IsForAll = false;
+                    //message.Script = contact.Reply;
+                    //message.ScriptAr = contact.Reply;
+                    //message.Title = contact.Subject;
+                    //message.TitleAr = contact.Subject;
+                    //message.IsForCustomer = true;
+                    //_context.Add(message);
+                    //await _context.SaveChangesAsync();
+                    //CustomerMessage customerMessage = new CustomerMessage();
+                    //customerMessage.CustomerId = (int)contact.CustomerId;
+                    //customerMessage.IsRead = false;
+                    //customerMessage.MessageId = message.Id;
+                    //customerMessage.SendDate = DateTime.Now;
+                    //_context.Add(customerMessage);
+                    //await _context.SaveChangesAsync();
                    // await SendNotification(message, contact.Customer.FCMToken);
                 }
                 HttpContext.Session.SetString("SuccessMsg", SuccessMsg);

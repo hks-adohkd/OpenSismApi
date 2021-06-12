@@ -28,6 +28,11 @@
                                 <span asp-validation-for="Icon" class="text-danger"></span>
                             </div>
                             <div class="form-group">
+                                <label asp-for="Name" class="control-label"></label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
                                 <label asp-for="DisplayNameAr" class="control-label"></label>
                                 <input asp-for="DisplayNameAr" class="form-control" />
                                 <span asp-validation-for="DisplayNameAr" class="text-danger"></span>
@@ -50,7 +55,7 @@
                             <input type="hidden" asp-for="Id" />
                             <input type="hidden" asp-for="Created" />
                             <input type="hidden" asp-for="Icon" />
-                            <input type="hidden" asp-for="Name" />
+                            @*<input type="hidden" asp-for="Name" />*@
                             <input type="hidden" asp-for="IsDeleted" />
                         </div>
 

@@ -108,6 +108,7 @@ namespace OpenSismApi.Controllers
                     contactUs.FirstName = customer.FirstName;
                     contactUs.LastName = customer.LastName;
                     contactUs.PhoneNumber = customer.User.PhoneNumber;
+                    contactUs.Email = model.Email;
                     contactUs.IsReaded = true;
 
                 }
