@@ -103,6 +103,14 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <div class="col-12">
+                                    <div class="icheck-primary">
+                                        @Html.CheckBoxFor(model => model.IsDeleted)
+                                        @Html.LabelFor(model => model.IsDeleted)
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="form-group" id="PackageNameDiv" style="display:none;">
                                 <label asp-for="PackageName" class="control-label"></label>
