@@ -164,6 +164,133 @@ namespace OpenSismApi.Controllers
             }
         }
 
+
+        [HttpPost]
+        [Route("GetActiveCustomerTask_V2")]
+        public Response<PagedContent<IPagedList<AppTaskViewModel>>> GetActiveCustomerTask_V2([FromBody] PaginationViewModel pagination) 
+        {
+            Response<PagedContent<IPagedList<AppTaskViewModel>>> response = new Response<PagedContent<IPagedList<AppTaskViewModel>>>();
+            try
+            {
+                
+                // get the customer who request 
+                var username = User.Identity.Name;
+               
+                var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
+
+                //var TaskTemp =  (from temp in _context.AppTasks.Where(a => !a.IsDeleted).Where(a => a.AppTaskGroups.Select(a => a.Group).Contains(customer.Group))
+                //    .OrderByDescending(a => a.Modified)
+                //                 select temp);
+
+
+                var TaskTemp = _context.AppTasks.Where(a => !a.IsDeleted).Where(a => a.AppTaskGroups.Select(a => a.Group).Contains(customer.Group))
+                   .OrderByDescending(a => a.Modified);
+
+                //within limit :  the count of all users who done the task smaller that task limit
+
+                //customer group : the task is from customer group
+
+
+                //var CustomerTaskTemp = (from tempCustomers in _context.CustomerTasks.Where(a => !a.IsDeleted)
+                //                              select tempCustomers);
+                var CustomerTaskTemp = _context.CustomerTasks.Where(a => !a.IsDeleted);
+                                              
+
+                var data = new List<AppTask>();
+                
+                foreach (var at in TaskTemp)
+                {
+                    int counter = 0;
+
+                    foreach (var ct in CustomerTaskTemp)
+                    {
+                        if ((at.Id == ct.AppTaskId) && (ct.IsDone))
+                        {
+                            counter++;
+                           
+                           // break;
+                        }
+                    }
+                    if (at.Limit < counter)
+                    {
+
+                        data.Add(at);
+                       
+                    }
+                }
+                
+
+                //NotDeleted
+                //var data = (from temp in _context.AppTasks.Where(a => !a.IsDeleted)
+                //    //within limit :  the count of all users who done the task smaller that task limit
+                //    .Where(a => a.CustomerTasks.Count() < a.Limit)
+                //    //customer group : the task is from customer group
+                //    .Where(a => a.AppTaskGroups.Select(a => a.Group).Contains(customer.Group))
+                //    .OrderByDescending(a => a.Modified)
+                //            select temp);
+                
+
+                if (pagination.TaskTypeId != null)
+                {
+                   // data.Add
+                    data = (List<AppTask>)data.Where(a => a.TaskTypeId == pagination.TaskTypeId);
+                }
+                var items = data.ToPagedList(pageNumber: pagination.Page, pageSize: pagination.Limit);
+                var tempTasks = new List<AppTaskViewModel>();
+
+                items = items.Where(a => a.StartDate.Ticks <= DateTime.Now.Ticks && a.EndDate.Ticks >= DateTime.Now.Ticks)
+                                        .ToPagedList(pageNumber: pagination.Page, pageSize: pagination.Limit);
+
+                var finished = _context.CustomerTasks.Where(c => c.CustomerId == customer.Id && c.IsDone
+                && !c.IsDeleted).Select(c => c.AppTask).ToList();
+                //get tasks list which is not done 
+
+                foreach (var at in items)
+                {
+                    bool isDone = false;
+                    foreach (var ct in finished)
+                    {
+                        if (at.Id == ct.Id)
+                        {
+                            isDone = true;
+                            finished.Remove(ct);
+                            break;
+                        }
+                    }
+                    if (!isDone)
+                    {
+
+                        tempTasks.Add(Mapper.Map<AppTaskViewModel>(at));
+                    }
+                }
+
+                AppTask shareAppTask = _context.AppTasks.Where(a => !a.IsDeleted)
+                    .Where(a => a.CustomerTasks.Where(c => c.AppTask.TaskType.Name == "share_games_app").Count() < a.Limit)
+                    .Where(a => a.AppTaskGroups.Select(a => a.Group).Contains(customer.Group))
+                    .Where(a => a.TaskType.Name == "share_games_app").FirstOrDefault();
+
+                if (shareAppTask != null)
+                {
+                    tempTasks.Add(Mapper.Map<AppTaskViewModel>(shareAppTask));
+                }
+
+
+                var tasks = tempTasks.ToPagedList(pageNumber: pagination.Page, pageSize: pagination.Limit);
+                PagedContent<IPagedList<AppTaskViewModel>> pagedContent = new PagedContent<IPagedList<AppTaskViewModel>>();
+                pagedContent.content = tasks;
+                pagedContent.pagination = new Pagination(tasks.TotalItemCount, tasks.PageSize, tasks.PageCount, tasks.PageNumber);
+                response = APIContants<PagedContent<IPagedList<AppTaskViewModel>>>.CostumSuccessResult(pagedContent, customer);
+                return response;
+            }
+            catch (Exception e)
+            {
+                response = APIContants<PagedContent<IPagedList<AppTaskViewModel>>>.CostumSometingWrong(_localizer["SomethingWentWrong"], null);
+                Serilog.Log.Fatal(e, "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
+                return response;
+            }
+        }
+
+
         // returns all finished customer Task
         [HttpPost]
         [Route("GetFinishCustomerTask")]
@@ -227,6 +354,7 @@ namespace OpenSismApi.Controllers
                 var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
                 // get the unique task by ID 
                 var item = _context.AppTasks.Where(a => a.Id == model.Id && !a.IsDeleted).FirstOrDefault();
+                
                 if (item == null)
                 {
                     response = APIContants<AppTaskViewModel>.CostumNotFound(_localizer["NotFound"], null);
@@ -290,6 +418,7 @@ namespace OpenSismApi.Controllers
 
                 var username = User.Identity.Name;
                 var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
+
 
                 CustomerTask customerTask = _context.CustomerTasks.Where(c => c.CustomerId == customer.Id
                 && c.AppTaskId == model.AppTaskId).FirstOrDefault();
@@ -371,6 +500,84 @@ namespace OpenSismApi.Controllers
                 _context.Customers.Update(customer);
                 await _context.SaveChangesAsync();
                 
+                response = APIContants<CustomerTaskViewModel>.CostumSuccessResult(Mapper.Map<CustomerTaskViewModel>(customerTask), customer);
+                return response;
+            }
+            catch (Exception e)
+            {
+                response = APIContants<CustomerTaskViewModel>.CostumSometingWrong(_localizer["SomethingWentWrong"], null);
+                Serilog.Log.Fatal(e, "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
+                return response;
+            }
+        }
+
+
+        [HttpPost]
+        [Route("AddEnd_V2")]
+        public async Task<Response<CustomerTaskViewModel>> AddEnd_V2([FromBody] CustomerTaskViewModel model)
+        {
+            Response<CustomerTaskViewModel> response = new Response<CustomerTaskViewModel>();
+            try
+            {
+                var username = User.Identity.Name;
+                var customer = _context.Customers.Where(c => c.User.UserName == username).FirstOrDefault();
+
+                CustomerTask customerTask = _context.CustomerTasks.Where(c => c.CustomerId == customer.Id
+                && c.AppTaskId == model.AppTaskId).FirstOrDefault();
+
+
+
+                if (customerTask == null)
+                {
+                    customerTask = new CustomerTask();
+                    customerTask.CustomerId = customer.Id;
+                    customerTask.AppTaskId = model.AppTaskId;
+                    customerTask.DoneDate = DateTime.Now; ;
+                    customerTask.StartDate = null;
+                    customerTask.Description = model.Description;
+                    customerTask.IsDone = true;
+                    customerTask.EarnedPoints = customerTask.AppTask.Points;
+                    _context.CustomerTasks.Add(customerTask);
+                    await _context.SaveChangesAsync();
+                }
+
+
+
+                
+
+                customer.CurrentPoints = customer.CurrentPoints + customerTask.AppTask.Points;
+                customer.TotalPoints = customer.TotalPoints + customerTask.AppTask.Points;
+                int nextGroup = customer.Group.ItemOrder + 1;
+                Group group = _context.Groups.Where(g => g.ItemOrder == nextGroup).FirstOrDefault();
+                if (group != null)
+                {
+                    if (customer.TotalPoints >= group.Points)
+                    {
+                        customer.GroupId = group.Id;
+                        customer.Group = group;
+                        int nextNextGroupOrder = nextGroup + 1;
+                        Group nextNextGroup = _context.Groups.Where(g => g.ItemOrder == nextNextGroupOrder).FirstOrDefault();
+                        if (nextNextGroup != null)
+                        {
+                            customer.NextGroupPoints = nextNextGroup.Points;
+                        }
+                        else
+                        {
+                            customer.NextGroupPoints = 0;
+                        }
+                    }
+                    else
+                    {
+                        customer.NextGroupPoints = group.Points;
+                    }
+                }
+                else
+                {
+                    customer.NextGroupPoints = 0;
+                }
+                _context.Customers.Update(customer);
+                await _context.SaveChangesAsync();
+
                 response = APIContants<CustomerTaskViewModel>.CostumSuccessResult(Mapper.Map<CustomerTaskViewModel>(customerTask), customer);
                 return response;
             }

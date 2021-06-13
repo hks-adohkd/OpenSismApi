@@ -331,6 +331,7 @@ namespace OpenSismApi.Controllers
                    
                     if (!result.Succeeded)
                     {
+                        return null;
                        
                         response = APIContants<CustomerViewModel>.CostumSometingWrong(result.Errors.ElementAt(0).Description, null);
                         Serilog.Log.Fatal(_localizer["SomethingWentWrong"], "{@RequestId}, {@Response}", CustomFilterAttribute.RequestId, response);
