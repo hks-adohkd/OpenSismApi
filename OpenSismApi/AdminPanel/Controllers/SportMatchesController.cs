@@ -174,8 +174,11 @@ namespace AdminPanel.Controllers
                     var res = await _context.SaveChangesAsync();
 
                     List<CustomerTask> customerTasks = _context.CustomerTasks.Where(ct => ct.AppTaskId == sportMatch.AppTaskId).ToList();
+                    int i = 0;
                     foreach (var item in customerTasks)
                     {
+
+                        
                         Customer customer = await _context.Customers.FindAsync(item.CustomerId);
                         if(customer != null)
                         {
@@ -196,7 +199,7 @@ namespace AdminPanel.Controllers
                                 customer.CurrentPoints = customer.CurrentPoints + gainedPoints;
 
                                 customer.TotalPoints = customer.TotalPoints + gainedPoints;
-
+                                customerTasks[i].IsDone = true;
                                 item.EarnedPoints = gainedPoints;
                                 _context.CustomerTasks.Update(item);
                                 _context.SaveChanges();
@@ -233,6 +236,7 @@ namespace AdminPanel.Controllers
                                 await _context.SaveChangesAsync();
                             }
                         }
+                        i++;
                     }
                 }
                 catch (Exception e)

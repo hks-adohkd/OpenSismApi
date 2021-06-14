@@ -20,5 +20,7 @@ namespace DBContext.ViewModels
         public int? SecondTeamScore { get; set; }
 
         public virtual AppTaskViewModel AppTask { get; set; }
+
+        public virtual CustomerPredictionViewModel CustomerPrediction { get; set; } 
     }
 }
