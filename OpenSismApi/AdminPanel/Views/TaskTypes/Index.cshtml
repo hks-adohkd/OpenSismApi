@@ -16,12 +16,16 @@
                     <!-- /.card-header -->
                     @if (!ViewBag.isArchive)
                     {
-                        <div class="card-header">
-                            <div class="card-title" style="float:right !important;">
-                                <a asp-action="Index" asp-route-isArchive="true" class="btn pull-right btn-block" style="color:white;background:#20c997;"><i class="fas fa-archive"></i> Archive</a>
-                            </div>
-                        </div>
-                    }
+                <div class="card-header">
+                    <div class="card-title">
+                        <a asp-action="Create"><i class="fas fa-plus-circle"></i> Add new record</a>
+                    </div>
+                </div>
+                                <div class="card-header">
+                                    <div class="card-title" style="float:right !important;">
+                                        <a asp-action="Index" asp-route-isArchive="true" class="btn pull-right btn-block" style="color:white;background:#20c997;"><i class="fas fa-archive"></i> Archive</a>
+                                    </div>
+                                </div>}
                     <div class="card-body">
                         <table class="table table-bordered table-striped" id="table">
                             <thead>

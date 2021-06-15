@@ -125,6 +125,20 @@ namespace AdminPanel.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (taskType.file != null)
+                {
+                    FileInfo fi = new FileInfo(taskType.file.FileName);
+                    var newFilename = "P" + taskType.Id + "_" + string.Format("{0:d}",
+                                      (DateTime.Now.Ticks / 10) % 100000000) + fi.Extension;
+                    var webPath = _hostingEnvironment.WebRootPath;
+                    var path = Path.Combine("", webPath + @"\images\tasktypes\" + newFilename);
+                    var pathToSave = @"/images/tasktypes/" + newFilename;
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        taskType.file.CopyTo(stream);
+                    }
+                    taskType.ImageUrl = pathToSave;
+                }
                 _context.Add(taskType);
                 await _context.SaveChangesAsync();
                 HttpContext.Session.SetString("SuccessMsg", SuccessMsg);

@@ -541,9 +541,12 @@ namespace OpenSismApi.Controllers
                     await _context.SaveChangesAsync();
                 }
 
+                else if (customerTask.IsDone == true) {
+                    response = APIContants<CustomerTaskViewModel>.CostumSometingWrong(_localizer["SomethingWentWrong"], null);
+                    return response;
+                }
 
 
-                
 
                 customer.CurrentPoints = customer.CurrentPoints + customerTask.AppTask.Points;
                 customer.TotalPoints = customer.TotalPoints + customerTask.AppTask.Points;

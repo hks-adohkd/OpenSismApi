@@ -155,7 +155,7 @@ namespace OpenSismApi.Controllers
                 && c.AppTaskId == sportMatch.AppTaskId).FirstOrDefault();
                 // CustomerTask customerTask = null;
 
-                if (customerTask == null )
+                if (customerTask == null)
                 {
                     customerTask = new CustomerTask();
                     customerTask.CustomerId = customer.Id;
@@ -164,10 +164,14 @@ namespace OpenSismApi.Controllers
                     //customerTask.IsDone = true;
                     customerTask.StartDate = DateTime.Now;
                     customerTask.EarnedPoints = 0;
-                    
+
                     _context.CustomerTasks.Add(customerTask);
                     await _context.SaveChangesAsync();
-                   // return null;
+                    // return null;
+                }
+                else if (customerTask.IsDone == true) {
+                    response = APIContants<CustomerTaskViewModel>.CostumSometingWrong(_localizer["SomethingWentWrong"], null);
+                    return response;
                 }
                 else
                 {

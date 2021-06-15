@@ -110,7 +110,10 @@ namespace DBContext.Models
         [Display(Name = "Link/Url")]
         public string Link { get; set; }
 
-        [Required]
+        [Display(Name = "TutorialLink/Url")]
+        public string TutorialLink { get; set; }
+
+        [Required]  
         [Display(Name = "Start Date *")]
         public DateTime StartDate { get; set; }
 

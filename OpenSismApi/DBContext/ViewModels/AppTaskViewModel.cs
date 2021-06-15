@@ -11,6 +11,8 @@ namespace DBContext.ViewModels
         public bool IsDone { get; set; }
         public bool IsReachLimit { get; set; }
         public string Link { get; set; }
+        public string TutorialLink { get; set; }
+
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int Points { get; set; }
