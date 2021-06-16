@@ -115,7 +115,18 @@
                 $('#VedioFileDiv').hide();
                 $("#VedioDurationInput").prop('required', false);
             }
-            else if (data.id == 6 || data.id == 7 || data.id == 8) {
+            else if (data.id == 6 ) {
+                $('#PageIdDiv').hide();
+                $("#PageIdInput").prop('required', false);
+                $('#PackageNameDiv').hide();
+                $("#PackageNameInput").prop('required', false);
+                $('#VedioIdDiv').hide();
+                $("#VedioIdInput").prop('required', false);
+                $('#VedioDurationDiv').hide();
+                $('#VedioFileDiv').hide();
+                $("#VedioDurationInput").prop('required', false);
+            }
+            else if ( data.id == 7 || data.id == 8) {
                 $('#PageIdDiv').show();
                 $("#PageIdInput").prop('required', true);
                 $('#PackageNameDiv').hide();
@@ -126,12 +137,12 @@
                 $('#VedioFileDiv').hide();
                 $("#VedioDurationInput").prop('required', false);
             }
-            else if (data.id == 10) {
-                $('#VedioIdDiv').show();
-                $("#VedioIdInput").prop('required', true);
-                $('#VedioDurationDiv').hide();
+            else if (data.id == 3) {
+                $('#VedioIdDiv').hide();
+                $("#VedioIdInput").prop('required', false);
+                $('#VedioDurationDiv').show();
                 $('#VedioFileDiv').hide();
-                $("#VedioDurationInput").prop('required', false);
+                $("#VedioDurationInput").prop('required', true);
                 $('#PackageNameDiv').hide();
                 $("#PackageNameInput").prop('required', false);
                 $('#PageIdDiv').hide();

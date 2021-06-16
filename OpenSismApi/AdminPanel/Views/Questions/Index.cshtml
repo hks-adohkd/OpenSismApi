@@ -1,0 +1,104 @@
+﻿@model IEnumerable<DBContext.Models.Question>
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Questions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <a asp-action="Create" asp-route-appTaskId="@ViewBag.AppTaskId" asp-route-IsQuiz="@ViewBag.IsQuiz"><i class="fas fa-plus-circle"></i> Add new record</a>
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped" id="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Id)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.ItemOrder)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Script)
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+      var controllerName = '@HttpContextAccessor.HttpContext.Session.GetString("ControllerName")';
+    var AppTaskId = '@ViewBag.AppTaskId';
+    var IsQuiz = '@ViewBag.IsQuiz';
+    //debugger;
+    var optionsControllerName = 'QuestionOptions';
+
+    $(function () {
+        debugger;
+        $('#table').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "filter": true,
+            "orderMulti": false,
+            "language": {
+                processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+            },
+            "ajax": {
+                "url": "/" + controllerName + "/IndexPost/" + AppTaskId,
+                "type": "POST",
+                "datatype": "json"
+            },
+            "columnDefs":
+                [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }],
+            "columns": [
+                { "data": "id", "name": "Id", "autoWidth": true },
+                { "data": "itemOrder", "name": "ItemOrder", "autoWidth": true },
+                { "data": "script", "name": "Script", "autoWidth": true },
+                {
+                    data: null, render: function (data, type, row) {
+                        if (data.type) {
+                            if (IsQuiz == "1") {
+                               // debugger;
+                                return '<a href="/' + optionsControllerName + '/Index/' + row.id + '?IsQuiz=1' + '"><i class="fas fa-ellipsis-h"></i></a>' +
+                                    '<a href="/' + controllerName + '/Edit/' + row.id + '?IsQuiz=1' + '"><i class="far fa-edit"></i></a>' +
+                                    '<a href="/' + controllerName + '/Details/' + row.id + '?IsQuiz=1' + '"><i class="fas fa-info-circle"></i></a>' +
+                                    '<a href="/' + controllerName + '/Delete/' + row.id + '?IsQuiz=1' + '"><i class="far fa-trash-alt"></i></a>';
+                            }
+                            else {
+                               // debugger;
+                                return '<a href="/' + optionsControllerName + '/Index/' + row.id + '"><i class="fas fa-ellipsis-h"></i></a>' +
+                                    '<a href="/' + controllerName + '/Edit/' + row.id + '"><i class="far fa-edit"></i></a>' +
+                                    '<a href="/' + controllerName + '/Details/' + row.id + '"><i class="fas fa-info-circle"></i></a>' +
+                                    '<a href="/' + controllerName + '/Delete/' + row.id + '"><i class="far fa-trash-alt"></i></a>';
+                            }
+                        }
+                        else {
+                           // debugger;
+                            return '<a href="/' + controllerName + '/Edit/' + row.id + '"><i class="far fa-edit"></i></a>' +
+                                '<a href="/' + controllerName + '/Details/' + row.id + '"><i class="fas fa-info-circle"></i></a>' +
+                                '<a href="/' + controllerName + '/Delete/' + row.id + '"><i class="far fa-trash-alt"></i></a>';
+                        }
+                    }
+                }
+            ]
+        })
+    })
+</script>

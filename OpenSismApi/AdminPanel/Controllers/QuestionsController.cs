@@ -21,12 +21,13 @@ namespace AdminPanel.Controllers
             _context = context;
         }
 
-        /*
+        
 
 
         // GET: Questions
         public IActionResult Index(int id, int? IsQuiz)
         {
+
             ViewBag.AppTaskId = id;
             if(IsQuiz != null && IsQuiz == 1)
             {
@@ -75,6 +76,7 @@ namespace AdminPanel.Controllers
             }
             catch (Exception e)
             {
+                //HttpContext.Session.SetString("FailedMsg", e.Message);
                 throw;
             }
         }
@@ -134,6 +136,7 @@ namespace AdminPanel.Controllers
             }
             catch (Exception e)
             {
+
                 ViewBag.AppTaskId = question.AppTaskId;
                 HttpContext.Session.SetString("FailedMsg", FailedMsg);
                 return View(question);
@@ -264,6 +267,6 @@ namespace AdminPanel.Controllers
         private bool QuestionExists(int id)
         {
             return _context.Questions.Any(e => e.Id == id);
-        }*/
+        }
     }
 }

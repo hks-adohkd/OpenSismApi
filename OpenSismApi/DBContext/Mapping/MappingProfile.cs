@@ -121,6 +121,24 @@ namespace DBContext.Mapping
             CreateMap<IPagedList<LuckyWheelViewModel>, IPagedList<LuckyWheel>>().ConvertUsing<PagedListConverter<LuckyWheelViewModel, LuckyWheel>>();
             CreateMap<IPagedList<LuckyWheel>, IPagedList<LuckyWheelViewModel>>().ConvertUsing<PagedListConverter<LuckyWheel, LuckyWheelViewModel>>();
 
+            CreateMap<CustomerAnswerViewModel, CustomerAnswer>();
+            CreateMap<CustomerAnswer, CustomerAnswerViewModel>();
+            CreateMap<IPagedList<CustomerAnswerViewModel>, IPagedList<CustomerAnswer>>().ConvertUsing<PagedListConverter<CustomerAnswerViewModel, CustomerAnswer>>();
+            CreateMap<IPagedList<CustomerAnswer>, IPagedList<CustomerAnswerViewModel>>().ConvertUsing<PagedListConverter<CustomerAnswer, CustomerAnswerViewModel>>();
+
+
+            CreateMap<QuestionViewModel, Question>();
+            CreateMap<Question, QuestionViewModel>();
+            CreateMap<IPagedList<QuestionViewModel>, IPagedList<Question>>().ConvertUsing<PagedListConverter<QuestionViewModel, Question>>();
+            CreateMap<IPagedList<Question>, IPagedList<QuestionViewModel>>().ConvertUsing<PagedListConverter<Question, QuestionViewModel>>();
+
+            CreateMap<QuestionOptionViewModel, QuestionOption>();
+            CreateMap<QuestionOption, QuestionOptionViewModel>();
+            CreateMap<IPagedList<QuestionOptionViewModel>, IPagedList<QuestionOption>>().ConvertUsing<PagedListConverter<QuestionOptionViewModel, QuestionOption>>();
+            CreateMap<IPagedList<QuestionOption>, IPagedList<QuestionOptionViewModel>>().ConvertUsing<PagedListConverter<QuestionOption, QuestionOptionViewModel>>();
+
+            
+
 
             CreateMissingTypeMaps = true;
 

@@ -1,0 +1,76 @@
+﻿@model DBContext.Models.Question
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Create</h3>
+                    </div>
+                    <form asp-action="Create" asp-route-IsQuiz="@ViewBag.IsQuiz">
+                        <div class="card-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="ScriptAr" class="control-label"></label>
+                                <input asp-for="ScriptAr" class="form-control" />
+                                <span asp-validation-for="ScriptAr" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Script" class="control-label"></label>
+                                <input asp-for="Script" class="form-control" />
+                                <span asp-validation-for="Script" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="DescriptionAr" class="control-label"></label>
+                                <input asp-for="DescriptionAr" class="form-control" />
+                                <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Description" class="control-label"></label>
+                                <input asp-for="Description" class="form-control" />
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                            @if (ViewBag.IsQuiz != null && (int)ViewBag.IsQuiz == 1)
+                            {
+                                <input type="hidden" name="Type" value="1" />
+                            }
+                            else
+                            {
+                                <div class="form-group">
+                                    <div class="col-12">
+                                        <div class="icheck-primary">
+                                            @Html.CheckBoxFor(model => model.Type)
+                                            @Html.LabelFor(model => model.Type)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="form-group">
+                                <label asp-for="ItemOrder" class="control-label"></label>
+                                <input asp-for="ItemOrder" class="form-control" />
+                                <span asp-validation-for="ItemOrder" class="text-danger"></span>
+                            </div>
+                            <input type="hidden" name="AppTaskId" value="@ViewBag.AppTaskId" />
+
+                        </div>
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-info">Submit</button>
+                            <a class="btn btn-default float-right" asp-action="Index" asp-route-id="@ViewBag.AppTaskId" asp-route-IsQuiz="@ViewBag.IsQuiz">
+                                Back to List
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

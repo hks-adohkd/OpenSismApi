@@ -1,0 +1,82 @@
+﻿@model DBContext.Models.QuestionOption
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h3 class="card-title">Details</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <dl class="dl-horizontal">
+                            <dt>
+                                @Html.DisplayNameFor(model => model.ScriptAr)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.ScriptAr)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Script)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Script)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.IsRightOption)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.IsRightOption)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.ItemOrder)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.ItemOrder)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Question)
+                            </dt>
+                            <dd>
+                                <a class="badge badge-info" target="_blank" asp-action="Details" asp-controller="Questions" asp-route-id="@Model.QuestionId">
+                                    @Html.DisplayFor(model => model.Question.Script)
+                                </a>
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Created)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Created)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Modified)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.Modified)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.IsDeleted)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.IsDeleted)
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="card-footer">
+                        <a class="btn btn-success" asp-action="Edit" asp-route-id="@Model.Id" asp-route-IsQuiz="@ViewBag.IsQuiz">Edit</a>
+                        <a class="btn btn-default float-right" asp-action="Index" asp-route-id="@ViewBag.QuestionId" asp-route-IsQuiz="@ViewBag.IsQuiz">
+                            Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -18,7 +18,7 @@ namespace AdminPanel.Controllers
             _context = context;
         }
 
-        /*
+       
 
 
         // GET: QuestionOptions
@@ -268,6 +268,6 @@ namespace AdminPanel.Controllers
         private bool QuestionOptionExists(int id)
         {
             return _context.QuestionOptions.Any(e => e.Id == id);
-        }*/
+        }
     }
 }

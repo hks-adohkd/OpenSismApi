@@ -1,0 +1,93 @@
+﻿@model DBContext.Models.Question
+
+@{
+ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-danger">
+                <div class="card-header">
+                    <h3 class="card-title">Are you sure you want to delete this?</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @Html.DisplayNameFor(model => model.ScriptAr)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.ScriptAr)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Script)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Script)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.DescriptionAr)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.DescriptionAr)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Description)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Description)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Type)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Type)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.ItemOrder)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.ItemOrder)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.AppTask)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.AppTask.DisplayName)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Created)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Created)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Modified)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.Modified)
+                        </dd>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.IsDeleted)
+                        </dt>
+                        <dd>
+                            @Html.DisplayFor(model => model.IsDeleted)
+                        </dd>
+                    </dl>
+                    </div>
+                    <div class="card-footer">
+                        <form asp-action="Delete" asp-route-IsQuiz="@ViewBag.IsQuiz">
+                            <input type="hidden" asp-for="Id" />
+                            <input type="submit" value="Delete" class="btn btn-danger" />
+                            <a class="btn btn-default" asp-action="Index" asp-route-id="@ViewBag.AppTaskId" asp-route-IsQuiz="@ViewBag.IsQuiz">Back to List</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
