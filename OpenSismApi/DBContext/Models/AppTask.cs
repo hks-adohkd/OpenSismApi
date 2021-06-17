@@ -159,6 +159,8 @@ namespace DBContext.Models
         [Display(Name = "Customers")]  // how many people solve this task , for statistics
         public virtual ICollection<CustomerTask> CustomerTasks { get; set; }
         public virtual ICollection<AppTaskGroup> AppTaskGroups { get; set; }
-     //   public virtual ICollection<Question> Questions { get; set; }
+
+        public virtual ICollection<Quiz> Quizs { get; set; }    
+        //   public virtual ICollection<Question> Questions { get; set; }
     }
 }
