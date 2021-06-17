@@ -4,14 +4,16 @@ using DBContext.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DBContext.Migrations
 {
     [DbContext(typeof(OpenSismDBContext))]
-    partial class OpenSismDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210617145933_quiz")]
+    partial class quiz
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1346,7 +1348,9 @@ namespace DBContext.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("('0001-01-01T00:00:00.0000000')");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -1361,7 +1365,9 @@ namespace DBContext.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Modified")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("('0001-01-01T00:00:00.0000000')");
 
                     b.Property<string>("Script")
                         .IsRequired()
@@ -1376,7 +1382,9 @@ namespace DBContext.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppTaskId");
+                    b.HasIndex("AppTaskId")
+                        .IsUnique()
+                        .HasFilter("([AppTaskId] IS NOT NULL)");
 
                     b.ToTable("Quiz");
                 });

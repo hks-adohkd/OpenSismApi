@@ -126,6 +126,17 @@
                 $('#VedioFileDiv').hide();
                 $("#VedioDurationInput").prop('required', false);
             }
+            else if (data.id == 5) {
+                $('#PageIdDiv').hide();
+                $("#PageIdInput").prop('required', false);
+                $('#PackageNameDiv').hide();
+                $("#PackageNameInput").prop('required', false);
+                $('#VedioIdDiv').hide();
+                $("#VedioIdInput").prop('required', false);
+                $('#VedioDurationDiv').hide();
+                $('#VedioFileDiv').hide();
+                $("#VedioDurationInput").prop('required', false);
+            }
             else if ( data.id == 7 || data.id == 8) {
                 $('#PageIdDiv').show();
                 $("#PageIdInput").prop('required', true);

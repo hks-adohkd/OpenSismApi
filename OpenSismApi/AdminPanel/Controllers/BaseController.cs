@@ -74,6 +74,12 @@ namespace AdminPanel.Controllers
                 sessionActive.Add("MailReplay.Index", "");
                 sessionActive.Add("MailReplay.Details", "");
 
+                sessionActive.Add("Quiz", "");
+                sessionActive.Add("Quiz.Header", "");
+                sessionActive.Add("Quiz.Index", "");
+                sessionActive.Add("Quiz.Details", "");
+
+
                 sessionActive.Add("Contents", "");
                 sessionActive.Add("Contents.Header", "");
                 sessionActive.Add("Contents.Index", "");

@@ -64,6 +64,8 @@ namespace DBContext.Models
         public virtual DbSet<PrizeType> PrizeTypes { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<QuestionOption> QuestionOptions { get; set; }
+        public virtual DbSet<Quiz> Quizs { get; set; }  
+        public virtual DbSet<QuizOption> QuizOptions{ get; set; }
         public virtual DbSet<SportMatch> SportMatches { get; set; }
         public virtual DbSet<TaskType> TaskTypes { get; set; }
         public virtual DbSet<UserLog> UserLogs { get; set; }
@@ -346,6 +348,17 @@ namespace DBContext.Models
 
                 entity.Property(e => e.Modified).HasDefaultValueSql("('0001-01-01T00:00:00.0000000')");
             });
+
+            //modelBuilder.Entity<Quiz>(entity =>
+            //{
+            //    entity.HasIndex(e => e.AppTaskId)
+            //        .IsUnique()
+            //        .HasFilter("([AppTaskId] IS NOT NULL)");
+
+            //    entity.Property(e => e.Created).HasDefaultValueSql("('0001-01-01T00:00:00.0000000')");
+
+            //    entity.Property(e => e.Modified).HasDefaultValueSql("('0001-01-01T00:00:00.0000000')");
+            //});
 
             modelBuilder.Entity<AppTask>()
             .HasOne(a => a.SportMatch)

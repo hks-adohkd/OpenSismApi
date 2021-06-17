@@ -137,7 +137,16 @@ namespace DBContext.Mapping
             CreateMap<IPagedList<QuestionOptionViewModel>, IPagedList<QuestionOption>>().ConvertUsing<PagedListConverter<QuestionOptionViewModel, QuestionOption>>();
             CreateMap<IPagedList<QuestionOption>, IPagedList<QuestionOptionViewModel>>().ConvertUsing<PagedListConverter<QuestionOption, QuestionOptionViewModel>>();
 
-            
+            CreateMap<QuizViewModel, Quiz>();
+            CreateMap<Quiz, QuizViewModel>();
+            CreateMap<IPagedList<QuizViewModel>, IPagedList<Quiz>>().ConvertUsing<PagedListConverter<QuizViewModel, Quiz>>();
+            CreateMap<IPagedList<Quiz>, IPagedList<QuizViewModel>>().ConvertUsing<PagedListConverter<Quiz, QuizViewModel>>();
+
+            CreateMap<QuizOptionViewModel, QuizOption>();
+            CreateMap<QuizOption, QuizOptionViewModel>();
+            CreateMap<IPagedList<QuizOptionViewModel>, IPagedList<QuizOption>>().ConvertUsing<PagedListConverter<QuizOptionViewModel, QuizOption>>();
+            CreateMap<IPagedList<QuizOption>, IPagedList<QuizOptionViewModel>>().ConvertUsing<PagedListConverter<QuizOption, QuizOptionViewModel>>();
+
 
 
             CreateMissingTypeMaps = true;

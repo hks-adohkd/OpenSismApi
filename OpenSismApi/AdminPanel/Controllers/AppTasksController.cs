@@ -179,7 +179,7 @@ namespace AdminPanel.Controllers
                 }
                 else if(appTask.TaskType.Name == "quiz")
                 {
-                    return RedirectToAction("Index", "Questions", new { id = appTask.Id, IsQuiz = 1 });
+                    return RedirectToAction("Index", "Quiz", new { id = appTask.Id });
                 }
                 else if (appTask.TaskType.Name == "sport_match")
                 {

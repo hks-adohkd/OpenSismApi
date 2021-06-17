@@ -1,7 +1,7 @@
-﻿@model DBContext.Models.QuestionOption
+﻿@model DBContext.Models.QuizOption
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,11 +10,11 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <div class="card card-info">
+                <div class="card card-success">
                     <div class="card-header">
-                        <h3 class="card-title">Create</h3>
+                        <h3 class="card-title">Edit</h3>
                     </div>
-                    <form asp-action="Create" asp-route-IsQuiz="@ViewBag.IsQuiz">
+                    <form asp-action="Edit" asp-route-IsQuiz="@ViewBag.IsQuiz">
                         <div class="card-body">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group">
@@ -27,9 +27,7 @@
                                 <input asp-for="Script" class="form-control" />
                                 <span asp-validation-for="Script" class="text-danger"></span>
                             </div>
-                            <input type="hidden" name="QuestionId" value="@ViewBag.QuestionId" />
-                            @if (ViewBag.IsQuiz != null && (int)ViewBag.IsQuiz == 1)
-                            {
+                           
                                 <div class="form-group">
                                     <div class="col-12">
                                         <div class="icheck-primary">
@@ -38,22 +36,21 @@
                                         </div>
                                     </div>
                                 </div>
-                            }
-                            else
-                            {
-                                <input type="hidden" name="IsRightOption" value="True" />
-                            }
+                            
                             <div class="form-group">
                                 <label asp-for="ItemOrder" class="control-label"></label>
                                 <input asp-for="ItemOrder" class="form-control" />
                                 <span asp-validation-for="ItemOrder" class="text-danger"></span>
                             </div>
-
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="Created" />
+                            <input type="hidden" asp-for="IsDeleted" />
+                            <input type="hidden" asp-for="QuizId" />
                         </div>
 
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-info">Submit</button>
-                            <a class="btn btn-default float-right" asp-action="Index" asp-route-id="@ViewBag.QuestionId" asp-route-IsQuiz="@ViewBag.IsQuiz">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                            <a class="btn btn-default float-right" asp-action="Index" asp-route-id="@ViewBag.QuizId" >
                                 Back to List
                             </a>
                         </div>
