@@ -132,6 +132,66 @@ namespace AdminPanel.Controllers
             }
         }
 
+        public IActionResult CustomerIndex(int id)
+        {
+
+            ViewBag.AppTaskId = id;
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult customerIndexPost(int id)
+        {
+            try
+            {
+                var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
+                var start = Request.Form["start"].FirstOrDefault();
+                var length = Request.Form["length"].FirstOrDefault();
+                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+                var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
+                var searchValue = Request.Form["search[value]"].FirstOrDefault();
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+                int recordsTotal = 0;
+
+                var tableData = (from temp in _context.QuizIndexs.Where(a => !a.IsDeleted)
+                                 select new
+                                 {
+                                     Id = temp.Id,
+                                     CustomerId = temp.CustomerId,
+                                     Index = temp.Index,
+                                     AppTaskId = temp.AppTaskId
+                                 });
+
+                if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection))
+                {
+                    tableData = tableData.OrderBy(sortColumn + " " + sortColumnDirection);
+                }
+                if (!string.IsNullOrEmpty(searchValue))
+                {
+                    //tableData = tableData.Where(m => m.AppTask.DisplayName.Contains(searchValue) ||
+                    //m.Script.Contains(searchValue) || m.ScriptAr.Contains(searchValue) || m.AppTaskId.ToString().Contains(searchValue));
+                }
+                recordsTotal = tableData.Count();
+                var data = tableData.Skip(skip).Take(pageSize).ToList();
+                var res = Json(new
+                {
+                    draw = draw,
+                    recordsFiltered = recordsTotal,
+                    recordsTotal = recordsTotal,
+                    data = data
+                   // data = Mapper.Map<List<QuizIndex>>(data)
+                });
+                return res;
+            }
+            catch (Exception e)
+            {
+                //HttpContext.Session.SetString("FailedMsg", e.Message);
+                throw;
+            }
+        }
+
         // GET: Questions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -278,6 +338,50 @@ namespace AdminPanel.Controllers
                     HttpContext.Session.SetString("SuccessMsg", SuccessMsg);
                     return RedirectToAction(nameof(Index), new { id = appTaskId });
                 
+            }
+            catch (Exception e)
+            {
+                HttpContext.Session.SetString("FailedMsg", FailedMsg);
+                return View(quiz);
+            }
+        }
+
+        public async Task<IActionResult> DeleteIndex(int? id)   
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var quiz = await _context.Quizs
+                .Include(q => q.AppTask)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (quiz == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.AppTaskId = quiz.AppTaskId;
+            return View(quiz);
+        }
+
+        // POST: Questions/Delete/5
+        [HttpPost, ActionName("DeleteIndex")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeletedConfirmed(int id)
+        {
+            var quiz = await _context.QuizIndexs.FindAsync(id);
+
+            try
+            {
+                int appTaskId = quiz.AppTaskId;
+
+
+                _context.Quizs.Remove(quiz);
+                await _context.SaveChangesAsync();
+                HttpContext.Session.SetString("SuccessMsg", SuccessMsg);
+                return RedirectToAction(nameof(Index), new { id = appTaskId });
+
             }
             catch (Exception e)
             {

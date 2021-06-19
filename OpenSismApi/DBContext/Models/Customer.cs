@@ -13,8 +13,9 @@ namespace DBContext.Models
             ContacstUs = new HashSet<ContactUs>();
             CustomerPrizes = new HashSet<CustomerPrize>();
             CustomerTasks = new HashSet<CustomerTask>();
-            //CustomerAnswers = new HashSet<CustomerAnswer>();
+            CustomerQuizIndex = new HashSet<QuizIndex>();
             CustomerMessages = new HashSet<CustomerMessage>();
+
         }
 
         [Required]
@@ -116,7 +117,7 @@ namespace DBContext.Models
         public virtual ICollection<CustomerPrize> CustomerPrizes { get; set; }
         [Display(Name = "Tasks")]
         public virtual ICollection<CustomerTask> CustomerTasks { get; set; }
-       // public virtual ICollection<CustomerAnswer> CustomerAnswers { get; set; }
+        public virtual ICollection<QuizIndex> CustomerQuizIndex { get; set; }
         public virtual ICollection<CustomerMessage> CustomerMessages { get; set; }
 
        

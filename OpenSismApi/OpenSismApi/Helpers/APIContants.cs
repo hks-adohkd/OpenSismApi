@@ -90,6 +90,11 @@ namespace OpenSismApi.Helpers
             return new Response<T>(SUCCESS_CODE, SUCCESS_RESULT, Content, Mapper.Map<CustomerViewModel>(customer));
         }
 
+        public static ResponseQuiz<T> CostumSuccessQuizResult(T Content, Customer customer , QuizIndex Indexes , int TotlaQuestion)
+        {
+            return new ResponseQuiz<T>(SUCCESS_CODE, SUCCESS_RESULT, Content, Mapper.Map<CustomerViewModel>(customer) , Mapper.Map<QuizIndexViewModel>(Indexes) , TotlaQuestion);
+        }
+
         public static Response<T> JustCostumSuccessResult(T Content, Customer customer)
         {
             return new Response<T>(SUCCESS_CODE, SUCCESS_RESULT, Content,  Mapper.Map<CustomerViewModel>(customer));
@@ -118,6 +123,11 @@ namespace OpenSismApi.Helpers
         public static Response<T> CostumSometingWrong(string msg, T Content)
         {
             return new Response<T>(SOMETHING_WENT_WROEG_CODE, msg, Content, null);
+        }
+
+        public static ResponseQuiz<T> CostumSometingQuizWrong(string msg, T Content)
+        {
+            return new ResponseQuiz<T>(SOMETHING_WENT_WROEG_CODE, msg, Content, null , null , 0);
         }
         public static Response<T> CostumBonusgWrong(string msg, T Content , Customer customer)
         {

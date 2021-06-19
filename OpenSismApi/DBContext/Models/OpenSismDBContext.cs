@@ -70,6 +70,7 @@ namespace DBContext.Models
         public virtual DbSet<TaskType> TaskTypes { get; set; }
         public virtual DbSet<UserLog> UserLogs { get; set; }
 
+        public virtual DbSet<QuizIndex> QuizIndexs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

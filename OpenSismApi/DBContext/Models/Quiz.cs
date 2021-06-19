@@ -11,7 +11,7 @@ namespace DBContext.Models
         public Quiz()   
         {
             QuizOptions = new HashSet<QuizOption>();
-          //  CustomerAnswers = new HashSet<CustomerAnswer>();
+            //QuizIndexs = new HashSet<QuizIndex>();
         }
 
         [NotMapped]
@@ -110,5 +110,7 @@ namespace DBContext.Models
         public virtual AppTask AppTask { get; set; }
        // public virtual ICollection<CustomerAnswer> CustomerAnswers { get; set; }
         public virtual ICollection<QuizOption> QuizOptions { get; set; }
-    }
+
+        //public virtual ICollection<QuizIndex> QuizIndexs { get; set; }
+    }   
 }

@@ -63,6 +63,8 @@ namespace AdminPanel.Controllers
                                      TaskTypeName = temp.TaskType.Name,
                                      Id = temp.Id,
                                      CustmersCount = temp.CustomerTasks.Count(),
+                                     Points = temp.Points,
+                                     Limit = temp.Limit,
                                  }) ;
 
                 if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection))

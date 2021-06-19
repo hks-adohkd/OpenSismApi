@@ -1,0 +1,114 @@
+﻿@model IEnumerable<DBContext.Models.QuizIndex>
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Quiz";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            @*<a asp-action="Create"  ><i class="fas fa-plus-circle"></i> Add new record</a>*@
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped" id="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Id)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Index)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.CustomerId)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.AppTaskId)
+                                    </th>
+                                    <th>
+
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+      var controllerName = '@HttpContextAccessor.HttpContext.Session.GetString("ControllerName")';
+    
+    
+    //debugger;
+    var optionsControllerName = 'QuizOptions';
+
+    $(function () {
+        debugger;
+        $('#table').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "filter": true,
+            "orderMulti": false,
+            "language": {
+                processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+            },
+            "ajax": {
+                "url": "/" + controllerName + "/customerIndexPost/" ,
+                "type": "POST",
+                "datatype": "json"
+            },
+            "columnDefs":
+                [{
+                    "targets": [0],
+                    "visible": false,
+                    "searchable": false
+                }],
+            "columns": [
+                { "data": "id", "name": "Id", "autoWidth": false },
+                { "data": "index", "name": "Index", "autoWidth": false },
+                { "data": "customerId", "name": "CustomerId", "autoWidth": false },
+                { "data": "appTaskId", "name": "AppTaskId", "autoWidth": false },
+                {
+                    data: null, render: function (data, type, row) {
+                        if (data.type) {
+                            return '<a href="/' + controllerName + '/Edit/' + row.id + '"><i class="far fa-edit"></i></a>' +
+                                    '<a href="/' + controllerName + '/Details/' + row.id + '"><i class="fas fa-info-circle"></i></a>' +
+                                    '<a href="/' + controllerName + '/Delete/' + row.id + '"><i class="far fa-trash-alt"></i></a>';
+                        
+                            //if (IsQuiz == "1") {
+                            //   // debugger;
+                            //    return '<a href="/' + optionsControllerName + '/Index/' + row.id + '?IsQuiz=1' + '"><i class="fas fa-ellipsis-h"></i></a>' +
+                            //        '<a href="/' + controllerName + '/Edit/' + row.id + '?IsQuiz=1' + '"><i class="far fa-edit"></i></a>' +
+                            //        '<a href="/' + controllerName + '/Details/' + row.id + '?IsQuiz=1' + '"><i class="fas fa-info-circle"></i></a>' +
+                            //        '<a href="/' + controllerName + '/Delete/' + row.id + '?IsQuiz=1' + '"><i class="far fa-trash-alt"></i></a>';
+                            //}
+                            //else {
+                            //   // debugger;
+                            //    return '<a href="/' + optionsControllerName + '/Index/' + row.id + '"><i class="fas fa-ellipsis-h"></i></a>' +
+                            //        '<a href="/' + controllerName + '/Edit/' + row.id + '"><i class="far fa-edit"></i></a>' +
+                            //        '<a href="/' + controllerName + '/Details/' + row.id + '"><i class="fas fa-info-circle"></i></a>' +
+                            //        '<a href="/' + controllerName + '/Delete/' + row.id + '"><i class="far fa-trash-alt"></i></a>';
+                            //}
+                        }
+                        else {
+                           // debugger;
+                            return '<a href="/' + controllerName + '/Edit/' + row.id + '"><i class="far fa-edit"></i></a>' +
+                                '<a href="/' + controllerName + '/Details/' + row.id + '"><i class="fas fa-info-circle"></i></a>' +
+                                '<a href="/' + controllerName + '/Delete/' + row.id + '"><i class="far fa-trash-alt"></i></a>';
+                        }
+                    }
+                }
+            ]
+        })
+    })
+</script>

@@ -25,6 +25,35 @@ namespace OpenSismApi.Models
         public CustomerViewModel CurrentCustomer { get; set; }
     }
 
+    public class ResponseQuiz<T>
+    {
+        public ResponseQuiz()
+        {
+        }
+
+        public ResponseQuiz(int code, string message, T content, CustomerViewModel customer, QuizIndexViewModel indexes , int TotlalQuestion)
+        {
+            Code = code;
+            Message = message;
+            Content = content;
+            CurrentCustomer = customer;
+            QuizIndexes = indexes;
+            TotalQuestions = TotlalQuestion;
+        }
+
+        public int Code { get; set; }
+
+        public string Message { get; set; }
+
+        public T Content { get; set; }
+
+        public CustomerViewModel CurrentCustomer { get; set; }
+
+        public QuizIndexViewModel QuizIndexes { get; set; }
+
+        public int TotalQuestions { get; set; }
+    }
+
     public class Response
     {
         public int code;
