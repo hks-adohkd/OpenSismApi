@@ -346,49 +346,49 @@ namespace AdminPanel.Controllers
             }
         }
 
-        public async Task<IActionResult> DeleteIndex(int? id)   
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> DeleteIndex(int? id)   
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var quiz = await _context.Quizs
-                .Include(q => q.AppTask)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (quiz == null)
-            {
-                return NotFound();
-            }
+        //    var quiz = await _context.Quizs
+        //        .Include(q => q.AppTask)
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (quiz == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            ViewBag.AppTaskId = quiz.AppTaskId;
-            return View(quiz);
-        }
+        //    ViewBag.AppTaskId = quiz.AppTaskId;
+        //    return View(quiz);
+        //}
 
-        // POST: Questions/Delete/5
-        [HttpPost, ActionName("DeleteIndex")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeletedConfirmed(int id)
-        {
-            var quiz = await _context.QuizIndexs.FindAsync(id);
+        //// POST: Questions/Delete/5
+        //[HttpPost, ActionName("DeleteIndex")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeletedConfirmed(int id)
+        //{
+        //    var quiz = await _context.QuizIndexs.FindAsync(id);
 
-            try
-            {
-                int appTaskId = quiz.AppTaskId;
+        //    try
+        //    {
+        //        int appTaskId = quiz.AppTaskId;
 
 
-                _context.Quizs.Remove(quiz);
-                await _context.SaveChangesAsync();
-                HttpContext.Session.SetString("SuccessMsg", SuccessMsg);
-                return RedirectToAction(nameof(Index), new { id = appTaskId });
+        //        _context.Quizs.Remove(quiz);
+        //        await _context.SaveChangesAsync();
+        //        HttpContext.Session.SetString("SuccessMsg", SuccessMsg);
+        //        return RedirectToAction(nameof(Index), new { id = appTaskId });
 
-            }
-            catch (Exception e)
-            {
-                HttpContext.Session.SetString("FailedMsg", FailedMsg);
-                return View(quiz);
-            }
-        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        HttpContext.Session.SetString("FailedMsg", FailedMsg);
+        //        return View(quiz);
+        //    }
+        //}
 
         private bool QuizExists(int id)
         {
